@@ -752,7 +752,7 @@
       </div>
     </div>
 
-    <!-- ÖNERILEN -->
+
 
 
   </main>
@@ -1016,20 +1016,6 @@ function updateFavBtn() {
   const btn = document.getElementById("favCurBtn");
   btn.textContent  = on ? "★" : "☆";
   btn.style.color  = on ? "var(--gold)" : "";
-}
-
-/* ── ÖNERILEN ── */
-function renderRelated() {
-  const pick = [...allChannels].sort(() => Math.random() - .5).slice(0, 10);
-  document.getElementById("relGrid").innerHTML = pick.map(ch => {
-    const idx = allChannels.indexOf(ch);
-    return `
-      <div class="rel-card" onclick="play(${idx})">
-        <div class="rc-icon">${ch.logo ? `<img src="${ch.logo}" onerror="this.outerHTML='📺'">` : "📺"}</div>
-        <div class="rc-name">${ch.name}</div>
-        <div class="rc-group">${ch.group}</div>
-      </div>`;
-  }).join("");
 }
 
 /* ── SLEEP TIMER ── */
