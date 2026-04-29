@@ -37,7 +37,7 @@ https://api.hitnova.net/s/b5/mono.m3u8
 https://api.hitnova.net/s/bm1/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports Max2A
 https://api.hitnova.net/s/bm2/mono.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/07/S_Sport_logo.png" group-title="Spor",S Sport 1A
+#EXTINF:-1 tvg-logo="https://www.diaicon.xyz/wp-content/uploads/2024/12/s-sport-2-hd.png" group-title="Spor",S Sport 1A
 https://api.hitnova.net/s/ss/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/07/S_Sport_logo.png" group-title="Spor",S Sport 2A
 https://api.hitnova.net/s/ss2/mono.m3u8
