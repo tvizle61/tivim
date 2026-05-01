@@ -3,7 +3,7 @@ import os
 
 m3u_urls = [
     "https://raw.githubusercontent.com/kadirsener1/tivim/main/1.m3u",
-    "https://raw.githubusercontent.com/kadirsener1/atom/main/playlist.m3u"
+    "https://raw.githubusercontent.com/kadirsener1/selcuk/refs/heads/main/5.m3u"
 ]
 
 output_file = "merged.m3u"
