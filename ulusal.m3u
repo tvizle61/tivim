@@ -1,0 +1,29 @@
+#EXTM3U
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/7/78/Atv_logosu.png" group-title="TR",ATV
+https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/atv/atv_1080p.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/7/78/Atv_logosu.png" group-title="TR",ATV Yedek
+https://api.hitnova.net/s/atv/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/f/f1/Logo_of_Show_TV.png" group-title="TR",Show Tv
+https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/showtv/showtv.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/a/a4/Kanal_D_logo.png" group-title="TR",Kanal D Yedek
+https://ackaxsqacw.turknet.ercdn.net/ozfkfbbjba/kanald/kanald_1080p.m3u8
+#EXTINF:-1 tvg-logo="https://filedn.eu/l5ABGVFVcpIfW9YXHkcxLX7/freelogo/fox-turkiye-logo.png" group-title="TR",Now Tv
+https://uycyyuuzyh.turknet.ercdn.net/nphindgytw/nowtv/nowtv_720p.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/6/68/Tv8_Yeni_Logo.png" group-title="TR",Tv 8
+https://api.hitnova.net/s/tv8/mono.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/6/68/Tv8_Yeni_Logo.png" group-title="TR",TV 8.5
+https://api.hitnova.net/s/tv85/mono.m3u8
+#EXTINF:-1 tvg-logo="https://static.wikia.nocookie.net/logopedia/images/c/ce/Kanal_7_logosu.png" group-title="TR",Kanal 7
+https://yurhnwtpys.turknet.ercdn.net/cvmbjbpmdx/kanal7/kanal7_1080p.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/b/b5/NTV_logo.png" group-title="TR",Ntv
+https://dogus.daioncdn.net/ntv/ntv_1080p.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/6/6b/TRT_Haber_logosu_%282013-2020%29.png" group-title="TR",Trt Haber
+https://tv-trthaber.medya.trt.com.tr/master.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/7/78/Haberturk_logo.png" group-title="TR",Haber  Türk
+https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/haberturktv/haberturktv_1080p.m3u8
+
+
+#EXTINF:-1 tvg-logo="https://i.hizliresim.com/qg6q0zx.png" group-title="TR",Haber Global
+https://tv.ensonhaber.com/haberglobal/haberglobal_720p.m3u8
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/2/23/TRT_%C3%A7ocuk_logo.png" group-title="TR",Trt Cocuk
+https://tv-trtcocuk.medya.trt.com.tr/master_1080.m3u8
