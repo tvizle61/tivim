@@ -1,32 +1,22 @@
 #EXTM3U
-
 #EXTINF:-1 group-title="Spor",beIN Sports 1-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-11.m3u8
-
 #EXTINF:-1 group-title="Spor",beIN Sports 2-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-2.m3u8
-
 #EXTINF:-1 group-title="Spor",beIN Sports 3-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-3.m3u8
-
 #EXTINF:-1 group-title="Spor",beIN Sports 4-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-4.m3u8
-
 #EXTINF:-1 group-title="Spor",beIN Sports 5-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-5.m3u8
-
 #EXTINF:-1 group-title="Spor",beIN Sports Max 1-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-max-1.m3u8
-
 #EXTINF:-1 group-title="Spor",beIN Sports Max 2-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-max-2.m3u8
-
 #EXTINF:-1 group-title="Spor",S Sport-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/s-sport.m3u8
-
 #EXTINF:-1 group-title="Spor",S Sport 2-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/s-sport-2.m3u8
-
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 1-HİT
 https://api.hitnova.net/s/zirve/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 2-HİT
@@ -63,7 +53,6 @@ https://api.hitnova.net/s/eu1/mono.m3u8
 https://api.hitnova.net/s/eu2/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/e/e9/A_Spor_logosu.png" group-title="Spor",A Spor-HİT
 https://api.hitnova.net/s/as/mono.m3u8
-
 #EXTINF:-1 tvg-id="selcukbeinsports1" tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",Bein Sports 1-SS
 #EXTVLCOPT:http-referrer= https://www.selcuksportshd1825.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/selcukbeinsports1/playlist.m3u8
@@ -121,83 +110,63 @@ https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/selcukeurosport1/playlist.m3u8
 #EXTINF:-1 tvg-id="selcukeurosport2" tvg-logo="" group-title="Spor",Eurosport 2-SS
 #EXTVLCOPT:http-referrer= https://www.selcuksportshd1825.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/selcukeurosport2/playlist.m3u8
-
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" tvg-id="sbeinsports-1" group-title="Spor",beIN Sports 1-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/sbeinsports-1/playlist.m3u8
-
 #EXTINF:-1  tvg-id="sbeinsports-2" tvg-logo="" group-title="Spor", Bein Sports 2-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/sbeinsports-2/playlist.m3u8
-
 #EXTINF:-1  tvg-id="sbeinsports-3" tvg-logo="" group-title="Spor", Bein Sports 3-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/sbeinsports-3/playlist.m3u8
-
 #EXTINF:-1  tvg-id="sbeinsports-4" tvg-logo="" group-title="Spor", Bein Sports 4-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/sbeinsports-4/playlist.m3u8
-
 #EXTINF:-1  tvg-id="sbeinsports-5" tvg-logo="" group-title="Spor", Bein Sports 5-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/sbeinsports-5/playlist.m3u8
-
 #EXTINF:-1  tvg-id="sbeinsportsmax-1" tvg-logo="" group-title="Spor", Bein Sports Max 1-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/sbeinsportsmax-1/playlist.m3u8
-
 #EXTINF:-1  tvg-id="sbeinsportsmax-2" tvg-logo="" group-title="Spor", Bein Sports Max 2-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/sbeinsportsmax-2/playlist.m3u8
-
 #EXTINF:-1  tvg-id="sssport" tvg-logo="" group-title="Spor", S Sport-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/sssport/playlist.m3u8
-
 #EXTINF:-1  tvg-id="sssport2" tvg-logo="" group-title="Spor", S sport 2-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/sssport2/playlist.m3u8
-
 #EXTINF:-1  tvg-id="ssmartspor" tvg-logo="" group-title="Spor", Smart Spor-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/ssmartspor/playlist.m3u8
-
 #EXTINF:-1  tvg-id="ssmartspor2" tvg-logo="" group-title="Spor", Smart Spor 2-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/ssmartspor2/playlist.m3u8
-
 #EXTINF:-1  tvg-id="stivibuspor-1" tvg-logo="" group-title="Spor",Tivibu Spor 1-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/stivibuspor-1/playlist.m3u8
-
 #EXTINF:-1  tvg-id="stivibuspor-2" tvg-logo="" group-title="Spor",Tivibu Spor 2-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/stivibuspor-2/playlist.m3u8
-
 #EXTINF:-1  tvg-id="stivibuspor-3" tvg-logo="" group-title="Spor",Tivibu Spor 3-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/stivibuspor-3/playlist.m3u8
-
 #EXTINF:-1  tvg-id="stivibuspor-4" tvg-logo="" group-title="Spor",Tivibu Spor 4-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/stivibuspor-4/playlist.m3u8
-
 #EXTINF:-1  tvg-id="sbeinsportshaber" tvg-logo="" group-title="Spor", Bein Sports Haber-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/sbeinsportshaber/playlist.m3u8
-
 #EXTINF:-1  tvg-id="saspor" tvg-logo="" group-title="Spor", A spor-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/saspor/playlist.m3u8
-
 #EXTINF:-1  tvg-id="seurosport1" tvg-logo="" group-title="Spor",Eurosport 1-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/seurosport1/playlist.m3u8
-
 #EXTINF:-1  tvg-id="seurosport2" tvg-logo="" group-title="Spor",Eurosport 2-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/seurosport2/playlist.m3u8
-
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/7/78/Atv_logosu.png" group-title="TR",ATV
 https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/atv/atv_1080p.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/7/78/Atv_logosu.png" group-title="TR",ATV Yedek
@@ -220,20 +189,14 @@ https://dogus.daioncdn.net/ntv/ntv_1080p.m3u8
 https://tv-trthaber.medya.trt.com.tr/master.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/7/78/Haberturk_logo.png" group-title="TR",Haber  Türk
 https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/haberturktv/haberturktv_1080p.m3u8
-
-
 #EXTINF:-1 tvg-logo="https://i.hizliresim.com/qg6q0zx.png" group-title="TR",Haber Global
 https://tv.ensonhaber.com/haberglobal/haberglobal_720p.m3u8
-
 #EXTINF:-1 tvg-id="39" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/00a59236-8875-4555-a97c-94b7633e14fa.png" group-title="TR",TRT GENÇ
 https://tv-trtgenc.medya.trt.com.tr/master.m3u8
-
-
-#EXTINF:-1 tvg-id="120" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/3261c5eb-0e08-4c96-b8fc-58211e3da29c.png" group-title="Çocuk",Trt Çocuk 
+#EXTINF:-1 tvg-id="120" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/3261c5eb-0e08-4c96-b8fc-58211e3da29c.png" group-title="Çocuk",Trt Çocuk
 https://tv-trtcocuk.medya.trt.com.tr/master.m3u8
 #EXTINF:-1 tvg-id="123" tvg-logo="https://feo.kablowebtv.com/resize/168A635D265A4328C2883FB4CD8FF/0/0/Vod/HLS/7e733bf8-6c0e-4d6e-b18a-5864e571894b.png" group-title="Çocuk",Trt Diyanet Çocuk
 https://tv-trtdiyanetcocuk.medya.trt.com.tr/master.m3u8
-
 #EXTINF:-1 tvg-id="minikacocuk" tvg-logo="https://img.dsmartgo.com.tr/content/2/Q2/13402/Thumbnail.png" tvg-name="Minika Çocuk" group-title="Çocuk",Minika Çocuk
 https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/minikago_cocuk/minikago_cocuk.m3u8
 #EXTINF:-1 tvg-id="minikago" tvg-logo="https://img.dsmartgo.com.tr/content/I/WS/13404/Thumbnail.png" tvg-name="Minika Go" group-title="Çocuk",Minika Go
