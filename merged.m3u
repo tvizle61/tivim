@@ -219,6 +219,10 @@ https://ronaldo.magnitude.workers.dev/?url=https://dga1op10s1u3leo.da0fdcfd5eefa
 https://ronaldo.magnitude.workers.dev/?url=https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/selcuktabiispor/playlist.m3u8
 #EXTINF:-1,tvg-name="TRT Türk" tvg-country="TR" tvg-id="ssportplus1" tvg-logo="" group-title="Ulusal",s sport plus
 https://ronaldo.magnitude.workers.dev/?url=https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/ssportplus1/playlist.m3u8
+#EXTINF:-1,tvg-name="excok" tvg-country="TR" tvg-id="selcukbeinsports1" tvg-logo="" group-title="Ulusal",selcukbeinsports1r exco
+#EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
+https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/selcukbeinsports1/playlist.m3u8
+
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 1-HİT
 https://api.hitnova.net/s/zirve/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 2-HİT
@@ -255,6 +259,3 @@ https://api.hitnova.net/s/eu1/mono.m3u8
 https://api.hitnova.net/s/eu2/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/e/e9/A_Spor_logosu.png" group-title="Spor",A Spor-HİT
 https://api.hitnova.net/s/as/mono.m3u8
-#EXTINF:-1,tvg-name="TRT Türk" tvg-country="TR" tvg-id="selcukbeinsports1" tvg-logo="" group-title="Ulusal",selcukbeinsports1r exco
-#EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
-https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/selcukbeinsports1/playlist.m3u8
