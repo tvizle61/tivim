@@ -1,7 +1,20 @@
 #EXTM3U
-#EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/bein.png" group-title="Spor",beIN Sports 1-247sız
-https://chat.cfbu247.sbs/api/proxy/playlist?token=eyJyZWZlcmVyIjoiaHR0cHM6Ly9kb25pcy5qaW1wZW5vcGlzb25saW5lLm9ubGluZS9wcmVtaXVtdHYvZGFkZHkzLnBocD9pZD02MiIsIm0zdTgiOiJodHRwczovL2tvbXBpcy56ZW1wb3ZsYW50aXMub25saW5lL3ByZW1pdW02Mi90cmFja3MtdjFhMS9tb25vLmNzcyIsInRzIjoxNzc4MTkwNTg1MzU3LCJjaGFubmVsSWQiOiI2MiJ9
-#EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/bein.png" group-title="Spor",beIN Sports 1-LV
+
+#EXTINF:-1 tvg-id="bein-sports-1-turkey" tvg-name="beIN Sports 1 Turkey" group-title="TV247",beIN Sports 1 Turkey
+https://chat.cfbu247.sbs/api/proxy/playlist?token=eyJjaGFubmVsSWQiOiI2MiIsInRzIjoxNzc4MTk2MjU3OTU3fQ==
+
+#EXTINF:-1 tvg-id="bein-sports-2-turkey" tvg-name="beIN Sports 2 Turkey" group-title="TV247",beIN Sports 2 Turkey
+https://chat.cfbu247.sbs/api/proxy/playlist?token=eyJjaGFubmVsSWQiOiI2MyIsInRzIjoxNzc4MTk2MjU4OTU3fQ==
+
+#EXTINF:-1 tvg-id="bein-sports-3-turkey" tvg-name="beIN Sports 3 Turkey" group-title="TV247",beIN Sports 3 Turkey
+https://chat.cfbu247.sbs/api/proxy/playlist?token=eyJjaGFubmVsSWQiOiI2NCIsInRzIjoxNzc4MTk2MjU5OTU3fQ==
+
+#EXTINF:-1 tvg-id="bein-sports-4-turkey" tvg-name="beIN Sports 4 Turkey" group-title="TV247",beIN Sports 4 Turkey
+https://chat.cfbu247.sbs/api/proxy/playlist?token=eyJjaGFubmVsSWQiOiI2NSIsInRzIjoxNzc4MTk2MjYwOTU3fQ==
+
+#EXTINF:-1 tvg-id="atv-turkey" tvg-name="atv Turkey" group-title="TV247",atv Turkey
+https://chat.cfbu247.sbs/api/proxy/playlist?token=eyJjaGFubmVsSWQiOiIxMDAwIiwidHMiOjE3NzgxOTYyNjM2ODF9#EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/bein.png" group-title="Spor",beIN Sports 1-LV
+#EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/bein.png" group-title="Spor",beIN Sports 1-Gav
 https://gavatlar.b-cdn.net/bein.m3u8
 #EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/bein.png" group-title="Spor",beIN Sports 1-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-11.m3u8
