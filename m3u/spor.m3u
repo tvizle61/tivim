@@ -1,1 +1,4 @@
+#EXTM3U
+
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports Haber
 https://netspor.tecostream.xyz/bsh.m3u8
