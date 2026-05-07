@@ -1,5 +1,4 @@
 #EXTM3U
-
 #EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/bein.png" group-title="Spor",beIN Sports avva prox 4
 https://pl.4everproxy.com/secure/SgErfXWYD6D~U3jaqQkOwsLzuNK7sSbE7iBn2YHHgnoUvcsI2L06f1~j57QaiK1ZIehRPHalnM6dEe8HaQ4kytLJw8FFQdUF~QJWUo0wRyI4PFGPnp6piM7hfXTh5lo7
 #EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/bein.png" group-title="Spor",beIN Sports 3 block
@@ -14,7 +13,6 @@ https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/selcukbeinsports1/playlist.m3u
 https://api.hitnova.net/s/zirve/mono.m3u8
 #EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/bein.png" group-title="Spor",beIN Sports 1-HİT
 https://api.hitnova.net/s/zirve/mono.m3u8
-
 #EXTINF:-1 group-title="Spor",beIN Sports 2-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-2.m3u8
 #EXTINF:-1 group-title="Spor",beIN Sports 3-R
@@ -31,7 +29,6 @@ https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help/
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/s-sport.m3u8
 #EXTINF:-1 group-title="Spor",S Sport 2-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/s-sport-2.m3u8
-
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 2-HİT
 https://api.hitnova.net/s/b2/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 3-HİT
@@ -66,7 +63,6 @@ https://api.hitnova.net/s/eu1/mono.m3u8
 https://api.hitnova.net/s/eu2/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/e/e9/A_Spor_logosu.png" group-title="Spor",A Spor-HİT
 https://api.hitnova.net/s/as/mono.m3u8
-
 #EXTINF:-1 tvg-id="selcukbeinsports2" tvg-logo="" group-title="Spor",Bein Sports 2-SS
 #EXTVLCOPT:http-referrer= https://www.selcuksportshd1825.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/selcukbeinsports2/playlist.m3u8
