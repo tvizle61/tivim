@@ -168,7 +168,7 @@ https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/seurosport1/playlist.m3u8
 #EXTINF:-1  tvg-id="seurosport2" tvg-logo="" group-title="Spor",Eurosport 2-CF
 #EXTVLCOPT:http-referrer= https://www.sporcafe9.xyz/
 https://dga1op10s1u3leo.da0fdcfd5eefac.click/live/seurosport2/playlist.m3u8
-#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/7/78/Atv_logosu.png" group-title="TR",ATV
+#EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/atv.png" group-title="TR",ATV
 https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/atv/atv_1080p.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/7/78/Atv_logosu.png" group-title="TR",ATV Yedek
 https://api.hitnova.net/s/atv/mono.m3u8
