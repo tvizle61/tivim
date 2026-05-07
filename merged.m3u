@@ -1,4 +1,7 @@
 #EXTM3U
+
+#EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/bein.png" group-title="Spor",beIN Sports avva prox
+https://azureserv.com/95f0000dd0e/index.m3u8?o=1&e=1778160364&tk=d8a5e65c02baf1d07a5341b724811b94&__cpo=aHR0cHM6Ly9hdnZhdXBkYXRlLmNvbQ
 #EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/bein.png" group-title="Spor",beIN Sports 1-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//hls/bein-sports-11.m3u8
 #EXTINF:-1 tvg-id="selcukbeinsports1" tvg-logo="tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/bein.png"" group-title="Spor",Bein Sports 1-SS
