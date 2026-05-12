@@ -1,8 +1,6 @@
-#EXTM3U8 x-url-tvg=https://vav00.de/sources/epg/epg_de.xml,https://epgshare01.online/epgshare01/epg_ripper_DE1.xml.gz,https://epg.pw/xmltv/epg_DE.xml
-#EXTVLCOPT:http-user-agent=VAVOO/2.6
-#EXTVLCOPT:http-referrer=https://vavoo.tv
-#EXTINF:-1 group-title="Turkey" tvg-name="4K TR", 4K TRm3u8
-https://www.vavoo.to/play/2325261286/index.m3u8
+#EXTM3U
+#EXTINF:-1 group-title="Turkey" tvg-name="4K TRim", 4K TRm3u8
+https://mjkskdvpfpb1fbv.ngolpdkyoctjcddxshli469r.org/sunshine/TQ7U6Rc5vPB_7_3QJpx2K8iuM3LmdZpj1SH0Fnh0clcP6DxDVYo1V7DAyJrjz42kRMQyOnDrqprUxqNMwLRd3Y-utR3qM6xHNeQeBMtXMEzFXV2DjM2-KobVja7Xsq7tLGYbkDaenLp1lZRaUkBqtd683YAUcilklecDi6T7SvQlU7Bs95TySdxzdmeF_j0IsLzASWBHTgjDl3i7iN6tVOY_DUXtUN6r-BEN3dM4DaOqZbIjc7cMNqYcyiX7o-TPK-mxo70agpTB3CIXOGiqmN6E44DPZFQxkLMwUQI1-78/hls/index.m3u8
 #EXTINF:-1 tvg-id="bein-sports-1-turkey" tvg-name="beIN Sports 1 Turkey" group-title="TV247",beIN Sports 1 Turkey
 https://chat.cfbu247.sbs/api/proxy/playlist?token=eyJjaGFubmVsSWQiOiI2MiIsInRzIjoxNzc4MTk2MjU3OTU3fQ==
 #EXTINF:-1 tvg-id="bein-sports-2-turkey" tvg-name="beIN Sports 2 Turkey" group-title="TV247",beIN Sports 2 Turkey
