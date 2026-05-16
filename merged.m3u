@@ -3,7 +3,6 @@
 https://gavatlar.b-cdn.net/bein.m3u8
 #EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/bein.png" group-title="Spor",beIN Sports 1-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//bein1/tracks-v1a1/mono.m3u8
-
 #EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/bein.png" group-title="Spor",beIN Sports 1-HİT refe
 #EXTVLCOPT:http-referrer= https://www.hitv.fun
 https://api.hitnova.net/s/zirve/mono.m3u8
@@ -25,7 +24,6 @@ https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help/
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help/s-sport/tracks-v1a1/mono.m3u8
 #EXTINF:-1 group-title="Spor",S Sport 2-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help//s-sport2/tracks-v1a1/mono.m3u8
-
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 2-HİT
 https://api.hitnova.net/s/b2/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/b/b2/SporSMART_HD_logo.png" group-title="Spor",beIN Sports 3-HİT
@@ -60,11 +58,9 @@ https://api.hitnova.net/s/eu1/mono.m3u8
 https://api.hitnova.net/s/eu2/mono.m3u8
 #EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/tr/e/e9/A_Spor_logosu.png" group-title="Spor",A Spor-HİT
 https://api.hitnova.net/s/as/mono.m3u8
-
 #EXTINF:-1 tvg-id="selcukbeinsports1" tvg-logo="tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/bein.png"" group-title="Spor",Bein Sports 1-SS
 #EXTVLCOPT:http-referrer= https://www.selcuksportshd1825.xyz/
 https://dga1op10s1u3leo.2ec2f887981228.click/live/selcukbeinsports1/playlist.m3u8
-
 #EXTINF:-1 tvg-id="selcukbeinsports2" tvg-logo="" group-title="Spor",Bein Sports 2-SS
 #EXTVLCOPT:http-referrer= https://www.selcuksportshd1825.xyz/
 https://dga1op10s1u3leo.2ec2f887981228.click/live/selcukbeinsports2/playlist.m3u8
