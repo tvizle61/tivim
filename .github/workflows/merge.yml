@@ -2,7 +2,8 @@ name: M3U Merge
 
 on:
   schedule:
-    - cron: "*/30 * * * *"  # ⬅️ Her 30 dakikada bir çalışır
+    - cron: "*/35 * * * *" 
+
   workflow_dispatch:
 
 jobs:
