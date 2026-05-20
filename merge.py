@@ -5,6 +5,7 @@ import os
 # Kaynak M3U URL'leri
 SOURCE_URLS = [
     "https://raw.githubusercontent.com/kadirsener1/avva1/refs/heads/main/playlist.m3u",
+    "https://raw.githubusercontent.com/kadirsener1/iptv-panel/refs/heads/main/tv247.m3u",
     "https://raw.githubusercontent.com/kadirsener1/tivim/refs/heads/main/m3u/hit.m3u",
     "https://raw.githubusercontent.com/kadirsener1/tivim/refs/heads/main/m3u/ss.m3u",
     "https://raw.githubusercontent.com/kadirsener1/tivim/refs/heads/main/m3u/cafe.m3u",
