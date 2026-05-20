@@ -1,5 +1,4 @@
 #EXTM3U
-
 #EXTINF:-1 tvg-id="1" tvg-logo="https://avvasportshd1.com/uploads/logos/1777556242_61b4d381230a63fbdb84.jpeg" group-title="Spor",beIN SPORTS 1 HD Avva
 https://avva.magnitude.workers.dev/?url=https://avvaupdate.com/95f0000dd0e/index.m3u8?o=1%26e=1779311480%26tk=c75f80795d1ca734747b97cf170cb904
 #EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/bein.png" group-title="Spor",beIN Sports 1-Gav
@@ -11,7 +10,6 @@ https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help/
 https://api.hitnova.net/s/zirve/mono.m3u8
 #EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/kadirsener1/logolar/refs/heads/master/kanallogolari/bein.png" group-title="Spor",beIN Sports 1-HİT
 https://api.hitnova.net/s/zirve/mono.m3u8
-
 #EXTINF:-1 tvg-id="2" tvg-logo="https://avvasportshd1.com/uploads/logos/1777559808_1357a6ec8b0917e4a713.png" group-title="Avva Sports",beIN SPORTS 2 HD
 https://avva.magnitude.workers.dev/?url=https://avvaupdate.com/bein2/index.m3u8?o=1%26e=1779311480%26tk=c75f80795d1ca734747b97cf170cb904
 #EXTINF:-1 tvg-id="3" tvg-logo="https://avvasportshd1.com/uploads/logos/1777559846_2789e29889c0139bb875.png" group-title="Avva Sports",beIN SPORTS 3 HD
@@ -78,7 +76,6 @@ https://avva.magnitude.workers.dev/?url=https://avvaupdate.com/aspor/index.m3u8?
 https://avva.magnitude.workers.dev/?url=https://avvaupdate.com/ahaber/index.m3u8?o=1%26e=1779311480%26tk=c75f80795d1ca734747b97cf170cb904
 #EXTINF:-1 tvg-id="34" tvg-logo="https://avvasportshd1.com/uploads/logos/1777560831_89666f2f82d64d3393e4.png" group-title="Avva Sports",ATV
 https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/atv/atv_1080p.m3u8
-
 #EXTINF:-1 group-title="Spor",beIN Sports 2-R
 https://ronaldo.magnitude.workers.dev/?url=https://corestream.ronaldovurdu.help/bein2/tracks-v1a1/mono.m3u8
 #EXTINF:-1 group-title="Spor",beIN Sports 3-R
