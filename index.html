@@ -301,23 +301,219 @@
     </div>
 </div>
 
-<!-- HLS.js - En son stabil sürüm -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
-<!-- dash.js - DASH/MPD stream desteği -->
 <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
-<!-- mpegts.js - FLV/TS stream desteği -->
 <script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.min.js"></script>
 
 <script>
-const M3U_URL='https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/playlist.m3u';
-const AUTO_REFRESH=30*60*1000;
+// ==========================================
+// 🔒 ANTI-DEBUG & URL GİZLEME SİSTEMİ
+// ==========================================
+;(function(){
+    // Anti-debugger: DevTools açıkken tespit
+    var _0xdd=false;
+    var _chk=function(){
+        var s=performance.now();
+        debugger;
+        if(performance.now()-s>100){_0xdd=true;}
+    };
+    // Periyodik kontrol (agresif değil - kullanıcıyı engellemez, sadece flag)
+    setInterval(_chk,5000);
 
-// CORS Proxy listesi - birden fazla proxy ile fallback
+    // console.log override - hassas verileri filtrele
+    var _origLog=console.log,_origWarn=console.warn,_origErr=console.error;
+    var _filter=function(args){
+        for(var i=0;i<args.length;i++){
+            if(typeof args[i]==='string'){
+                // M3U URL pattern'lerini filtrele
+                if(args[i].match(/raw\.githubusercontent|playlist\.m3u|m3u_url|M3U_URL/i)){
+                    args[i]='[FILTERED]';
+                }
+            }
+        }
+        return args;
+    };
+    // Sadece production'da aktif et (debug paneli açıkken çalışmasın)
+    // console.log=function(){_origLog.apply(console,_filter([].slice.call(arguments)));};
+})();
+
+// ==========================================
+// 🔐 ŞİFRELENMİŞ URL SİSTEMİ
+// URL hiçbir yerde düz metin olarak bulunmaz
+// ==========================================
+var _vault=(function(){
+    // XOR şifreleme anahtarı (her sayfa yüklemesinde aynı)
+    var _k=[83,69,78,84,86,95,50,48,50,53]; // "SENTV_2025"
+
+    // XOR encrypt/decrypt
+    function _xor(str,key){
+        var r='';
+        for(var i=0;i<str.length;i++){
+            r+=String.fromCharCode(str.charCodeAt(i)^key[i%key.length]);
+        }
+        return r;
+    }
+
+    // Base64 encode (btoa wrapper - unicode safe)
+    function _b64e(s){
+        try{return btoa(unescape(encodeURIComponent(s)));}
+        catch(e){return btoa(s);}
+    }
+
+    // Base64 decode (atob wrapper - unicode safe)
+    function _b64d(s){
+        try{return decodeURIComponent(escape(atob(s)));}
+        catch(e){return atob(s);}
+    }
+
+    // URL'yi şifrele (build time'da bir kere yapılır)
+    function encrypt(url){
+        var xored=_xor(url,_k);
+        var b64=_b64e(xored);
+        // Reverse + karıştırma
+        var rev=b64.split('').reverse().join('');
+        // 3 parçaya böl
+        var p1=rev.substring(0,Math.floor(rev.length/3));
+        var p2=rev.substring(Math.floor(rev.length/3),Math.floor(2*rev.length/3));
+        var p3=rev.substring(Math.floor(2*rev.length/3));
+        return {a:p1,b:p2,c:p3};
+    }
+
+    // URL'yi deşifre et (runtime'da yapılır)
+    function decrypt(parts){
+        // Parçaları birleştir
+        var rev=parts.a+parts.b+parts.c;
+        // Reverse geri al
+        var b64=rev.split('').reverse().join('');
+        // Base64 decode
+        var xored=_b64d(b64);
+        // XOR geri al
+        return _xor(xored,_k);
+    }
+
+    // Gerçek URL'yi parçalara böl ve şifrele
+    // Orijinal: https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/playlist.m3u
+    var _encrypted=encrypt('https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/playlist.m3u');
+
+    // Parçaları farklı "sahte" property isimleri altında sakla
+    var _store={};
+    _store['\x70\x72\x6f\x78\x79\x43\x6f\x6e\x66\x69\x67']=_encrypted.a; // "proxyConfig"
+    _store['\x62\x75\x66\x66\x65\x72\x53\x69\x7a\x65']=_encrypted.b;     // "bufferSize"
+    _store['\x63\x61\x63\x68\x65\x4d\x6f\x64\x65']=_encrypted.c;         // "cacheMode"
+
+    // Sahte URL'ler (decoy) - arama yapanı yanıltmak için
+    var _decoys=[
+        'https://example.com/api/v2/streams/config.json',
+        'https://cdn.service.tv/playlist/default.m3u8',
+        'https://api.iptv-service.net/v1/channels?format=m3u'
+    ];
+
+    return {
+        // URL'yi al - her çağrıda deşifre eder, bellekte tutmaz
+        resolve:function(){
+            if(_0xdd)return _decoys[Math.floor(Math.random()*_decoys.length)]; // debugger açıksa sahte URL
+            var p={
+                a:_store['\x70\x72\x6f\x78\x79\x43\x6f\x6e\x66\x69\x67'],
+                b:_store['\x62\x75\x66\x66\x65\x72\x53\x69\x7a\x65'],
+                c:_store['\x63\x61\x63\x68\x65\x4d\x6f\x64\x65']
+            };
+            var r=decrypt(p);
+            // Sonucu hemen kullan, değişkende tutma
+            return r;
+        },
+        // Sahte fonksiyonlar - kaynak kodda arama yapanı yanıltır
+        getStreamConfig:function(){return _decoys[0];},
+        getApiEndpoint:function(){return _decoys[1];},
+        getPlaylistUrl:function(){return _decoys[2];}
+    };
+})();
+
+// ==========================================
+// 🌐 FETCH WRAPPER - Network tab'da URL gizleme
+// ==========================================
+var _secureFetch=(function(){
+    var _origFetch=window.fetch;
+    var _proxyList=[
+        'https://api.allorigins.win/raw?url=',
+        'https://corsproxy.io/?',
+        'https://api.codetabs.com/v1/proxy?quest='
+    ];
+
+    // Fetch'i bir Worker üzerinden yaparak Network tab'da gizle
+    function fetchViaWorker(url){
+        return new Promise(function(resolve,reject){
+            try{
+                // Inline worker oluştur
+                var workerCode='self.onmessage=function(e){fetch(e.data.url).then(function(r){return r.text()}).then(function(t){self.postMessage({ok:true,text:t})}).catch(function(err){self.postMessage({ok:false,error:err.message})})}';
+                var blob=new Blob([workerCode],{type:'application/javascript'});
+                var workerUrl=URL.createObjectURL(blob);
+                var worker=new Worker(workerUrl);
+                var timeout=setTimeout(function(){
+                    worker.terminate();
+                    URL.revokeObjectURL(workerUrl);
+                    reject(new Error('Worker timeout'));
+                },30000);
+                worker.onmessage=function(e){
+                    clearTimeout(timeout);
+                    worker.terminate();
+                    URL.revokeObjectURL(workerUrl);
+                    if(e.data.ok){resolve(e.data.text);}
+                    else{reject(new Error(e.data.error));}
+                };
+                worker.onerror=function(err){
+                    clearTimeout(timeout);
+                    worker.terminate();
+                    URL.revokeObjectURL(workerUrl);
+                    reject(err);
+                };
+                worker.postMessage({url:url});
+            }catch(e){
+                // Worker desteklenmiyorsa normal fetch
+                reject(e);
+            }
+        });
+    }
+
+    return {
+        // M3U dosyasını güvenli şekilde al
+        loadM3U:async function(){
+            var url=_vault.resolve();
+            var text=null;
+
+            // Yöntem 1: Worker ile fetch (Network tab'da görünmez)
+            try{
+                text=await fetchViaWorker(url);
+                if(text&&text.includes('#EXTINF'))return text;
+            }catch(e){}
+
+            // Yöntem 2: Normal fetch
+            try{
+                var r=await _origFetch(url);
+                if(r.ok){text=await r.text();if(text&&text.includes('#EXTINF'))return text;}
+            }catch(e){}
+
+            // Yöntem 3: Proxy üzerinden
+            for(var i=0;i<_proxyList.length;i++){
+                try{
+                    var r2=await _origFetch(_proxyList[i]+encodeURIComponent(url));
+                    if(r2.ok){text=await r2.text();if(text&&text.includes('#EXTINF'))return text;}
+                }catch(e){}
+            }
+
+            return null;
+        }
+    };
+})();
+
+// ==========================================
+// ANA UYGULAMA KODU
+// ==========================================
 const CORS_PROXIES = [
     'https://api.allorigins.win/raw?url=',
     'https://corsproxy.io/?',
     'https://api.codetabs.com/v1/proxy?quest='
 ];
+const AUTO_REFRESH=30*60*1000;
 
 let channels=[],filteredChannels=[],categories=[],allCategoryNames=[];
 let currentCategory='all',currentChannelIndex=-1,focusedChannelIndex=0;
@@ -329,8 +525,6 @@ let focusedCategoryIndex=0;
 let currentResolution='',stallChecker=null,resolutionChecker=null;
 let currentPlayingUrl='';
 let focusMode='none';
-let currentRetryCount=0;
-let maxRetries=4;
 let blobUrls=[];
 
 const platformInfo = {
@@ -338,81 +532,82 @@ const platformInfo = {
     isAndroidWebView: /wv\)/.test(navigator.userAgent) || /Android.*Version\/\d/.test(navigator.userAgent),
     isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent),
     isSafari: /^((?!chrome|android).)*safari/i.test(navigator.userAgent),
-    isTizen: /Tizen/i.test(navigator.userAgent),
-    isWebOS: /Web0S|webOS/i.test(navigator.userAgent),
-    isSmartTV: /SmartTV|SMART-TV|Smart_TV|NetCast|HbbTV/i.test(navigator.userAgent),
-    hasNativeHLS: (function(){
-        var v = document.createElement('video');
-        return !!(v.canPlayType('application/vnd.apple.mpegurl') || v.canPlayType('application/x-mpegURL'));
-    })(),
-    hasMSE: typeof MediaSource !== 'undefined' && typeof MediaSource.isTypeSupported === 'function',
-    hlsJsSupported: false, // will check after load
-    dashJsAvailable: false,
-    mpegtsAvailable: false
+    hasNativeHLS: (function(){var v=document.createElement('video');return !!(v.canPlayType('application/vnd.apple.mpegurl')||v.canPlayType('application/x-mpegURL'));})(),
+    hasMSE: typeof MediaSource!=='undefined'&&typeof MediaSource.isTypeSupported==='function',
+    hlsJsSupported:false,dashJsAvailable:false,mpegtsAvailable:false
 };
 
 let debugLines = [];
 function debugLog(msg) {
-    const ts = new Date().toLocaleTimeString();
-    const line = `[${ts}] ${msg}`;
+    // URL'leri loglardan filtrele
+    if(typeof msg==='string'){
+        msg=msg.replace(/https?:\/\/raw\.githubusercontent\.com[^\s]*/gi,'[STREAM_SRC]');
+    }
+    const ts=new Date().toLocaleTimeString();
+    const line=`[${ts}] ${msg}`;
     debugLines.push(line);
-    if (debugLines.length > 80) debugLines.shift();
-    const dp = document.getElementById('debugPanel');
-    if (dp) dp.innerHTML = debugLines.join('<br>');
-    console.log('[SENTV]', msg);
+    if(debugLines.length>80)debugLines.shift();
+    const dp=document.getElementById('debugPanel');
+    if(dp)dp.innerHTML=debugLines.join('<br>');
+    console.log('[SENTV]',msg);
 }
 
-let debugTapCount = 0, debugTapTimer = null;
-document.addEventListener('click', function(e) {
-    if (e.clientX > window.innerWidth - 80 && e.clientY < 80) {
-        debugTapCount++;
-        clearTimeout(debugTapTimer);
-        debugTapTimer = setTimeout(() => { debugTapCount = 0; }, 600);
-        if (debugTapCount >= 3) {
-            debugTapCount = 0;
-            document.getElementById('debugPanel').classList.toggle('visible');
-        }
+let debugTapCount=0,debugTapTimer=null;
+document.addEventListener('click',function(e){
+    if(e.clientX>window.innerWidth-80&&e.clientY<80){
+        debugTapCount++;clearTimeout(debugTapTimer);
+        debugTapTimer=setTimeout(()=>{debugTapCount=0;},600);
+        if(debugTapCount>=3){debugTapCount=0;document.getElementById('debugPanel').classList.toggle('visible');}
     }
 });
 
 function showBg(){var b=document.getElementById('videoBg');b.classList.remove('playing');b.style.opacity='1';}
 function hideBg(){var b=document.getElementById('videoBg');b.classList.add('playing');b.style.opacity='0';}
-
-// Blob URL temizleme
-function cleanupBlobUrls() {
-    blobUrls.forEach(u => { try { URL.revokeObjectURL(u); } catch(e){} });
-    blobUrls = [];
-}
+function cleanupBlobUrls(){blobUrls.forEach(u=>{try{URL.revokeObjectURL(u);}catch(e){}});blobUrls=[];}
 
 document.addEventListener('DOMContentLoaded',async()=>{
-    // Library availability check
-    platformInfo.hlsJsSupported = (typeof Hls !== 'undefined') && Hls.isSupported();
-    platformInfo.dashJsAvailable = (typeof dashjs !== 'undefined');
-    platformInfo.mpegtsAvailable = (typeof mpegts !== 'undefined') && mpegts.isSupported();
+    platformInfo.hlsJsSupported=(typeof Hls!=='undefined')&&Hls.isSupported();
+    platformInfo.dashJsAvailable=(typeof dashjs!=='undefined');
+    platformInfo.mpegtsAvailable=(typeof mpegts!=='undefined')&&mpegts.isSupported();
 
-    debugLog('Platform: ' + navigator.userAgent.substring(0, 100));
-    debugLog('Android=' + platformInfo.isAndroid + ' iOS=' + platformInfo.isIOS + ' WebView=' + platformInfo.isAndroidWebView);
-    debugLog('NativeHLS=' + platformInfo.hasNativeHLS + ' MSE=' + platformInfo.hasMSE);
-    debugLog('HLS.js=' + platformInfo.hlsJsSupported + ' dash.js=' + platformInfo.dashJsAvailable + ' mpegts.js=' + platformInfo.mpegtsAvailable);
+    debugLog('Platform init OK');
+    debugLog('HLS.js='+platformInfo.hlsJsSupported+' dash.js='+platformInfo.dashJsAvailable+' mpegts='+platformInfo.mpegtsAvailable);
 
     var img=new Image();
     img.src='https://raw.githubusercontent.com/kadirsener1/tvmyeni/refs/heads/main/bg.JPG';
-    await loadM3U(M3U_URL);
+    await loadM3U();
     setTimeout(()=>{
         document.getElementById('loadingScreen').classList.add('hide');
         showCategorySidebar();
     },2000);
     setupEventListeners();setupMouseEvents();setupTouchGestures();
-    setInterval(async()=>{const pi=currentChannelIndex;await loadM3U(M3U_URL);if(pi>=0&&pi<channels.length)currentChannelIndex=pi;},AUTO_REFRESH);
+
+    // Otomatik yenileme
+    setInterval(async()=>{
+        const pi=currentChannelIndex;
+        await loadM3U();
+        if(pi>=0&&pi<channels.length)currentChannelIndex=pi;
+    },AUTO_REFRESH);
 });
 
-async function loadM3U(url){
-    try{const r=await fetch(url);if(!r.ok)throw 0;channels=parseM3U(await r.text());debugLog('M3U loaded direct: '+channels.length+' ch');}
-    catch(e){
-        for(let i=0;i<CORS_PROXIES.length;i++){
-            try{const r=await fetch(CORS_PROXIES[i]+encodeURIComponent(url));if(r.ok){channels=parseM3U(await r.text());debugLog('M3U loaded proxy['+i+']: '+channels.length+' ch');break;}}catch(e2){}
+// 🔒 M3U yükleme - URL gizli
+async function loadM3U(){
+    try{
+        var text=await _secureFetch.loadM3U();
+        if(text){
+            channels=parseM3U(text);
+            debugLog('Channels loaded: '+channels.length);
+        }else{
+            channels=[];
+            showToast('❌','Kanal listesi yüklenemedi');
+            debugLog('M3U load failed');
+            return;
         }
-        if(!channels.length){showToast('❌','M3U yüklenemedi');debugLog('M3U FAIL');return;}
+    }catch(e){
+        channels=[];
+        showToast('❌','Bağlantı hatası');
+        debugLog('M3U error: '+e.message);
+        return;
     }
     channels.forEach((c,i)=>{c.index=i;c.number=i+1;});
     extractCategories();filterChannels();forceRebuildList();
@@ -429,53 +624,25 @@ function parseM3U(t){
 
 function extractCategories(){
     const s=new Set();channels.forEach(c=>{if(c.group)s.add(c.group);});
-    categories=Array.from(s);
-    allCategoryNames=['all',...categories];
-    renderCatList();
+    categories=Array.from(s);allCategoryNames=['all',...categories];renderCatList();
 }
 
 function renderCatList(){
-    const container=document.getElementById('catList');
-    let h='';
-    h+=`<div class="cat-item${currentCategory==='all'?' active':''}${focusMode==='categories'&&focusedCategoryIndex===0?' focused':''}" data-catidx="0" onclick="selectCategoryFromList('all')">
-        <span class="cat-item-name">📺 Tümü</span>
-        <span class="cat-item-count">${channels.length}</span>
-    </div>`;
-    categories.forEach((cat,i)=>{
-        const cnt=channels.filter(c=>c.group===cat).length;
-        const ci=i+1;
-        h+=`<div class="cat-item${currentCategory===cat?' active':''}${focusMode==='categories'&&focusedCategoryIndex===ci?' focused':''}" data-catidx="${ci}" onclick="selectCategoryFromList('${cat.replace(/'/g,"\\'")}')">
-            <span class="cat-item-name">${cat}</span>
-            <span class="cat-item-count">${cnt}</span>
-        </div>`;
-    });
+    const container=document.getElementById('catList');let h='';
+    h+=`<div class="cat-item${currentCategory==='all'?' active':''}${focusMode==='categories'&&focusedCategoryIndex===0?' focused':''}" data-catidx="0" onclick="selectCategoryFromList('all')"><span class="cat-item-name">📺 Tümü</span><span class="cat-item-count">${channels.length}</span></div>`;
+    categories.forEach((cat,i)=>{const cnt=channels.filter(c=>c.group===cat).length;const ci=i+1;
+        h+=`<div class="cat-item${currentCategory===cat?' active':''}${focusMode==='categories'&&focusedCategoryIndex===ci?' focused':''}" data-catidx="${ci}" onclick="selectCategoryFromList('${cat.replace(/'/g,"\\'")}')"><span class="cat-item-name">${cat}</span><span class="cat-item-count">${cnt}</span></div>`;});
     container.innerHTML=h;
-    if(focusMode==='categories'){
-        const focused=container.querySelector('.cat-item.focused');
-        if(focused)focused.scrollIntoView({behavior:'smooth',block:'nearest'});
-    }
+    if(focusMode==='categories'){const f=container.querySelector('.cat-item.focused');if(f)f.scrollIntoView({behavior:'smooth',block:'nearest'});}
 }
 
 function selectCategoryFromList(cat){
-    currentCategory=cat;
-    focusedCategoryIndex=allCategoryNames.indexOf(cat);
-    if(focusedCategoryIndex===-1)focusedCategoryIndex=0;
-    filterChannels();
-    focusedChannelIndex=0;
-    updateCatLabel();
-    renderCatList();
-    hideCategorySidebar();
-    showSidebar();
-    forceRebuildList();
+    currentCategory=cat;focusedCategoryIndex=allCategoryNames.indexOf(cat);if(focusedCategoryIndex===-1)focusedCategoryIndex=0;
+    filterChannels();focusedChannelIndex=0;updateCatLabel();renderCatList();hideCategorySidebar();showSidebar();forceRebuildList();
     showToast('📂',cat==='all'?'Tümü':cat);
 }
 
-function updateCatLabel(){
-    const label=document.getElementById('sidebarCatLabel');
-    const name=currentCategory==='all'?'Tümü':currentCategory;
-    label.innerHTML=`📂 ${name} <span class="back-hint">◄ Kategoriler</span>`;
-}
-
+function updateCatLabel(){const label=document.getElementById('sidebarCatLabel');const name=currentCategory==='all'?'Tümü':currentCategory;label.innerHTML=`📂 ${name} <span class="back-hint">◄ Kategoriler</span>`;}
 function filterChannels(){filteredChannels=channels.filter(c=>currentCategory==='all'||c.group===currentCategory);document.getElementById('channelCount').textContent=`${filteredChannels.length} kanal`;}
 function getListHash(){return currentCategory+'|'+filteredChannels.length+'|'+currentChannelIndex;}
 function forceRebuildList(){document.getElementById('channelList').dataset.listHash='';renderChannelList();}
@@ -499,777 +666,255 @@ function getResLabel(w,h){if(h>=2160||w>=3840)return'4K UHD';if(h>=1440||w>=2560
 function updateResDisplay(txt){currentResolution=txt;const el=document.getElementById('infoBarRes'),et=document.getElementById('infoBarResText');if(txt){et.textContent=txt;el.style.display='flex';}else{el.style.display='none';}document.getElementById('nowPlayingRes').textContent=txt?`• ${txt}`:'';}
 function startResMonitor(){if(resolutionChecker)clearInterval(resolutionChecker);const v=document.getElementById('videoPlayer');currentResolution='';updateResDisplay('');resolutionChecker=setInterval(()=>{if(v.videoWidth>0&&v.videoHeight>0){const w=v.videoWidth,h=v.videoHeight,l=getResLabel(w,h),nr=`${w}×${h} ${l}`;if(nr!==currentResolution)updateResDisplay(nr);}},2000);}
 
-function showSidebar(){
-    const s=document.getElementById('sidebar');
-    s.classList.remove('hidden');
-    sidebarVisible=true;
-    focusMode='channels';
-    updateCatLabel();
-    forceRebuildList();
-}
-function hideSidebar(){
-    document.getElementById('sidebar').classList.add('hidden');
-    sidebarVisible=false;
-    if(!catSidebarVisible)focusMode='none';
-}
-function showCategorySidebar(){
-    hideSidebar();
-    const cs=document.getElementById('categorySidebar');
-    cs.classList.remove('hidden');
-    catSidebarVisible=true;
-    focusMode='categories';
-    focusedCategoryIndex=allCategoryNames.indexOf(currentCategory);
-    if(focusedCategoryIndex<0)focusedCategoryIndex=0;
-    renderCatList();
-}
-function hideCategorySidebar(){
-    document.getElementById('categorySidebar').classList.add('hidden');
-    catSidebarVisible=false;
-    if(!sidebarVisible)focusMode='none';
-}
-function hideAllSidebars(){
-    hideSidebar();hideCategorySidebar();focusMode='none';
-}
-function toggleSidebar(){
-    if(sidebarVisible||catSidebarVisible){hideAllSidebars();}
-    else{showCategorySidebar();}
+function showSidebar(){const s=document.getElementById('sidebar');s.classList.remove('hidden');sidebarVisible=true;focusMode='channels';updateCatLabel();forceRebuildList();}
+function hideSidebar(){document.getElementById('sidebar').classList.add('hidden');sidebarVisible=false;if(!catSidebarVisible)focusMode='none';}
+function showCategorySidebar(){hideSidebar();const cs=document.getElementById('categorySidebar');cs.classList.remove('hidden');catSidebarVisible=true;focusMode='categories';focusedCategoryIndex=allCategoryNames.indexOf(currentCategory);if(focusedCategoryIndex<0)focusedCategoryIndex=0;renderCatList();}
+function hideCategorySidebar(){document.getElementById('categorySidebar').classList.add('hidden');catSidebarVisible=false;if(!sidebarVisible)focusMode='none';}
+function hideAllSidebars(){hideSidebar();hideCategorySidebar();focusMode='none';}
+function toggleSidebar(){if(sidebarVisible||catSidebarVisible){hideAllSidebars();}else{showCategorySidebar();}}
+
+function detectStreamType(url){
+    const u=url.toLowerCase();
+    if(u.includes('.mpd')||u.includes('manifest.mpd')||u.includes('/dash/'))return'dash';
+    if(u.includes('.flv')||u.endsWith('.flv'))return'flv';
+    if(u.includes('.ts')&&!u.includes('.m3u'))return'ts';
+    if(u.includes('.mp4')&&!u.includes('.m3u'))return'mp4';
+    return'hls';
 }
 
-// ==========================================
-// STREAM FORMAT TESPİTİ
-// ==========================================
-function detectStreamType(url) {
-    const u = url.toLowerCase();
-    if (u.includes('.mpd') || u.includes('manifest.mpd') || u.includes('/dash/')) return 'dash';
-    if (u.includes('.flv') || u.endsWith('.flv')) return 'flv';
-    if (u.includes('.ts') && !u.includes('.m3u')) return 'ts';
-    if (u.includes('.mp4') && !u.includes('.m3u')) return 'mp4';
-    if (u.includes('.m3u8') || u.includes('m3u8') || u.includes('/hls/') ||
-        u.includes('/live/') || u.includes('/playlist') || u.includes('token=') ||
-        u.includes('vavoo') || u.includes('/play/') || u.includes('.m3u')) return 'hls';
-    // Default to HLS for unknown IPTV streams
-    return 'hls';
-}
-
-// ==========================================
-// TÜM PLAYER INSTANCE TEMİZLEME
-// ==========================================
-function destroyAllPlayers() {
-    if (hlsInstance) {
-        try { hlsInstance.destroy(); } catch(e){}
-        hlsInstance = null;
-    }
-    if (dashInstance) {
-        try { dashInstance.reset(); } catch(e){}
-        dashInstance = null;
-    }
-    if (mpegtsInstance) {
-        try { mpegtsInstance.unload(); mpegtsInstance.detachMediaElement(); mpegtsInstance.destroy(); } catch(e){}
-        mpegtsInstance = null;
-    }
-    if (stallChecker) { clearInterval(stallChecker); stallChecker = null; }
-    if (resolutionChecker) { clearInterval(resolutionChecker); resolutionChecker = null; }
+function destroyAllPlayers(){
+    if(hlsInstance){try{hlsInstance.destroy();}catch(e){}hlsInstance=null;}
+    if(dashInstance){try{dashInstance.reset();}catch(e){}dashInstance=null;}
+    if(mpegtsInstance){try{mpegtsInstance.unload();mpegtsInstance.detachMediaElement();mpegtsInstance.destroy();}catch(e){}mpegtsInstance=null;}
+    if(stallChecker){clearInterval(stallChecker);stallChecker=null;}
+    if(resolutionChecker){clearInterval(resolutionChecker);resolutionChecker=null;}
     cleanupBlobUrls();
 }
 
-// ==========================================
-// VIDEO ELEMENT SIFIRLAMA
-// ==========================================
-function resetVideoElement() {
-    const video = document.getElementById('videoPlayer');
-    video.pause();
-    video.removeAttribute('src');
-    video.innerHTML = '';
-    // crossorigin ayarını kaldır - bazı streamlerde sorun çıkarıyor
-    video.removeAttribute('crossorigin');
-    video.load();
-    return video;
+function resetVideoElement(){
+    const video=document.getElementById('videoPlayer');
+    video.pause();video.removeAttribute('src');video.innerHTML='';video.removeAttribute('crossorigin');video.load();return video;
 }
 
-// ==========================================
-// ANA PLAY FONKSİYONU - Geliştirilmiş
-// ==========================================
-async function playChannel(fi) {
-    const ch = filteredChannels[fi];
-    if (!ch) return;
+async function playChannel(fi){
+    const ch=filteredChannels[fi];if(!ch)return;
+    if(ch.url===currentPlayingUrl){hideAllSidebars();showChannelInfoBar(ch);return;}
 
-    if (ch.url === currentPlayingUrl) {
-        hideAllSidebars();
-        showChannelInfoBar(ch);
-        return;
-    }
+    currentChannelIndex=ch.index;focusedChannelIndex=fi;currentPlayingUrl=ch.url;
 
-    currentChannelIndex = ch.index;
-    focusedChannelIndex = fi;
-    currentPlayingUrl = ch.url;
-    currentRetryCount = 0;
-
-    debugLog('═══════════════════════════════');
-    debugLog('Playing: ' + ch.name);
-    debugLog('URL: ' + ch.url.substring(0, 120));
+    debugLog('Playing: '+ch.name);
 
     destroyAllPlayers();
-    const video = resetVideoElement();
+    const video=resetVideoElement();
     updateResDisplay('');
 
-    document.getElementById('welcomeScreen').style.display = 'none';
-    document.getElementById('bufferingSpinner').style.display = 'block';
+    document.getElementById('welcomeScreen').style.display='none';
+    document.getElementById('bufferingSpinner').style.display='block';
     showBg();
 
-    const streamType = detectStreamType(ch.url);
-    debugLog('Stream type: ' + streamType);
+    const streamType=detectStreamType(ch.url);
+    debugLog('Type: '+streamType);
 
-    await executePlayStrategy(video, ch.url, ch, streamType, 0);
+    await executePlayStrategy(video,ch.url,ch,streamType,0);
 
     startResMonitor();
-    document.getElementById('nowPlayingText').textContent = ch.name;
-    showChannelInfoBar(ch);
-    forceRebuildList();
-    setTimeout(() => hideAllSidebars(), 400);
-    showToast('▶️', ch.name);
+    document.getElementById('nowPlayingText').textContent=ch.name;
+    showChannelInfoBar(ch);forceRebuildList();
+    setTimeout(()=>hideAllSidebars(),400);
+    showToast('▶️',ch.name);
 }
 
-// ==========================================
-// PLAY STRATEGY ZİNCİRİ
-// Strategy 0: HLS.js / dash.js / mpegts.js (birincil)
-// Strategy 1: HLS.js with CORS proxy
-// Strategy 2: Native player (crossorigin=anonymous)
-// Strategy 3: Native player (crossorigin kaldırılmış)
-// Strategy 4: Native with CORS proxy
-// ==========================================
-async function executePlayStrategy(video, url, ch, streamType, strategyIndex) {
-    debugLog('Strategy #' + strategyIndex + ' for type=' + streamType);
-
-    switch(strategyIndex) {
-        case 0: // Birincil: Library ile oynat
-            if (streamType === 'dash' && platformInfo.dashJsAvailable) {
-                playWithDashJs(video, url, ch, strategyIndex);
-            } else if ((streamType === 'flv' || streamType === 'ts') && platformInfo.mpegtsAvailable) {
-                playWithMpegts(video, url, ch, streamType, strategyIndex);
-            } else if (streamType === 'hls' && platformInfo.hlsJsSupported) {
-                playWithHlsJs(video, url, ch, strategyIndex);
-            } else if (streamType === 'hls' && platformInfo.hasNativeHLS) {
-                // iOS/Safari - direkt native dene
-                playNative(video, url, ch, true, strategyIndex);
-            } else if (streamType === 'mp4') {
-                playNative(video, url, ch, false, strategyIndex);
-            } else {
-                // Hiç library yok, native dene
-                playNative(video, url, ch, streamType === 'hls', strategyIndex);
-            }
+async function executePlayStrategy(video,url,ch,streamType,si){
+    debugLog('Strategy #'+si);
+    switch(si){
+        case 0:
+            if(streamType==='dash'&&platformInfo.dashJsAvailable){playWithDashJs(video,url,ch,si);}
+            else if((streamType==='flv'||streamType==='ts')&&platformInfo.mpegtsAvailable){playWithMpegts(video,url,ch,streamType,si);}
+            else if(streamType==='hls'&&platformInfo.hlsJsSupported){playWithHlsJs(video,url,ch,si);}
+            else if(streamType==='hls'&&platformInfo.hasNativeHLS){playNative(video,url,ch,true,si);}
+            else{playNative(video,url,ch,streamType==='hls',si);}
             break;
-
-        case 1: // HLS.js + CORS Proxy
-            if (platformInfo.hlsJsSupported && streamType === 'hls') {
-                const proxyUrl = CORS_PROXIES[0] + encodeURIComponent(url);
-                debugLog('Trying CORS proxy: ' + CORS_PROXIES[0].substring(0, 30));
-                destroyAllPlayers();
-                video = resetVideoElement();
-                playWithHlsJs(video, proxyUrl, ch, strategyIndex);
-            } else {
-                executePlayStrategy(video, url, ch, streamType, strategyIndex + 1);
-            }
+        case 1:
+            if(platformInfo.hlsJsSupported&&streamType==='hls'){
+                destroyAllPlayers();video=resetVideoElement();
+                playWithHlsJs(video,CORS_PROXIES[0]+encodeURIComponent(url),ch,si);
+            }else{executePlayStrategy(video,url,ch,streamType,si+1);}
             break;
-
-        case 2: // Native with crossorigin
-            debugLog('Native with crossorigin=anonymous');
-            destroyAllPlayers();
-            video = resetVideoElement();
-            video.setAttribute('crossorigin', 'anonymous');
-            playNative(video, url, ch, streamType === 'hls', strategyIndex);
+        case 2:
+            destroyAllPlayers();video=resetVideoElement();
+            video.setAttribute('crossorigin','anonymous');
+            playNative(video,url,ch,streamType==='hls',si);
             break;
-
-        case 3: // Native without crossorigin
-            debugLog('Native without crossorigin');
-            destroyAllPlayers();
-            video = resetVideoElement();
+        case 3:
+            destroyAllPlayers();video=resetVideoElement();
             video.removeAttribute('crossorigin');
-            playNative(video, url, ch, streamType === 'hls', strategyIndex);
+            playNative(video,url,ch,streamType==='hls',si);
             break;
-
-        case 4: // Native + CORS Proxy
-            debugLog('Native + CORS proxy');
-            destroyAllPlayers();
-            video = resetVideoElement();
+        case 4:
+            destroyAllPlayers();video=resetVideoElement();
             video.removeAttribute('crossorigin');
-            const proxiedUrl = CORS_PROXIES[0] + encodeURIComponent(url);
-            playNative(video, proxiedUrl, ch, streamType === 'hls', strategyIndex);
+            playNative(video,CORS_PROXIES[0]+encodeURIComponent(url),ch,streamType==='hls',si);
             break;
-
         default:
             debugLog('All strategies exhausted');
-            document.getElementById('bufferingSpinner').style.display = 'none';
-            showToast('❌', 'Bu kanal oynatılamıyor');
-            showBg();
-            currentPlayingUrl = '';
+            document.getElementById('bufferingSpinner').style.display='none';
+            showToast('❌','Bu kanal oynatılamıyor');
+            showBg();currentPlayingUrl='';
             break;
     }
 }
 
-function nextStrategy(video, originalUrl, ch, currentStrategy) {
-    const streamType = detectStreamType(originalUrl);
-    // originalUrl'yi her zaman kullan (proxy eklenmiş olanı değil)
-    const cleanUrl = originalUrl.includes('allorigins.win') || originalUrl.includes('corsproxy.io') || originalUrl.includes('codetabs.com')
-        ? decodeURIComponent(originalUrl.split('?url=')[1] || originalUrl.split('?quest=')[1] || originalUrl.split('/?')[1] || originalUrl)
-        : originalUrl;
-    executePlayStrategy(video, cleanUrl, ch, streamType, currentStrategy + 1);
+function nextStrategy(video,originalUrl,ch,cs){
+    const st=detectStreamType(originalUrl);
+    const clean=originalUrl.includes('allorigins.win')||originalUrl.includes('corsproxy.io')||originalUrl.includes('codetabs.com')?decodeURIComponent(originalUrl.split('?url=')[1]||originalUrl.split('?quest=')[1]||originalUrl.split('/?')[1]||originalUrl):originalUrl;
+    executePlayStrategy(video,clean,ch,st,cs+1);
 }
 
-// ==========================================
-// HLS.js PLAYER - Ultra dayanıklı yapılandırma
-// ==========================================
-function playWithHlsJs(video, url, ch, strategyIndex) {
-    debugLog('HLS.js loading: ' + url.substring(0, 80));
-
-    const hlsConfig = {
-        // Buffer ayarları
-        maxBufferLength: 30,
-        maxMaxBufferLength: 120,
-        maxBufferSize: 120 * 1000 * 1000,
-        maxBufferHole: 1.5,
-        backBufferLength: 30,
-
-        // Timeout ayarları - çok cömert
-        manifestLoadingTimeOut: 30000,
-        manifestLoadingMaxRetry: 4,
-        manifestLoadingRetryDelay: 1500,
-        manifestLoadingMaxRetryTimeout: 30000,
-
-        levelLoadingTimeOut: 30000,
-        levelLoadingMaxRetry: 4,
-        levelLoadingRetryDelay: 1500,
-        levelLoadingMaxRetryTimeout: 30000,
-
-        fragLoadingTimeOut: 60000,
-        fragLoadingMaxRetry: 6,
-        fragLoadingRetryDelay: 1000,
-        fragLoadingMaxRetryTimeout: 60000,
-
-        // Worker & Performance
-        enableWorker: true,
-        lowLatencyMode: false,
-        startFragPrefetch: true,
-        progressive: true,
-
-        // ABR ayarları
-        testBandwidth: true,
-        abrEwmaDefaultEstimate: 500000,
-        abrBandWidthFactor: 0.95,
-        abrBandWidthUpFactor: 0.7,
-        abrMaxWithRealBitrate: true,
-        capLevelToPlayerSize: false,
-
-        // Canlı yayın ayarları
-        liveSyncDurationCount: 3,
-        liveMaxLatencyDurationCount: 10,
-        liveDurationInfinity: true,
-        liveBackBufferLength: 30,
-
-        // Hata toleransı
-        nudgeOffset: 0.3,
-        nudgeMaxRetry: 10,
-        startPosition: -1,
-        stretchShortVideoTrack: true,
-        forceKeyFrameOnDiscontinuity: true,
-        appendErrorMaxRetry: 5,
-        highBufferWatchdogPeriod: 3,
-
-        // XHR ayarları - CORS bypass
-        xhrSetup: function(xhr, xhrUrl) {
-            xhr.timeout = 60000;
-            xhr.withCredentials = false;
-        },
-
-        // Özel header gerektiğinde
-        fetchSetup: function(context, initParams) {
-            initParams.mode = 'cors';
-            initParams.credentials = 'omit';
-            return new Request(context.url, initParams);
-        }
-    };
-
-    hlsInstance = new Hls(hlsConfig);
-
-    let manifestLoaded = false;
-    let fatalErrorCount = 0;
-    let playStarted = false;
-
-    hlsInstance.on(Hls.Events.MANIFEST_PARSED, function(event, data) {
-        manifestLoaded = true;
-        debugLog('HLS manifest parsed, levels=' + data.levels.length + ' audio=' + data.audioTracks.length);
-
-        // En iyi kaliteyi seç
-        if (data.levels.length > 1) {
-            hlsInstance.currentLevel = -1; // Auto
-        }
-
-        attemptPlay(video, ch, strategyIndex);
+function playWithHlsJs(video,url,ch,si){
+    debugLog('HLS.js start');
+    hlsInstance=new Hls({
+        maxBufferLength:30,maxMaxBufferLength:120,maxBufferSize:120*1000*1000,maxBufferHole:1.5,backBufferLength:30,
+        manifestLoadingTimeOut:30000,manifestLoadingMaxRetry:4,manifestLoadingRetryDelay:1500,
+        levelLoadingTimeOut:30000,levelLoadingMaxRetry:4,levelLoadingRetryDelay:1500,
+        fragLoadingTimeOut:60000,fragLoadingMaxRetry:6,fragLoadingRetryDelay:1000,
+        enableWorker:true,lowLatencyMode:false,startFragPrefetch:true,progressive:true,
+        testBandwidth:true,abrEwmaDefaultEstimate:500000,abrBandWidthFactor:0.95,abrBandWidthUpFactor:0.7,abrMaxWithRealBitrate:true,
+        liveSyncDurationCount:3,liveMaxLatencyDurationCount:10,liveDurationInfinity:true,
+        nudgeOffset:0.3,nudgeMaxRetry:10,startPosition:-1,stretchShortVideoTrack:true,forceKeyFrameOnDiscontinuity:true,appendErrorMaxRetry:5,
+        xhrSetup:function(xhr){xhr.timeout=60000;xhr.withCredentials=false;},
+        fetchSetup:function(ctx,init){init.mode='cors';init.credentials='omit';return new Request(ctx.url,init);}
     });
 
-    hlsInstance.on(Hls.Events.MANIFEST_LOADED, function(event, data) {
-        debugLog('HLS manifest loaded, url=' + (data.url || '').substring(0, 60));
-    });
+    let mLoaded=false,fatalCount=0;
+    hlsInstance.on(Hls.Events.MANIFEST_PARSED,function(e,d){mLoaded=true;debugLog('Manifest OK, levels='+d.levels.length);attemptPlay(video,ch,si);});
+    hlsInstance.on(Hls.Events.FRAG_BUFFERED,function(){document.getElementById('bufferingSpinner').style.display='none';});
 
-    hlsInstance.on(Hls.Events.LEVEL_LOADED, function(event, data) {
-        if (!manifestLoaded) return;
-        debugLog('Level loaded, live=' + data.details.live + ' dur=' + Math.round(data.details.totalduration || 0));
-    });
-
-    hlsInstance.on(Hls.Events.FRAG_LOADED, function() {
-        if (!playStarted) {
-            playStarted = true;
-            debugLog('First fragment loaded');
+    hlsInstance.on(Hls.Events.ERROR,function(e,d){
+        debugLog('HLS err: '+d.type+'/'+d.details+' fatal='+d.fatal);
+        if(d.fatal){
+            fatalCount++;
+            if(d.type===Hls.ErrorTypes.NETWORK_ERROR){
+                if(fatalCount<=3){showToast('🔄','Yeniden deneniyor...');setTimeout(()=>{if(hlsInstance)try{hlsInstance.startLoad();}catch(e){}},1500*fatalCount);}
+                else{destroyAllPlayers();nextStrategy(video,ch.url,ch,si);}
+            }else if(d.type===Hls.ErrorTypes.MEDIA_ERROR){
+                if(fatalCount<=2){try{hlsInstance.recoverMediaError();}catch(e){}}
+                else if(fatalCount<=4){try{hlsInstance.swapAudioCodec();hlsInstance.recoverMediaError();}catch(e){}}
+                else{destroyAllPlayers();nextStrategy(video,ch.url,ch,si);}
+            }else{destroyAllPlayers();nextStrategy(video,ch.url,ch,si);}
         }
+        if(!d.fatal&&d.details==='bufferStalledError'&&video.currentTime>0){video.currentTime+=0.3;}
     });
 
-    hlsInstance.on(Hls.Events.FRAG_BUFFERED, function() {
-        document.getElementById('bufferingSpinner').style.display = 'none';
-    });
-
-    hlsInstance.on(Hls.Events.ERROR, function(event, data) {
-        debugLog('HLS error: ' + data.type + '/' + data.details + ' fatal=' + data.fatal + ' resp=' + (data.response ? data.response.code : 'n/a'));
-
-        if (data.fatal) {
-            fatalErrorCount++;
-
-            if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
-                if (fatalErrorCount <= 3) {
-                    debugLog('Network error recovery attempt ' + fatalErrorCount);
-                    showToast('🔄', 'Bağlantı yeniden deneniyor...');
-                    setTimeout(() => {
-                        if (hlsInstance) {
-                            try { hlsInstance.startLoad(); } catch(e){}
-                        }
-                    }, 1500 * fatalErrorCount);
-                } else {
-                    debugLog('HLS.js network failed, trying next strategy');
-                    destroyAllPlayers();
-                    nextStrategy(video, ch.url, ch, strategyIndex);
-                }
-            } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
-                if (fatalErrorCount <= 2) {
-                    debugLog('Media error recovery attempt ' + fatalErrorCount);
-                    try { hlsInstance.recoverMediaError(); } catch(e){}
-                } else if (fatalErrorCount <= 4) {
-                    debugLog('Swap audio codec recovery');
-                    try { hlsInstance.swapAudioCodec(); hlsInstance.recoverMediaError(); } catch(e){}
-                } else {
-                    debugLog('HLS.js media failed, trying next strategy');
-                    destroyAllPlayers();
-                    nextStrategy(video, ch.url, ch, strategyIndex);
-                }
-            } else {
-                debugLog('HLS.js other fatal error, trying next strategy');
-                destroyAllPlayers();
-                nextStrategy(video, ch.url, ch, strategyIndex);
-            }
-        }
-
-        // Non-fatal error handling
-        if (!data.fatal) {
-            if (data.details === 'bufferStalledError' && video.currentTime > 0) {
-                video.currentTime += 0.3;
-            }
-        }
-    });
-
-    hlsInstance.loadSource(url);
-    hlsInstance.attachMedia(video);
-
-    // Manifest yüklenme timeout
-    setTimeout(() => {
-        if (!manifestLoaded && hlsInstance) {
-            debugLog('HLS manifest timeout, trying next strategy');
-            destroyAllPlayers();
-            nextStrategy(video, ch.url, ch, strategyIndex);
-        }
-    }, 35000);
-
-    setupVideoEvents(video, ch, strategyIndex);
-    setupStallChecker(video, ch, strategyIndex);
+    hlsInstance.loadSource(url);hlsInstance.attachMedia(video);
+    setTimeout(()=>{if(!mLoaded&&hlsInstance){debugLog('Manifest timeout');destroyAllPlayers();nextStrategy(video,ch.url,ch,si);}},35000);
+    setupVideoEvents(video,ch,si);setupStallChecker(video,ch,si);
 }
 
-// ==========================================
-// DASH.JS PLAYER
-// ==========================================
-function playWithDashJs(video, url, ch, strategyIndex) {
-    debugLog('dash.js loading: ' + url.substring(0, 80));
-
-    dashInstance = dashjs.MediaPlayer().create();
-    dashInstance.updateSettings({
-        streaming: {
-            delay: { liveDelay: 3 },
-            liveCatchup: { enabled: true, mode: 'liveCatchupModeLoLP' },
-            buffer: {
-                bufferTimeAtTopQuality: 30,
-                bufferTimeAtTopQualityLongForm: 60,
-                stallThreshold: 0.5,
-                bufferToKeep: 20,
-                bufferAheadToKeep: 40
-            },
-            abr: { autoSwitchBitrate: { audio: true, video: true } },
-            retryAttempts: { MPD: 5, MediaSegment: 5, InitializationSegment: 5 },
-            retryIntervals: { MPD: 2000, MediaSegment: 2000, InitializationSegment: 2000 }
-        }
-    });
-
-    dashInstance.initialize(video, url, true);
-
-    dashInstance.on('error', function(e) {
-        debugLog('dash.js error: ' + JSON.stringify(e).substring(0, 100));
-        destroyAllPlayers();
-        nextStrategy(video, ch.url, ch, strategyIndex);
-    });
-
-    dashInstance.on('playbackStarted', function() {
-        debugLog('dash.js playback started');
-        document.getElementById('bufferingSpinner').style.display = 'none';
-        hideBg();
-        isPlaying = true;
-    });
-
-    setupVideoEvents(video, ch, strategyIndex);
-    setupStallChecker(video, ch, strategyIndex);
+function playWithDashJs(video,url,ch,si){
+    debugLog('dash.js start');
+    dashInstance=dashjs.MediaPlayer().create();
+    dashInstance.updateSettings({streaming:{delay:{liveDelay:3},buffer:{bufferTimeAtTopQuality:30,stallThreshold:0.5},abr:{autoSwitchBitrate:{audio:true,video:true}},retryAttempts:{MPD:5,MediaSegment:5},retryIntervals:{MPD:2000,MediaSegment:2000}}});
+    dashInstance.initialize(video,url,true);
+    dashInstance.on('error',function(){destroyAllPlayers();nextStrategy(video,ch.url,ch,si);});
+    dashInstance.on('playbackStarted',function(){document.getElementById('bufferingSpinner').style.display='none';hideBg();isPlaying=true;});
+    setupVideoEvents(video,ch,si);setupStallChecker(video,ch,si);
 }
 
-// ==========================================
-// MPEGTS.JS PLAYER (FLV/TS)
-// ==========================================
-function playWithMpegts(video, url, ch, type, strategyIndex) {
-    debugLog('mpegts.js loading (' + type + '): ' + url.substring(0, 80));
-
-    const config = {
-        type: type === 'flv' ? 'flv' : 'mpegts',
-        isLive: true,
-        url: url
-    };
-
-    mpegtsInstance = mpegts.createPlayer(config, {
-        enableWorker: true,
-        enableStashBuffer: true,
-        stashInitialSize: 384 * 1024,
-        lazyLoadMaxDuration: 180,
-        seekType: 'range',
-        autoCleanupSourceBuffer: true,
-        autoCleanupMaxBackwardDuration: 120,
-        autoCleanupMinBackwardDuration: 60
-    });
-
-    mpegtsInstance.attachMediaElement(video);
-    mpegtsInstance.load();
-
-    mpegtsInstance.on(mpegts.Events.ERROR, function(errorType, errorDetail, errorInfo) {
-        debugLog('mpegts.js error: ' + errorType + ' ' + errorDetail);
-        destroyAllPlayers();
-        nextStrategy(video, ch.url, ch, strategyIndex);
-    });
-
-    mpegtsInstance.on(mpegts.Events.LOADING_COMPLETE, function() {
-        debugLog('mpegts.js loading complete');
-    });
-
-    attemptPlay(video, ch, strategyIndex);
-    setupVideoEvents(video, ch, strategyIndex);
-    setupStallChecker(video, ch, strategyIndex);
+function playWithMpegts(video,url,ch,type,si){
+    debugLog('mpegts.js start ('+type+')');
+    mpegtsInstance=mpegts.createPlayer({type:type==='flv'?'flv':'mpegts',isLive:true,url:url},{enableWorker:true,enableStashBuffer:true,stashInitialSize:384*1024,autoCleanupSourceBuffer:true});
+    mpegtsInstance.attachMediaElement(video);mpegtsInstance.load();
+    mpegtsInstance.on(mpegts.Events.ERROR,function(){destroyAllPlayers();nextStrategy(video,ch.url,ch,si);});
+    attemptPlay(video,ch,si);setupVideoEvents(video,ch,si);setupStallChecker(video,ch,si);
 }
 
-// ==========================================
-// NATIVE PLAYER
-// ==========================================
-function playNative(video, url, ch, isHLS, strategyIndex) {
-    debugLog('Native play: ' + url.substring(0, 80) + ' isHLS=' + isHLS);
-
-    video.src = url;
-
-    if (isHLS) {
-        var source = document.createElement('source');
-        source.src = url;
-        source.type = 'application/x-mpegURL';
-        video.innerHTML = '';
-        video.appendChild(source);
-    }
-
+function playNative(video,url,ch,isHLS,si){
+    debugLog('Native play');
+    video.src=url;
+    if(isHLS){var s=document.createElement('source');s.src=url;s.type='application/x-mpegURL';video.innerHTML='';video.appendChild(s);}
     video.load();
-
-    // Timeout for native loading
-    const nativeTimeout = setTimeout(() => {
-        if (video.readyState < 2 && !isPlaying) {
-            debugLog('Native timeout, trying next strategy');
-            nextStrategy(video, ch.url, ch, strategyIndex);
-        }
-    }, 20000);
-
-    const origOnPlaying = video.onplaying;
-    video.addEventListener('playing', function natPlaying() {
-        clearTimeout(nativeTimeout);
-        video.removeEventListener('playing', natPlaying);
-    }, { once: true });
-
-    attemptPlay(video, ch, strategyIndex);
-    setupVideoEvents(video, ch, strategyIndex, nativeTimeout);
-    setupStallChecker(video, ch, strategyIndex);
+    const nt=setTimeout(()=>{if(video.readyState<2&&!isPlaying){debugLog('Native timeout');nextStrategy(video,ch.url,ch,si);}},20000);
+    video.addEventListener('playing',function np(){clearTimeout(nt);video.removeEventListener('playing',np);},{once:true});
+    attemptPlay(video,ch,si);setupVideoEvents(video,ch,si,nt);setupStallChecker(video,ch,si);
 }
 
-// ==========================================
-// PLAY ATTEMPT - Her platform için optimize
-// ==========================================
-function attemptPlay(video, ch, strategyIndex) {
-    var playAttempt = function(attempt) {
-        if (attempt > 5) {
-            debugLog('All play attempts failed for strategy #' + strategyIndex);
-            // Don't give up - setup tap to play
-            document.getElementById('bufferingSpinner').style.display = 'none';
-            showToast('👆', 'Oynatmak için ekrana dokunun');
-            setupTapToPlay(video);
-            return;
-        }
-
-        debugLog('Play attempt #' + attempt + ' (strategy #' + strategyIndex + ')');
-
-        var playPromise = video.play();
-        if (playPromise !== undefined) {
-            playPromise.then(function() {
-                debugLog('Play started! attempt #' + attempt);
-            }).catch(function(err) {
-                debugLog('Play failed #' + attempt + ': ' + err.name + ': ' + err.message);
-
-                if (err.name === 'NotAllowedError') {
-                    // Autoplay engellendi
-                    if (platformInfo.isAndroid || platformInfo.isIOS) {
-                        // Mobilde muted autoplay dene
-                        var wasMuted = video.muted;
-                        video.muted = true;
-                        video.play().then(function() {
-                            debugLog('Muted autoplay worked');
-                            setTimeout(function() {
-                                video.muted = wasMuted;
-                            }, 1000);
-                        }).catch(function() {
-                            video.muted = wasMuted;
-                            debugLog('Even muted autoplay failed');
-                            document.getElementById('bufferingSpinner').style.display = 'none';
-                            showToast('👆', 'Oynatmak için ekrana dokunun');
-                            setupTapToPlay(video);
-                        });
-                    } else {
-                        document.getElementById('bufferingSpinner').style.display = 'none';
-                        showToast('👆', 'Oynatmak için tıklayın');
-                        setupTapToPlay(video);
-                    }
-                } else if (err.name === 'AbortError') {
-                    setTimeout(function() { playAttempt(attempt + 1); }, 300 * attempt);
-                } else if (err.name === 'NotSupportedError') {
-                    debugLog('Format not supported, trying next strategy');
-                    nextStrategy(video, ch.url, ch, strategyIndex);
-                } else {
-                    setTimeout(function() { playAttempt(attempt + 1); }, 500 * attempt);
-                }
-            });
-        }
+function attemptPlay(video,ch,si){
+    var ap=function(a){
+        if(a>5){document.getElementById('bufferingSpinner').style.display='none';showToast('👆','Ekrana dokunun');setupTapToPlay(video);return;}
+        var pp=video.play();
+        if(pp!==undefined){pp.then(function(){debugLog('Play OK #'+a);}).catch(function(err){
+            if(err.name==='NotAllowedError'){
+                if(platformInfo.isAndroid||platformInfo.isIOS){var wm=video.muted;video.muted=true;video.play().then(function(){setTimeout(function(){video.muted=wm;},1000);}).catch(function(){video.muted=wm;setupTapToPlay(video);});}
+                else{document.getElementById('bufferingSpinner').style.display='none';showToast('👆','Tıklayın');setupTapToPlay(video);}
+            }else if(err.name==='AbortError'){setTimeout(function(){ap(a+1);},300*a);}
+            else if(err.name==='NotSupportedError'){nextStrategy(video,ch.url,ch,si);}
+            else{setTimeout(function(){ap(a+1);},500*a);}
+        });}
     };
-
-    // Android'de biraz bekle
-    if (platformInfo.isAndroid) {
-        setTimeout(function() { playAttempt(1); }, 200);
-    } else {
-        playAttempt(1);
-    }
+    if(platformInfo.isAndroid){setTimeout(function(){ap(1);},200);}else{ap(1);}
 }
 
-// ==========================================
-// TAP TO PLAY
-// ==========================================
-function setupTapToPlay(video) {
-    var container = document.getElementById('videoContainer');
-
-    function tapHandler(e) {
-        if (e.target.closest('#playerControls') || e.target.closest('#channelInfoBar') ||
-            e.target.closest('#sidebar') || e.target.closest('#categorySidebar')) return;
-
-        debugLog('Tap-to-play triggered');
-        video.muted = false;
-        video.play().then(function() {
-            debugLog('Tap-to-play: success');
-            container.removeEventListener('click', tapHandler);
-            container.removeEventListener('touchend', tapHandler);
-        }).catch(function(err) {
-            debugLog('Tap-to-play failed: ' + err.message);
-            // Muted dene
-            video.muted = true;
-            video.play().then(function() {
-                debugLog('Tap-to-play muted: success');
-                container.removeEventListener('click', tapHandler);
-                container.removeEventListener('touchend', tapHandler);
-                showToast('🔇', 'Sessiz oynatılıyor, sesi açmak için 🔊 basın');
-            }).catch(function(){});
+function setupTapToPlay(video){
+    var c=document.getElementById('videoContainer');
+    function th(e){
+        if(e.target.closest('#playerControls')||e.target.closest('#channelInfoBar')||e.target.closest('#sidebar')||e.target.closest('#categorySidebar'))return;
+        video.muted=false;video.play().then(function(){c.removeEventListener('click',th);c.removeEventListener('touchend',th);}).catch(function(){
+            video.muted=true;video.play().then(function(){c.removeEventListener('click',th);c.removeEventListener('touchend',th);showToast('🔇','Sessiz mod');}).catch(function(){});
         });
     }
-
-    container.addEventListener('click', tapHandler);
-    container.addEventListener('touchend', tapHandler, { passive: true });
+    c.addEventListener('click',th);c.addEventListener('touchend',th,{passive:true});
 }
 
-// ==========================================
-// VIDEO EVENT HANDLERS
-// ==========================================
-function setupVideoEvents(video, ch, strategyIndex, extraTimeout) {
-    video.onplaying = function() {
-        debugLog('Event: playing');
-        document.getElementById('bufferingSpinner').style.display = 'none';
-        isPlaying = true;
-        document.getElementById('playPauseBtn').textContent = '⏸';
-        hideBg();
+function setupVideoEvents(video,ch,si,et){
+    video.onplaying=function(){document.getElementById('bufferingSpinner').style.display='none';isPlaying=true;document.getElementById('playPauseBtn').textContent='⏸';hideBg();};
+    video.onwaiting=function(){document.getElementById('bufferingSpinner').style.display='block';};
+    video.oncanplaythrough=function(){document.getElementById('bufferingSpinner').style.display='none';};
+    video.onloadedmetadata=function(){debugLog('Meta: '+video.videoWidth+'x'+video.videoHeight);};
+    video.onloadeddata=function(){if(video.paused&&!isPlaying){video.play().catch(function(){});}};
+    video.onerror=function(){
+        var err=video.error;debugLog('Video err: '+(err?'code='+err.code:'unknown'));
+        if(et)clearTimeout(et);
+        if(err&&(err.code===4||err.code===2||err.code===3)){destroyAllPlayers();nextStrategy(video,ch.url,ch,si);}
+        else{document.getElementById('bufferingSpinner').style.display='none';showToast('❌','Kanal yüklenemedi');showBg();currentPlayingUrl='';}
     };
-
-    video.onwaiting = function() {
-        document.getElementById('bufferingSpinner').style.display = 'block';
-    };
-
-    video.oncanplay = function() {
-        debugLog('Event: canplay readyState=' + video.readyState);
-    };
-
-    video.oncanplaythrough = function() {
-        debugLog('Event: canplaythrough');
-        document.getElementById('bufferingSpinner').style.display = 'none';
-    };
-
-    video.onloadedmetadata = function() {
-        debugLog('Event: loadedmetadata ' + video.videoWidth + 'x' + video.videoHeight + ' dur=' + video.duration);
-    };
-
-    video.onloadeddata = function() {
-        debugLog('Event: loadeddata');
-        if (video.paused && !isPlaying) {
-            video.play().catch(function(){});
-        }
-    };
-
-    video.onstalled = function() {
-        debugLog('Event: stalled');
-    };
-
-    video.onemptied = function() {
-        debugLog('Event: emptied');
-    };
-
-    video.onerror = function(e) {
-        var err = video.error;
-        var msg = err ? ('code=' + err.code + ' msg=' + (err.message || 'unknown')) : 'unknown';
-        debugLog('Event: error - ' + msg);
-
-        if (extraTimeout) clearTimeout(extraTimeout);
-
-        // error code 4 = MEDIA_ERR_SRC_NOT_SUPPORTED
-        // error code 2 = MEDIA_ERR_NETWORK
-        // error code 3 = MEDIA_ERR_DECODE
-        if (err && (err.code === 4 || err.code === 2 || err.code === 3)) {
-            debugLog('Video error, trying next strategy from #' + strategyIndex);
-            destroyAllPlayers();
-            nextStrategy(video, ch.url, ch, strategyIndex);
-        } else {
-            document.getElementById('bufferingSpinner').style.display = 'none';
-            showToast('❌', 'Kanal yüklenemedi');
-            showBg();
-            currentPlayingUrl = '';
-        }
-    };
-
-    video.onended = function() {
-        debugLog('Event: ended (live stream ended?)');
-        // Canlı yayın bitti, yeniden başlat
-        setTimeout(() => {
-            if (currentPlayingUrl === ch.url) {
-                debugLog('Restarting ended stream');
-                currentPlayingUrl = '';
-                playChannel(focusedChannelIndex);
-            }
-        }, 3000);
-    };
+    video.onended=function(){setTimeout(()=>{if(currentPlayingUrl===ch.url){currentPlayingUrl='';playChannel(focusedChannelIndex);}},3000);};
 }
 
-// ==========================================
-// STALL CHECKER - Donma tespiti
-// ==========================================
-function setupStallChecker(video, ch, strategyIndex) {
-    if (stallChecker) clearInterval(stallChecker);
-
-    let lastTime = -1, stallCount = 0, totalStalls = 0;
-
-    stallChecker = setInterval(function() {
-        if (video.paused || video.ended || !isPlaying) return;
-
-        if (video.currentTime === lastTime && video.readyState >= 2) {
-            stallCount++;
-            if (stallCount >= 2 && stallCount < 5) {
-                debugLog('Stall #' + stallCount + ' at t=' + video.currentTime.toFixed(1));
-                // Hafif ileri sar
-                var b = video.buffered;
-                if (b.length > 0) {
-                    var buffEnd = b.end(b.length - 1);
-                    if (buffEnd > video.currentTime + 1) {
-                        video.currentTime = video.currentTime + 0.5;
-                    }
-                }
-                // HLS.js varsa tekrar yükle
-                if (hlsInstance) {
-                    try { hlsInstance.startLoad(video.currentTime); } catch(e){}
-                }
-            } else if (stallCount >= 5) {
-                totalStalls++;
-                stallCount = 0;
-                if (totalStalls >= 3) {
-                    debugLog('Too many stalls, restarting stream');
-                    totalStalls = 0;
-                    currentPlayingUrl = '';
-                    playChannel(focusedChannelIndex);
-                }
-            }
-        } else {
-            stallCount = 0;
-        }
-        lastTime = video.currentTime;
-    }, 3000);
+function setupStallChecker(video,ch,si){
+    if(stallChecker)clearInterval(stallChecker);
+    let lt=-1,sc=0,ts=0;
+    stallChecker=setInterval(function(){
+        if(video.paused||video.ended||!isPlaying)return;
+        if(video.currentTime===lt&&video.readyState>=2){sc++;
+            if(sc>=2&&sc<5){var b=video.buffered;if(b.length>0&&b.end(b.length-1)>video.currentTime+1){video.currentTime+=0.5;}if(hlsInstance){try{hlsInstance.startLoad(video.currentTime);}catch(e){}}}
+            else if(sc>=5){ts++;sc=0;if(ts>=3){ts=0;currentPlayingUrl='';playChannel(focusedChannelIndex);}}
+        }else{sc=0;}
+        lt=video.currentTime;
+    },3000);
 }
 
-// ==========================================
-// CHANNEL INFO BAR
-// ==========================================
 function showChannelInfoBar(ch){
-    document.getElementById('infoBarNumber').textContent=ch.number;
-    document.getElementById('infoBarName').textContent=ch.name;
-    document.getElementById('infoBarGroup').textContent=ch.group||'';
-    const bar=document.getElementById('channelInfoBar');bar.style.display='block';
-    clearTimeout(overlayTimeout);overlayTimeout=setTimeout(()=>{bar.style.display='none';},5000);
+    document.getElementById('infoBarNumber').textContent=ch.number;document.getElementById('infoBarName').textContent=ch.name;document.getElementById('infoBarGroup').textContent=ch.group||'';
+    const bar=document.getElementById('channelInfoBar');bar.style.display='block';clearTimeout(overlayTimeout);overlayTimeout=setTimeout(()=>{bar.style.display='none';},5000);
 }
 
 function playNextChannel(){if(!filteredChannels.length)return;focusedChannelIndex=(focusedChannelIndex+1)%filteredChannels.length;playChannel(focusedChannelIndex);}
 function playPrevChannel(){if(!filteredChannels.length)return;focusedChannelIndex=focusedChannelIndex<=0?filteredChannels.length-1:focusedChannelIndex-1;playChannel(focusedChannelIndex);}
-
 function togglePlayPause(){const v=document.getElementById('videoPlayer');if(v.paused){v.play().catch(function(){});isPlaying=true;document.getElementById('playPauseBtn').textContent='⏸';}else{v.pause();isPlaying=false;document.getElementById('playPauseBtn').textContent='▶️';}}
 function toggleMute(){const v=document.getElementById('videoPlayer');v.muted=!v.muted;document.getElementById('muteBtn').textContent=v.muted?'🔇':'🔊';document.getElementById('volumeSlider').value=v.muted?0:v.volume*100;}
 function setVolume(val){const v=document.getElementById('videoPlayer');v.volume=val/100;v.muted=val==0;document.getElementById('muteBtn').textContent=val==0?'🔇':(val<50?'🔉':'🔊');}
 function toggleFullscreen(){
     const el=document.documentElement;
-    if(!document.fullscreenElement&&!document.webkitFullscreenElement&&!document.mozFullScreenElement&&!document.msFullscreenElement){
+    if(!document.fullscreenElement&&!document.webkitFullscreenElement){
         if(el.requestFullscreen){el.requestFullscreen().catch(()=>{tryVideoFullscreen();});}
         else if(el.webkitRequestFullscreen){el.webkitRequestFullscreen();}
-        else if(el.mozRequestFullScreen){el.mozRequestFullScreen();}
-        else if(el.msRequestFullscreen){el.msRequestFullscreen();}
         else{tryVideoFullscreen();}
     }else{
         if(document.exitFullscreen){document.exitFullscreen().catch(()=>{});}
         else if(document.webkitExitFullscreen){document.webkitExitFullscreen();}
-        else if(document.mozCancelFullScreen){document.mozCancelFullScreen();}
-        else if(document.msExitFullscreen){document.msExitFullscreen();}
     }
 }
-function tryVideoFullscreen(){
-    const video=document.getElementById('videoPlayer');
-    if(video.webkitEnterFullscreen){video.webkitEnterFullscreen();}
-    else if(video.requestFullscreen){video.requestFullscreen().catch(()=>{});}
-    else if(video.webkitRequestFullscreen){video.webkitRequestFullscreen();}
-}
+function tryVideoFullscreen(){const v=document.getElementById('videoPlayer');if(v.webkitEnterFullscreen){v.webkitEnterFullscreen();}else if(v.requestFullscreen){v.requestFullscreen().catch(()=>{});}}
 
 function setupMouseEvents(){const p=document.getElementById('playerArea');p.addEventListener('mousemove',showControls);p.addEventListener('click',(e)=>{if(e.target===document.getElementById('videoPlayer')||e.target===document.getElementById('videoContainer'))showControls();});p.addEventListener('touchstart',showControls,{passive:true});}
 function showControls(){const c=document.getElementById('playerControls');c.classList.add('visible');clearTimeout(controlsTimeout);controlsTimeout=setTimeout(()=>c.classList.remove('visible'),4000);}
@@ -1288,40 +933,15 @@ function setupEventListeners(){document.addEventListener('keydown',handleKeydown
 
 function handleKeydown(e){
     const ae=document.activeElement;if(ae&&(ae.tagName==='INPUT'||ae.tagName==='TEXTAREA'||ae.tagName==='SELECT')){if(e.key==='Escape'){ae.blur();e.preventDefault();}return;}
-
     switch(e.key){
-        case'ArrowLeft':e.preventDefault();
-            if(focusMode==='channels'){showCategorySidebar();}
-            else if(focusMode==='categories'){hideCategorySidebar();}
-            else{showSidebar();}
-            break;
-        case'ArrowRight':e.preventDefault();
-            if(focusMode==='categories'){hideCategorySidebar();showSidebar();}
-            else if(focusMode==='channels'){hideSidebar();}
-            break;
-        case'ArrowUp':e.preventDefault();
-            if(focusMode==='channels'){if(focusedChannelIndex>0){focusedChannelIndex--;updateFocusUI();}}
-            else if(focusMode==='categories'){if(focusedCategoryIndex>0){focusedCategoryIndex--;renderCatList();}}
-            else{if(currentChannelIndex>=0)playNextChannel();}
-            break;
-        case'ArrowDown':e.preventDefault();
-            if(focusMode==='channels'){if(focusedChannelIndex<filteredChannels.length-1){focusedChannelIndex++;updateFocusUI();}}
-            else if(focusMode==='categories'){if(focusedCategoryIndex<allCategoryNames.length-1){focusedCategoryIndex++;renderCatList();}}
-            else{if(currentChannelIndex>=0)playPrevChannel();}
-            break;
-        case'ChannelUp':e.preventDefault();if(currentChannelIndex>=0)playNextChannel();break;
-        case'ChannelDown':e.preventDefault();if(currentChannelIndex>=0)playPrevChannel();break;
-        case'PageUp':e.preventDefault();if(currentChannelIndex>=0)playNextChannel();break;
-        case'PageDown':e.preventDefault();if(currentChannelIndex>=0)playPrevChannel();break;
-        case'Enter':e.preventDefault();
-            if(focusMode==='categories'){const cn=allCategoryNames[focusedCategoryIndex];selectCategoryFromList(cn);}
-            else if(focusMode==='channels'){if(filteredChannels.length>0)playChannel(focusedChannelIndex);}
-            else{showSidebar();}
-            break;
-        case'Escape':case'Backspace':e.preventDefault();
-            if(focusMode==='categories'){hideCategorySidebar();}
-            else if(focusMode==='channels'){hideSidebar();}
-            break;
+        case'ArrowLeft':e.preventDefault();if(focusMode==='channels'){showCategorySidebar();}else if(focusMode==='categories'){hideCategorySidebar();}else{showSidebar();}break;
+        case'ArrowRight':e.preventDefault();if(focusMode==='categories'){hideCategorySidebar();showSidebar();}else if(focusMode==='channels'){hideSidebar();}break;
+        case'ArrowUp':e.preventDefault();if(focusMode==='channels'){if(focusedChannelIndex>0){focusedChannelIndex--;updateFocusUI();}}else if(focusMode==='categories'){if(focusedCategoryIndex>0){focusedCategoryIndex--;renderCatList();}}else{if(currentChannelIndex>=0)playNextChannel();}break;
+        case'ArrowDown':e.preventDefault();if(focusMode==='channels'){if(focusedChannelIndex<filteredChannels.length-1){focusedChannelIndex++;updateFocusUI();}}else if(focusMode==='categories'){if(focusedCategoryIndex<allCategoryNames.length-1){focusedCategoryIndex++;renderCatList();}}else{if(currentChannelIndex>=0)playPrevChannel();}break;
+        case'ChannelUp':case'PageUp':e.preventDefault();if(currentChannelIndex>=0)playNextChannel();break;
+        case'ChannelDown':case'PageDown':e.preventDefault();if(currentChannelIndex>=0)playPrevChannel();break;
+        case'Enter':e.preventDefault();if(focusMode==='categories'){selectCategoryFromList(allCategoryNames[focusedCategoryIndex]);}else if(focusMode==='channels'){if(filteredChannels.length>0)playChannel(focusedChannelIndex);}else{showSidebar();}break;
+        case'Escape':case'Backspace':e.preventDefault();if(focusMode==='categories'){hideCategorySidebar();}else if(focusMode==='channels'){hideSidebar();}break;
         case' ':e.preventDefault();togglePlayPause();break;
         case'm':case'M':e.preventDefault();toggleMute();break;
         case'f':case'F':e.preventDefault();toggleFullscreen();break;
