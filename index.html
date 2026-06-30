@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌟 CANLI TV & YOUTUBE PLAYER (AKILLI KATEGORİ)</title>
+<title>🌟 CANLI TV & YOUTUBE PLAYER (AKILLI KATEGORİ V2)</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <!-- YouTube Iframe API -->
 <script src="https://www.youtube.com/iframe_api"></script>
@@ -271,7 +271,7 @@
 
   #ytPlayer { position: absolute; inset: 0; border: none; }
 
-  /* ══ ALT BAR SABİTLEME ══ */
+  /* ══ KONTROL BARI ══ */
   .ctrl-bar {
     background: linear-gradient(to right, var(--bg2), var(--bg3));
     border-top: 1px solid var(--border);
@@ -456,16 +456,26 @@ Promise.all(fetchM3uPromises)
     renderList();
   });
 
-// AKILLI GRUP KONTROL FONKSİYONU
-function isSportGroup(groupName) {
-  if (!groupName) return false;
-  const name = groupName.toLowerCase();
-  return name.includes("spor") || name.includes("sport");
+// 🌟 AKILLI GRUP AKILLI EŞLEŞTİRME FONKSİYONU 🌟
+function getSmartGroup(groupName) {
+  if (!groupName) return "Genel";
+  const name = groupName.toLowerCase().trim();
+  
+  // Spor Kontrolü
+  if (name.includes("spor") || name.includes("sport")) return "Spor";
+  
+  // Çocuk Kontrolü
+  if (name.includes("çocuk") || name.includes("cocuk") || name.includes("kid")) return "Çocuk";
+  
+  // Müzik Kontrolü
+  if (name.includes("müzik") || name.includes("muzik") || name.includes("music")) return "Müzik";
+  
+  return groupName; // Eşleşme yoksa kendi adını koru
 }
 
 function buildCats() {
-  // Spor kelimesi geçen grupları temizleyip yerine tek bir "Spor" ekliyoruz
-  const mappedGroups = allChannels.map(c => isSportGroup(c.group) ? "Spor" : c.group);
+  // Tüm kanalların gruplarını akıllı isimlere dönüştürüp benzersiz liste yapıyoruz
+  const mappedGroups = allChannels.map(c => getSmartGroup(c.group));
   const groups = ["", ...new Set(mappedGroups)];
   
   const bar = document.getElementById("catBar");
@@ -494,11 +504,7 @@ function renderList() {
   
   // Akıllı Filtreleme Alanı
   if (currentCat) {
-    if (currentCat === "Spor") {
-      list = list.filter(c => isSportGroup(c.group));
-    } else {
-      list = list.filter(c => c.group === currentCat && !isSportGroup(c.group));
-    }
+    list = list.filter(c => getSmartGroup(c.group) === currentCat);
   }
 
   document.getElementById("chCount").textContent = list.length + " kanal/video";
@@ -521,7 +527,7 @@ function renderList() {
       : `<span>📺</span>`;
       
     const badge = ch.youtubeId ? `<span class="yt-badge">YOUTUBE</span>` : `<span class="live-badge">CANLI</span>`;
-    const displayGroup = isSportGroup(ch.group) ? "Spor" : ch.group;
+    const displayGroup = getSmartGroup(ch.group);
     const u = idKey.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
 
     return `
@@ -599,13 +605,7 @@ function stopPlayer() {
 function getFiltered() {
   let list = allChannels;
   if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url || c.youtubeId));
-  if (currentCat) {
-    if (currentCat === "Spor") {
-      list = list.filter(c => isSportGroup(c.group));
-    } else {
-      list = list.filter(c => c.group === currentCat && !isSportGroup(c.group));
-    }
-  }
+  if (currentCat)            list = list.filter(c => getSmartGroup(c.group) === currentCat);
   return list;
 }
 
