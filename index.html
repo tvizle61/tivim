@@ -38,7 +38,7 @@
     opacity: 0.4;
   }
 
-  /* ══ LAYOUT ONAYI (SOL PANEL 240PX'E DARALTILDI) ══ */
+  /* ══ LAYOUT ONAYI (Sol Bar Daraltıldı: 240px) ══ */
   .app {
     display: grid;
     grid-template-columns: 240px 1fr;
@@ -71,7 +71,7 @@
     font-family: 'DM Sans', sans-serif;
     font-size: 11px; font-weight: 600;
     letter-spacing: 0.5px; text-transform: uppercase;
-    padding: 14px 4px;
+    padding: 12px 4px;
     cursor: pointer;
     transition: all .2s;
   }
@@ -82,7 +82,7 @@
   .cat-bar {
     display: flex;
     gap: 6px;
-    padding: 0 10px;
+    padding: 0 4px;
     overflow-x: auto;
     flex: 1;
     align-items: center;
@@ -91,13 +91,14 @@
   .cat-bar::-webkit-scrollbar { height: 3px; }
   .cat-bar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
 
+  /* Kategori Hapları Daraltıldı */
   .cat-pill {
     background: var(--bg3);
     border: 1px solid var(--border);
     color: var(--muted);
     font-family: 'DM Sans', sans-serif;
     font-size: 11px; font-weight: 500;
-    padding: 6px 14px;
+    padding: 4px 10px;
     border-radius: 20px;
     cursor: pointer;
     white-space: nowrap;
@@ -111,7 +112,7 @@
   }
 
   .ch-count {
-    padding: 8px 16px 4px;
+    padding: 6px 12px 2px;
     font-size: 11px;
     color: var(--muted);
     flex-shrink: 0;
@@ -121,7 +122,7 @@
   .channel-list {
     overflow-y: auto;
     flex: 1;
-    padding: 6px 8px;
+    padding: 4px 6px;
   }
 
   .channel-list::-webkit-scrollbar { width: 4px; }
@@ -131,9 +132,9 @@
   .channel {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 8px;
-    border-radius: 10px;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
     margin-bottom: 4px;
     cursor: pointer;
     border: 1px solid transparent;
@@ -149,12 +150,12 @@
   }
 
   .ch-logo {
-    width: 38px; height: 38px;
+    width: 36px; height: 36px;
     border-radius: 8px;
     background: var(--bg3);
     border: 1px solid var(--border);
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
+    font-size: 16px;
     flex-shrink: 0;
     overflow: hidden;
   }
@@ -162,14 +163,14 @@
   .ch-logo img {
     width: 100%; height: 100%;
     object-fit: contain;
-    padding: 3px;
+    padding: 2px;
     background: #0e1318;
   }
 
   .ch-info { flex: 1; min-width: 0; }
 
   .ch-name {
-    font-size: 13px; font-weight: 600;
+    font-size: 12px; font-weight: 600;
     color: var(--text);
     white-space: nowrap;
     overflow: hidden;
@@ -179,19 +180,19 @@
   .ch-meta {
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin-top: 2px;
+    gap: 4px;
+    margin-top: 1px;
   }
 
   .live-badge {
     background: var(--accent); color: #fff;
-    font-size: 9px; font-weight: 700;
-    padding: 2px 5px; border-radius: 3px;
+    font-size: 8px; font-weight: 700;
+    padding: 1px 4px; border-radius: 2px;
     flex-shrink: 0;
   }
 
   .ch-group {
-    font-size: 11px; color: var(--muted);
+    font-size: 10px; color: var(--muted);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
 
@@ -199,10 +200,10 @@
     background: none; border: none;
     color: var(--muted);
     cursor: pointer;
-    font-size: 15px;
+    font-size: 14px;
     transition: color .2s, transform .2s;
     flex-shrink: 0;
-    padding: 3px;
+    padding: 2px;
     line-height: 1;
   }
 
@@ -236,6 +237,7 @@
     flex-direction: column;
     height: 100vh;
     background: #000;
+    overflow: hidden;
   }
 
   /* ══ PLAYER WRAPPER ══ */
@@ -287,9 +289,10 @@
   #video {
     width: 100%; 
     height: 100%;
+    max-height: 100%;
     background: #000;
     display: none;
-    object-fit: cover;
+    object-fit: contain; /* Görüntünün orijinal oranını bozmaz ve taşmaları engeller */
   }
 
   /* Fullscreen hint */
@@ -314,35 +317,36 @@
     font-family: 'DM Sans', sans-serif; font-weight: 500;
   }
 
-   /* EN ALTTAKI KONTROL BARI */
+  /* ALT KONTROL BARI (Yükseklik ve Padding Küçültüldü) */
   .ctrl-bar {
     background: linear-gradient(to right, var(--bg2), var(--bg3));
     border-top: 1px solid var(--border);
-    padding: 14px 20px;
+    padding: 8px 14px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     flex-shrink: 0;
-    gap: 16px;
+    gap: 12px;
     z-index: 5;
   }
 
   .ctrl-btns { 
     display: flex; 
     align-items: center; 
-    gap: 8px; 
+    gap: 6px; 
     flex-shrink: 0;
   }
 
+  /* Butonlar Küçültüldü */
   .cb {
-    width: 36px; height: 36px;
-    border-radius: 8px;
+    width: 30px; height: 30px;
+    border-radius: 6px;
     background: var(--bg3);
     border: 1px solid var(--border);
     color: var(--text);
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    font-size: 14px;
+    font-size: 12px;
     transition: all .2s;
   }
 
@@ -445,8 +449,8 @@
     .ctrl-bar {
       flex-wrap: nowrap !important;
       justify-content: flex-start !important;
-      padding: 10px 14px;
-      gap: 12px;
+      padding: 8px 12px;
+      gap: 10px;
     }
 
     .ctrl-btns { 
@@ -456,9 +460,9 @@
     
     .cb { 
       flex: none !important; 
-      width: 34px; 
-      height: 34px; 
-      font-size: 13px; 
+      width: 30px; 
+      height: 30px; 
+      font-size: 12px; 
     }
 
     .sidebar-tabs  { padding: 0 12px; }
@@ -467,13 +471,13 @@
     .channel-list  { max-height: 42vh; }
 
     .channel  { padding: 8px 10px; gap: 10px; }
-    .ch-logo  { width: 38px; height: 38px; border-radius: 8px; flex-shrink: 0; }
+    .ch-logo  { width: 34px; height: 34px; border-radius: 6px; flex-shrink: 0; }
     .ch-name  { font-size: 12px; }
     .ch-group { font-size: 10px; }
   }
 
   @media (max-width: 380px) {
-    .ctrl-bar { gap: 8px; }
+    .ctrl-bar { gap: 6px; }
   }
 </style>
 </head>
@@ -514,11 +518,10 @@
       <!-- CONTROLS + CATEGORIES -->
       <div class="ctrl-bar">
         <div class="ctrl-btns">
-          <button class="cb" onclick="openFS()" title="Tam Ekran">⛶</button>
           <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
-          <button class="cb danger" onclick="stopPlayer()" title="Durdur (Esc)">⏹</button>
           <button class="cb" onclick="nextCh()" title="Sonraki (→)">⏭</button>
-                    
+          <button class="cb danger" onclick="stopPlayer()" title="Durdur (Esc)">⏹</button>
+          <button class="cb" onclick="openFS()" title="Tam Ekran">⛶</button>
         </div>
         <div class="cat-bar" id="catBar">
           <button class="cat-pill active" onclick="filterCat('', this)">Tümü</button>
