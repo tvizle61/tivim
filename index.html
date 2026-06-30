@@ -143,7 +143,6 @@
 
   .channel:hover { background: var(--bg3); }
 
-  /* Aktif olan kanala renkli kalın çerçeve */
   .channel.active {
     background: rgba(232,55,61,.15);
     border: 2px solid var(--accent) !important;
@@ -231,24 +230,33 @@
 
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ══ MAIN ══ */
+  /* ══ MAIN (AŞAĞIYA DOĞRU UZAYAN YENİ YAPI) ══ */
   .main {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    background: var(--bg);
+    height: 100vh;
+    background: #000; /* Boş kalan her yer artık sinematik siyah */
   }
 
-  /* ══ PLAYER ══ */
-  .player-wrap { position: relative; background: #000; flex-shrink: 0; }
+  /* ══ PLAYER WRAPPER (TÜM ALANI KAPLAR) ══ */
+  .player-wrap { 
+    position: relative; 
+    background: #000; 
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
 
   .player-ratio {
     position: relative;
     width: 100%;
-    padding-top: 48%; 
-    max-height: calc(100vh - 120px);
+    flex: 1; /* Oynatıcıyı dikeyde sonuna kadar esnetir */
     background: #000;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .player-idle {
@@ -257,6 +265,7 @@
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     gap: 16px;
+    z-index: 2;
   }
 
   .idle-icon {
@@ -276,13 +285,11 @@
   }
 
   #video {
-    position: absolute; 
-    inset: 0;
     width: 100%; 
     height: 100%;
     background: #000;
     display: none;
-    object-fit: contain;
+    object-fit: contain; /* Görüntü oranını bozmadan maksimum boyuta getirir */
   }
 
   /* Fullscreen hint */
@@ -291,6 +298,7 @@
     display: flex; align-items: center; justify-content: center;
     opacity: 0; transition: opacity .2s;
     pointer-events: none;
+    z-index: 3;
   }
 
   .player-ratio:hover .fs-hint { opacity: 1; }
@@ -306,16 +314,17 @@
     font-family: 'DM Sans', sans-serif; font-weight: 500;
   }
 
-  /* KONTROL BARI */
+  /* EN ALTTAKI KONTROL BARI */
   .ctrl-bar {
     background: linear-gradient(to right, var(--bg2), var(--bg3));
     border-top: 1px solid var(--border);
-    padding: 12px 20px;
+    padding: 14px 20px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     flex-shrink: 0;
     gap: 16px;
+    z-index: 5;
   }
 
   .ctrl-btns { 
@@ -426,10 +435,10 @@
       min-height: 100vh;
     }
 
-    .main    { order: 1; }
+    .main    { order: 1; height: auto; }
     .sidebar { order: 2; border-right: none; border-top: 1px solid var(--border); }
 
-    .player-ratio { padding-top: 56.25%; }
+    .player-ratio { height: 56.25vw; flex: none; }
     .idle-icon { font-size: 40px; }
     .idle-txt  { font-size: 13px; letter-spacing: 2px; }
 
@@ -452,7 +461,6 @@
       font-size: 13px; 
     }
 
-    /* Sidebar içi */
     .sidebar-tabs  { padding: 0 12px; }
     .tab-btn       { font-size: 10px; padding: 11px 4px; }
     .ch-count      { padding: 6px 12px 2px; }
@@ -475,41 +483,32 @@
 
   <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar">
-
     <div class="sidebar-tabs">
       <button class="tab-btn active" onclick="switchTab('all', this)">TÜM KANALLAR</button>
       <button class="tab-btn" onclick="switchTab('fav', this)">⭐ FAVORİLER</button>
     </div>
-
     <div class="ch-count" id="chCount"></div>
-
     <div class="channel-list" id="channelList">
       <div class="loading">
         <div class="spin"></div>
         Kanallar yükleniyor...
       </div>
     </div>
-
   </aside>
 
   <!-- ══ MAIN ══ -->
   <main class="main">
-
-    <!-- PLAYER -->
     <div class="player-wrap">
+      
       <div class="player-ratio">
-
         <div class="player-idle" id="playerIdle">
           <div class="idle-icon">📺</div>
           <div class="idle-txt">İZLEMEK İÇİN KANAL SEÇİN</div>
         </div>
-
         <video id="video" controls playsinline></video>
-
         <div class="fs-hint">
           <button class="fs-btn" onclick="openFS()">⛶ TAM EKRAN</button>
         </div>
-
       </div>
 
       <!-- CONTROLS + CATEGORIES -->
@@ -520,15 +519,12 @@
           <button class="cb danger" onclick="stopPlayer()" title="Durdur (Esc)">⏹</button>
           <button class="cb" onclick="openFS()" title="Tam Ekran">⛶</button>
         </div>
-        
-        <!-- Kategoriler -->
         <div class="cat-bar" id="catBar">
           <button class="cat-pill active" onclick="filterCat('', this)">Tümü</button>
         </div>
       </div>
 
     </div>
-
   </main>
 </div>
 
@@ -567,7 +563,6 @@ let allChannels = [];
 let currentCh   = null;
 let currentTab  = "all";
 let currentCat  = "";
-let searchQ     = "";
 
 const fetchPromises = M3U_URLS.map(url => 
   fetch(url)
@@ -645,7 +640,6 @@ function renderList() {
   if (currentCat)            list = list.filter(c => c.group === currentCat);
 
   document.getElementById("chCount").textContent = list.length + " kanal";
-
   const el = document.getElementById("channelList");
 
   if (!list.length) {
@@ -756,11 +750,6 @@ function toggleFavorite(url, btn) {
     showToast("⭐ Favorilere eklendi");
   }
   localStorage.setItem("favorites", JSON.stringify(favorites));
-  renderList();
-}
-
-function search(q) {
-  searchQ = q.toLowerCase();
   renderList();
 }
 
