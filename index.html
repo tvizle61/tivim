@@ -391,7 +391,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ⚠️ KENDİ BULUT PROXY ADRESİNİZİ BURAYA YAZIN (Sonunda ?url= olmalı)
+// 🛠 TEMİZLENMİŞ PROXY DEĞİŞKENİ
 const PRIVATE_CLOUDFLARE_PROXY = "https://ancient-hall-8d94.deepblueee61.workers.dev/?url=";
 
 const M3U_URLS = [
@@ -415,7 +415,6 @@ function onYouTubeIframeAPIReady() {
   console.log("YouTube API Hazır.");
 }
 
-// M3U listelerini yükleme
 const fetchM3uPromises = M3U_URLS.map(url => 
   fetch(url)
     .then(r => r.ok ? r.text() : "")
@@ -570,7 +569,6 @@ function play(idx, useProxy = false) {
   ytPlayerWrap.style.display = "none";
   ytPlayerWrap.innerHTML = "";
 
-  // 🔴 YOUTUBE OYNATMA
   if (ch.youtubeId) {
     ytPlayerWrap.style.display = "block";
     const ytTarget = document.createElement("div");
@@ -586,12 +584,9 @@ function play(idx, useProxy = false) {
       }
     });
   } 
-  // 🔵 CANLI TV (.M3U8) OYNATMA
   else if (ch.url) {
     video.style.display = "block";
     
-    // YAYIN STRATEJİSİ: Diğer kanalları bozmamak için varsayılan olarak doğrudan orijinal linkten aç. 
-    // Star TV (daioncdn) gibi bilinen sorunlu adreslerde veya araç ekranı hata verirse kendi Cloudflare tüneline sok.
     let finalStreamUrl = ch.url;
     if (useProxy || ch.url.includes("daioncdn.net") || ch.url.includes("puhu") || ch.url.includes("startv")) {
       finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
@@ -614,12 +609,10 @@ function play(idx, useProxy = false) {
         video.play().catch(() => {});
       });
 
-      // 🛠 ARAÇ İÇİN AKILLI BULUT PROXY HATA TAKİBİ
       hls.on(Hls.Events.ERROR, function (event, data) {
         if (data.fatal) {
-          // Eğer normal yüklemede CORS, mixed-content veya ağ hatası aldıysa otomatik kendi Cloudflare tüneline yönlendir
           if ((data.details === "manifestLoadError" || data.type === Hls.ErrorTypes.NETWORK_ERROR) && !useProxy) {
-            console.warn("Araç ekranında CORS/Erişim engeli tespit edildi! Özel bulut tüneline geçiliyor...");
+            console.warn("CORS/Erişim engeli tespit edildi! Tünele geçiliyor...");
             play(idx, true);
           } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
             hls.recoverMediaError();
