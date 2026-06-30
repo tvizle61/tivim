@@ -38,7 +38,7 @@
     opacity: 0.4;
   }
 
-  /* ══ LAYOUT ONAYI (Üst bar kalktığı için tam ekran yapıldı) ══ */
+  /* LAYOUT */
   .app {
     display: grid;
     grid-template-columns: 280px 1fr;
@@ -78,7 +78,7 @@
 
   .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
 
-  /* Alt bar için Category pills ayarları */
+  /* Category pills */
   .cat-bar {
     display: flex;
     gap: 6px;
@@ -117,7 +117,7 @@
     flex-shrink: 0;
   }
 
-  /* Channel list scroll area */
+  /* Channel list */
   .channel-list {
     overflow-y: auto;
     flex: 1;
@@ -127,7 +127,6 @@
   .channel-list::-webkit-scrollbar { width: 4px; }
   .channel-list::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
 
-  /* Channel item */
   .channel {
     display: flex;
     align-items: center;
@@ -143,7 +142,6 @@
 
   .channel:hover { background: var(--bg3); }
 
-  /* Aktif olan kanala renkli kalın çerçeve */
   .channel.active {
     background: rgba(232,55,61,.15);
     border: 2px solid var(--accent) !important;
@@ -210,7 +208,6 @@
   .fav-btn:hover  { color: var(--gold); transform: scale(1.2); }
   .fav-btn.on     { color: var(--gold); }
 
-  /* Loading */
   .loading {
     display: flex;
     flex-direction: column;
@@ -235,20 +232,31 @@
   .main {
     display: flex;
     flex-direction: column;
+    justify-content: center; /* Önerilenler kalktığı için ortalandı */
+    align-items: center;
     overflow: hidden;
     background: var(--bg);
+    height: 100%;
+    padding: 20px;
   }
 
   /* ══ PLAYER ══ */
-  .player-wrap { position: relative; background: #000; flex-shrink: 0; }
+  .player-wrap { 
+    position: relative; 
+    background: #000; 
+    width: 100%;
+    max-width: 1200px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    border: 1px solid var(--border);
+  }
 
   .player-ratio {
     position: relative;
     width: 100%;
-    padding-top: 48%; 
-    max-height: calc(100vh - 120px);
+    padding-top: 56.25%; /* Standart 16:9 genişlik */
     background: #000;
-    overflow: hidden;
   }
 
   .player-idle {
@@ -285,7 +293,6 @@
     object-fit: contain;
   }
 
-  /* Fullscreen hint */
   .fs-hint {
     position: absolute; inset: 0;
     display: flex; align-items: center; justify-content: center;
@@ -314,7 +321,6 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    flex-shrink: 0;
     gap: 16px;
   }
 
@@ -339,39 +345,6 @@
 
   .cb:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-1px); }
   .cb.danger:hover { background: #c0392b; border-color: #c0392b; }
-
-  /* ══ INFO BAR ══ */
-  .info-bar { flex: 1; overflow-y: auto; padding: 16px 20px; }
-  .info-bar::-webkit-scrollbar { width: 4px; }
-  .info-bar::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
-
-  .sec-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 14px; letter-spacing: 2px;
-    color: var(--muted); margin-bottom: 12px;
-    display: flex; align-items: center; gap: 8px;
-  }
-
-  .sec-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
-  .rel-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 10px;
-  }
-
-  .rel-card {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: 10px; padding: 12px 8px;
-    cursor: pointer; text-align: center;
-    transition: all .2s;
-  }
-
-  .rel-card:hover { border-color: rgba(232,55,61,.3); background: var(--bg3); transform: translateY(-2px); }
-  .rel-card .rc-icon { font-size: 26px; margin-bottom: 6px; }
-  .rel-card .rc-icon img { width: 30px; height: 30px; object-fit: contain; }
-  .rel-card .rc-name { font-size: 11px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .rel-card .rc-group { font-size: 10px; color: var(--muted); margin-top: 2px; }
 
   /* ══ SLEEP MODAL ══ */
   .modal-overlay {
@@ -451,7 +424,7 @@
   ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); border-radius: 2px; }
 
-  /* ══ MOBIL UYUM ══ */
+  /* MOBIL UYUM */
   @media (max-width: 768px) {
     .app {
       grid-template-columns: 1fr;
@@ -459,9 +432,12 @@
       min-height: 100vh;
     }
 
-    .main    { order: 1; }
-    .sidebar { order: 2; border-right: none; border-top: 1px solid var(--border); }
+    .main { 
+      padding: 10px; 
+      height: auto;
+    }
 
+    .sidebar { border-right: none; border-top: 1px solid var(--border); }
     .player-ratio { padding-top: 56.25%; }
     .idle-icon { font-size: 40px; }
     .idle-txt  { font-size: 13px; letter-spacing: 2px; }
@@ -473,35 +449,18 @@
       gap: 12px;
     }
 
-    .ctrl-btns { 
-      width: auto; 
-      gap: 6px; 
-    }
-    
-    .cb { 
-      flex: none !important; 
-      width: 34px; 
-      height: 34px; 
-      font-size: 13px; 
-    }
+    .ctrl-btns { width: auto; gap: 6px; }
+    .cb { flex: none !important; width: 34px; height: 34px; font-size: 13px; }
 
-    /* Sidebar içi */
     .sidebar-tabs  { padding: 0 12px; }
     .tab-btn       { font-size: 10px; padding: 11px 4px; }
     .ch-count      { padding: 6px 12px 2px; }
-    .channel-list  { max-height: 42vh; }
+    .channel-list  { max-height: 45vh; }
 
     .channel  { padding: 8px 10px; gap: 10px; }
-    .ch-logo  { width: 38px; height: 38px; border-radius: 8px; flex-shrink: 0; }
+    .ch-logo  { width: 38px; height: 38px; border-radius: 8px; }
     .ch-name  { font-size: 12px; }
     .ch-group { font-size: 10px; }
-
-    /* Info bar */
-    .info-bar { padding: 12px 14px; }
-    .rel-grid { grid-template-columns: repeat(auto-fill, minmax(80px,1fr)); gap: 8px; }
-    .rel-card { padding: 10px 6px; }
-    .rel-card .rc-name  { font-size: 10px; }
-    .rel-card .rc-group { font-size: 9px; }
   }
 
   @media (max-width: 380px) {
@@ -515,7 +474,6 @@
 
   <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar">
-
     <div class="sidebar-tabs">
       <button class="tab-btn active" onclick="switchTab('all', this)">TÜM KANALLAR</button>
       <button class="tab-btn" onclick="switchTab('fav', this)">⭐ FAVORİLER</button>
@@ -529,16 +487,12 @@
         Kanallar yükleniyor...
       </div>
     </div>
-
   </aside>
 
   <!-- ══ MAIN ══ -->
   <main class="main">
-
-    <!-- PLAYER -->
     <div class="player-wrap">
       <div class="player-ratio">
-
         <div class="player-idle" id="playerIdle">
           <div class="idle-icon">📺</div>
           <div class="idle-txt">İZLEMEK İÇİN KANAL SEÇİN</div>
@@ -549,7 +503,6 @@
         <div class="fs-hint">
           <button class="fs-btn" onclick="openFS()">⛶ TAM EKRAN</button>
         </div>
-
       </div>
 
       <!-- CONTROLS + CATEGORIES -->
@@ -566,15 +519,7 @@
           <button class="cat-pill active" onclick="filterCat('', this)">Tümü</button>
         </div>
       </div>
-
     </div>
-
-    <!-- ÖNERILEN -->
-    <div class="info-bar">
-      <div class="sec-title">ÖNERİLEN KANALLAR</div>
-      <div class="rel-grid" id="relGrid"></div>
-    </div>
-
   </main>
 </div>
 
@@ -613,7 +558,6 @@ let allChannels = [];
 let currentCh   = null;
 let currentTab  = "all";
 let currentCat  = "";
-let searchQ     = "";
 
 const fetchPromises = M3U_URLS.map(url => 
   fetch(url)
@@ -657,7 +601,6 @@ Promise.all(fetchPromises)
 
     buildCats();
     renderList();
-    renderRelated();
   })
   .catch(() => {
     document.getElementById("channelList").innerHTML =
@@ -697,7 +640,7 @@ function renderList() {
 
   if (!list.length) {
     el.innerHTML = `<div style="text-align:center;padding:40px 16px;color:var(--muted);font-size:13px;">
-      ${currentTab === "fav" ? "⭐ Favori yok" : " Sonu ç yok"}
+      ${currentTab === "fav" ? "⭐ Favori yok" : "Sonuç yok"}
     </div>`;
     return;
   }
@@ -804,25 +747,6 @@ function toggleFavorite(url, btn) {
   }
   localStorage.setItem("favorites", JSON.stringify(favorites));
   renderList();
-}
-
-// Arama fonksiyonu (header kalktığı için işlevini korur ancak arama çubuğu yoktur)
-function search(q) {
-  searchQ = q.toLowerCase();
-  renderList();
-}
-
-function renderRelated() {
-  const pick = [...allChannels].sort(() => Math.random() - .5).slice(0, 10);
-  document.getElementById("relGrid").innerHTML = pick.map(ch => {
-    const idx = allChannels.indexOf(ch);
-    return `
-      <div class="rel-card" onclick="play(${idx})">
-        <div class="rc-icon">${ch.logo ? `<img src="${ch.logo}" onerror="this.outerHTML='📺'">` : "📺"}</div>
-        <div class="rc-name">${ch.name}</div>
-        <div class="rc-group">${ch.group}</div>
-      </div>`;
-  }).join("");
 }
 
 /* ── TOAST ── */
