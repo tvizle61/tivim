@@ -38,7 +38,7 @@
     opacity: 0.4;
   }
 
-  /* LAYOUT */
+  /* ══ LAYOUT ONAYI ══ */
   .app {
     display: grid;
     grid-template-columns: 280px 1fr;
@@ -78,7 +78,7 @@
 
   .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
 
-  /* Category pills */
+  /* Alt bar için Category pills ayarları */
   .cat-bar {
     display: flex;
     gap: 6px;
@@ -117,7 +117,7 @@
     flex-shrink: 0;
   }
 
-  /* Channel list */
+  /* Channel list scroll area */
   .channel-list {
     overflow-y: auto;
     flex: 1;
@@ -127,6 +127,7 @@
   .channel-list::-webkit-scrollbar { width: 4px; }
   .channel-list::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
 
+  /* Channel item */
   .channel {
     display: flex;
     align-items: center;
@@ -142,6 +143,7 @@
 
   .channel:hover { background: var(--bg3); }
 
+  /* Aktif olan kanala renkli kalın çerçeve */
   .channel.active {
     background: rgba(232,55,61,.15);
     border: 2px solid var(--accent) !important;
@@ -208,6 +210,7 @@
   .fav-btn:hover  { color: var(--gold); transform: scale(1.2); }
   .fav-btn.on     { color: var(--gold); }
 
+  /* Loading */
   .loading {
     display: flex;
     flex-direction: column;
@@ -232,31 +235,20 @@
   .main {
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Önerilenler kalktığı için ortalandı */
-    align-items: center;
     overflow: hidden;
     background: var(--bg);
-    height: 100%;
-    padding: 20px;
   }
 
   /* ══ PLAYER ══ */
-  .player-wrap { 
-    position: relative; 
-    background: #000; 
-    width: 100%;
-    max-width: 1200px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-    border: 1px solid var(--border);
-  }
+  .player-wrap { position: relative; background: #000; flex-shrink: 0; }
 
   .player-ratio {
     position: relative;
     width: 100%;
-    padding-top: 56.25%; /* Standart 16:9 genişlik */
+    padding-top: 48%; 
+    max-height: calc(100vh - 120px);
     background: #000;
+    overflow: hidden;
   }
 
   .player-idle {
@@ -293,6 +285,7 @@
     object-fit: contain;
   }
 
+  /* Fullscreen hint */
   .fs-hint {
     position: absolute; inset: 0;
     display: flex; align-items: center; justify-content: center;
@@ -321,6 +314,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    flex-shrink: 0;
     gap: 16px;
   }
 
@@ -424,7 +418,7 @@
   ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); border-radius: 2px; }
 
-  /* MOBIL UYUM */
+  /* ══ MOBIL UYUM ══ */
   @media (max-width: 768px) {
     .app {
       grid-template-columns: 1fr;
@@ -432,12 +426,9 @@
       min-height: 100vh;
     }
 
-    .main { 
-      padding: 10px; 
-      height: auto;
-    }
+    .main    { order: 1; }
+    .sidebar { order: 2; border-right: none; border-top: 1px solid var(--border); }
 
-    .sidebar { border-right: none; border-top: 1px solid var(--border); }
     .player-ratio { padding-top: 56.25%; }
     .idle-icon { font-size: 40px; }
     .idle-txt  { font-size: 13px; letter-spacing: 2px; }
@@ -449,16 +440,26 @@
       gap: 12px;
     }
 
-    .ctrl-btns { width: auto; gap: 6px; }
-    .cb { flex: none !important; width: 34px; height: 34px; font-size: 13px; }
+    .ctrl-btns { 
+      width: auto; 
+      gap: 6px; 
+    }
+    
+    .cb { 
+      flex: none !important; 
+      width: 34px; 
+      height: 34px; 
+      font-size: 13px; 
+    }
 
+    /* Sidebar içi */
     .sidebar-tabs  { padding: 0 12px; }
     .tab-btn       { font-size: 10px; padding: 11px 4px; }
     .ch-count      { padding: 6px 12px 2px; }
-    .channel-list  { max-height: 45vh; }
+    .channel-list  { max-height: 42vh; }
 
     .channel  { padding: 8px 10px; gap: 10px; }
-    .ch-logo  { width: 38px; height: 38px; border-radius: 8px; }
+    .ch-logo  { width: 38px; height: 38px; border-radius: 8px; flex-shrink: 0; }
     .ch-name  { font-size: 12px; }
     .ch-group { font-size: 10px; }
   }
@@ -474,6 +475,7 @@
 
   <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar">
+
     <div class="sidebar-tabs">
       <button class="tab-btn active" onclick="switchTab('all', this)">TÜM KANALLAR</button>
       <button class="tab-btn" onclick="switchTab('fav', this)">⭐ FAVORİLER</button>
@@ -487,12 +489,16 @@
         Kanallar yükleniyor...
       </div>
     </div>
+
   </aside>
 
   <!-- ══ MAIN ══ -->
   <main class="main">
+
+    <!-- PLAYER -->
     <div class="player-wrap">
       <div class="player-ratio">
+
         <div class="player-idle" id="playerIdle">
           <div class="idle-icon">📺</div>
           <div class="idle-txt">İZLEMEK İÇİN KANAL SEÇİN</div>
@@ -503,6 +509,7 @@
         <div class="fs-hint">
           <button class="fs-btn" onclick="openFS()">⛶ TAM EKRAN</button>
         </div>
+
       </div>
 
       <!-- CONTROLS + CATEGORIES -->
@@ -519,7 +526,9 @@
           <button class="cat-pill active" onclick="filterCat('', this)">Tümü</button>
         </div>
       </div>
+
     </div>
+
   </main>
 </div>
 
@@ -558,6 +567,7 @@ let allChannels = [];
 let currentCh   = null;
 let currentTab  = "all";
 let currentCat  = "";
+let searchQ     = "";
 
 const fetchPromises = M3U_URLS.map(url => 
   fetch(url)
@@ -640,7 +650,7 @@ function renderList() {
 
   if (!list.length) {
     el.innerHTML = `<div style="text-align:center;padding:40px 16px;color:var(--muted);font-size:13px;">
-      ${currentTab === "fav" ? "⭐ Favori yok" : "Sonuç yok"}
+      ${currentTab === "fav" ? "⭐ Favori yok" : " Sonuç yok"}
     </div>`;
     return;
   }
@@ -746,6 +756,11 @@ function toggleFavorite(url, btn) {
     showToast("⭐ Favorilere eklendi");
   }
   localStorage.setItem("favorites", JSON.stringify(favorites));
+  renderList();
+}
+
+function search(q) {
+  searchQ = q.toLowerCase();
   renderList();
 }
 
