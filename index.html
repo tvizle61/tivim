@@ -38,7 +38,7 @@
     opacity: 0.4;
   }
 
-  /* ══ LAYOUT ONAYI (Sol Bar Daraltıldı: 240px) ══ */
+  /* ══ LAYOUT (İstediğin Dar Sol Bar Korundu) ══ */
   .app {
     display: grid;
     grid-template-columns: 240px 1fr;
@@ -91,7 +91,7 @@
   .cat-bar::-webkit-scrollbar { height: 3px; }
   .cat-bar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
 
-  /* Kategori Hapları Daraltıldı */
+  /* İstediğin Dar Kategori Hapları Korundu */
   .cat-pill {
     background: var(--bg3);
     border: 1px solid var(--border);
@@ -292,7 +292,7 @@
     max-height: 100%;
     background: #000;
     display: none;
-    object-fit: contain; /* Görüntünün orijinal oranını bozmaz ve taşmaları engeller */
+    object-fit: cover; /* Siyah boşlukları yok edip alanı tamamen kaplaması sağlandı */
   }
 
   /* Fullscreen hint */
@@ -317,7 +317,7 @@
     font-family: 'DM Sans', sans-serif; font-weight: 500;
   }
 
-  /* ALT KONTROL BARI (Yükseklik ve Padding Küçültüldü) */
+  /* ALT KONTROL BARI (İstediğin Dar Düzen ve Küçük Padding Korundu) */
   .ctrl-bar {
     background: linear-gradient(to right, var(--bg2), var(--bg3));
     border-top: 1px solid var(--border);
@@ -337,7 +337,6 @@
     flex-shrink: 0;
   }
 
-  /* Butonlar Küçültüldü */
   .cb {
     width: 30px; height: 30px;
     border-radius: 6px;
