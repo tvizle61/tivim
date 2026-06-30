@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌟 CANLI TV & YOUTUBE PLAYER (HİBRİT)</title>
+<title>🌟 CANLI TV & YOUTUBE PLAYER (AKILLI KATEGORİ)</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <!-- YouTube Iframe API -->
 <script src="https://www.youtube.com/iframe_api"></script>
@@ -271,7 +271,7 @@
 
   #ytPlayer { position: absolute; inset: 0; border: none; }
 
-  /* ══ ALT BAR KUSURSUZ SABİTLEME ══ */
+  /* ══ ALT BAR SABİTLEME ══ */
   .ctrl-bar {
     background: linear-gradient(to right, var(--bg2), var(--bg3));
     border-top: 1px solid var(--border);
@@ -302,7 +302,7 @@
   .cb:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-1px); }
   .cb.danger:hover { background: #c0392b; border-color: #c0392b; }
 
-  /* ══ TAM EKRAN AYARLARI (Sadece 4 Buton Kalır) ══ */
+  /* ══ TAM EKRAN AYARLARI ══ */
   .player-wrap:fullscreen .ctrl-bar,
   .player-wrap:-webkit-full-screen .ctrl-bar {
     position: absolute;
@@ -390,7 +390,6 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// İNTERNETTEKİ M3U LİNKLERİNİZ
 const M3U_URLS = [
   "https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/playlist.m3u",
   "https://raw.githubusercontent.com/tvizle61/tv/refs/heads/main/yerel1.m3u"
@@ -408,7 +407,7 @@ function onYouTubeIframeAPIReady() {
   console.log("YouTube API Hazır.");
 }
 
-// 1. ADIM: ÖNCE İNTERNETTEN M3U LİSTELERİNİ ÇEKELİM
+// 1. ADIM: M3U LİSTELERİNİ ÇEK
 const fetchM3uPromises = M3U_URLS.map(url => 
   fetch(url)
     .then(r => r.ok ? r.text() : "")
@@ -438,19 +437,18 @@ Promise.all(fetchM3uPromises)
       }
     });
     
-    // 2. ADIM: M3U'LAR BİTİNCE YEREL CHANNELS.JSON DOSYASINI DA ÜZERİNE EKLEYELİM
+    // 2. ADIM: CHANNELS.JSON DOSYASINI EKLE
     return fetch("channels.json").then(r => r.ok ? r.json() : {channels: []}).catch(() => ({channels: []}));
   })
   .then(jsonData => {
     if (jsonData && jsonData.channels) {
-      // JSON'dan gelen kanalları/videoları listenin en önüne veya arkasına ekleyebiliriz (Push arkasına ekler)
       jsonData.channels.forEach(ch => {
         allChannels.push(ch);
       });
     }
     
     if(allChannels.length === 0) {
-      document.getElementById("channelList").innerHTML = '<div style="padding:20px;color:var(--muted);text-align:center">❌ Hiç kaynak yüklenemedi.</div>';
+      document.getElementById("channelList").innerHTML = '<div style="padding:20px;color:var(--muted);text-align:center">❌ Kaynak yüklenemedi.</div>';
       return;
     }
 
@@ -458,8 +456,18 @@ Promise.all(fetchM3uPromises)
     renderList();
   });
 
+// AKILLI GRUP KONTROL FONKSİYONU
+function isSportGroup(groupName) {
+  if (!groupName) return false;
+  const name = groupName.toLowerCase();
+  return name.includes("spor") || name.includes("sport");
+}
+
 function buildCats() {
-  const groups = ["", ...new Set(allChannels.map(c => c.group))];
+  // Spor kelimesi geçen grupları temizleyip yerine tek bir "Spor" ekliyoruz
+  const mappedGroups = allChannels.map(c => isSportGroup(c.group) ? "Spor" : c.group);
+  const groups = ["", ...new Set(mappedGroups)];
+  
   const bar = document.getElementById("catBar");
   bar.innerHTML = groups.map((g, i) =>
     `<button class="cat-pill ${i === 0 ? "active" : ""}" onclick="filterCat('${g.replace(/'/g,"\\'")}',this)">${i === 0 ? "Tümü" : g}</button>`
@@ -483,7 +491,15 @@ function switchTab(tab, btn) {
 function renderList() {
   let list = allChannels;
   if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url || c.youtubeId));
-  if (currentCat)            list = list.filter(c => c.group === currentCat);
+  
+  // Akıllı Filtreleme Alanı
+  if (currentCat) {
+    if (currentCat === "Spor") {
+      list = list.filter(c => isSportGroup(c.group));
+    } else {
+      list = list.filter(c => c.group === currentCat && !isSportGroup(c.group));
+    }
+  }
 
   document.getElementById("chCount").textContent = list.length + " kanal/video";
   const el = document.getElementById("channelList");
@@ -505,6 +521,7 @@ function renderList() {
       : `<span>📺</span>`;
       
     const badge = ch.youtubeId ? `<span class="yt-badge">YOUTUBE</span>` : `<span class="live-badge">CANLI</span>`;
+    const displayGroup = isSportGroup(ch.group) ? "Spor" : ch.group;
     const u = idKey.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
 
     return `
@@ -514,7 +531,7 @@ function renderList() {
           <div class="ch-name">${ch.name}</div>
           <div class="ch-meta">
             ${badge}
-            <span class="ch-group">${ch.group}</span>
+            <span class="ch-group">${displayGroup}</span>
           </div>
         </div>
         <button class="fav-btn ${isFav ? "on" : ""}"
@@ -540,24 +557,18 @@ function play(idx) {
   ytDOM.style.display = "none";
   if (ytPlayerInstance && ytPlayerInstance.stopVideo) { ytPlayerInstance.stopVideo(); }
 
-  // YOUTUBE VİDEOSU OYNATMA
   if (ch.youtubeId) {
     ytDOM.style.display = "block";
     if (ytPlayerInstance) {
       ytPlayerInstance.loadVideoById(ch.youtubeId);
     } else {
       ytPlayerInstance = new YT.Player('ytPlayer', {
-        height: '100%',
-        width: '100%',
-        videoId: ch.youtubeId,
+        height: '100%', width: '100%', videoId: ch.youtubeId,
         playerVars: { 'autoplay': 1, 'playsinline': 1 },
-        events: {
-          'onReady': (e) => e.target.playVideo()
-        }
+        events: { 'onReady': (e) => e.target.playVideo() }
       });
     }
   } 
-  // STANDART M3U8 YAYIN OYNATMA
   else if (ch.url) {
     video.style.display = "block";
     if (Hls.isSupported()) {
@@ -580,7 +591,6 @@ function stopPlayer() {
   video.pause(); video.src = ""; video.style.display = "none";
   if (ytPlayerInstance && ytPlayerInstance.stopVideo) { ytPlayerInstance.stopVideo(); }
   ytDOM.style.display = "none";
-  
   document.getElementById("playerIdle").style.display = "flex";
   currentCh = null;
   renderList();
@@ -589,7 +599,13 @@ function stopPlayer() {
 function getFiltered() {
   let list = allChannels;
   if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url || c.youtubeId));
-  if (currentCat)            list = list.filter(c => c.group === currentCat);
+  if (currentCat) {
+    if (currentCat === "Spor") {
+      list = list.filter(c => isSportGroup(c.group));
+    } else {
+      list = list.filter(c => c.group === currentCat && !isSportGroup(c.group));
+    }
+  }
   return list;
 }
 
@@ -621,13 +637,11 @@ function toggleFSSmart() {
 function toggleFavorite(idKey, btn) {
   if (favorites.includes(idKey)) {
     favorites = favorites.filter(u => u !== idKey);
-    btn.textContent = "☆";
-    btn.classList.remove("on");
+    btn.textContent = "☆"; btn.classList.remove("on");
     showToast("Favorilerden çıkarıldı");
   } else {
     favorites.push(idKey);
-    btn.textContent = "★";
-    btn.classList.add("on");
+    btn.textContent = "★"; btn.classList.add("on");
     showToast("⭐ Favorilere eklendi");
   }
   localStorage.setItem("favorites", JSON.stringify(favorites));
