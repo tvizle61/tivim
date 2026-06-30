@@ -235,7 +235,7 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background: #000; /* Boş kalan her yer artık sinematik siyah */
+    background: #000;
   }
 
   /* ══ PLAYER WRAPPER (TÜM ALANI KAPLAR) ══ */
@@ -251,7 +251,7 @@
   .player-ratio {
     position: relative;
     width: 100%;
-    flex: 1; /* Oynatıcıyı dikeyde sonuna kadar esnetir */
+    flex: 1;
     background: #000;
     overflow: hidden;
     display: flex;
@@ -289,7 +289,7 @@
     height: 100%;
     background: #000;
     display: none;
-    object-fit: contain; /* Görüntü oranını bozmadan maksimum boyuta getirir */
+    object-fit: cover; /* Görüntüyü kırpıp tüm alanı kaplamasını sağlar (Siyah boşlukları yok eder) */
   }
 
   /* Fullscreen hint */
@@ -754,10 +754,12 @@ function toggleFavorite(url, btn) {
 }
 
 /* ── TOAST ── */
+let toastT;
 function showToast(msg) {
   const t = document.getElementById("toast");
   t.textContent = msg; t.classList.add("show");
-  clearTimeout(t.to); t.to = setTimeout(() => t.classList.remove("show"), 3000);
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove("show"), 2800);
 }
 
 /* ── SLEEP TIMER ── */
@@ -795,16 +797,6 @@ function startSleep() {
 document.getElementById("sleepModal").addEventListener("click", e => {
   if (e.target === document.getElementById("sleepModal")) closeSleep();
 });
-
-
-/* ── TOAST ── */
-let toastT;
-function showToast(msg) {
-  const t = document.getElementById("toast");
-  t.textContent = msg; t.classList.add("show");
-  clearTimeout(toastT);
-  toastT = setTimeout(() => t.classList.remove("show"), 2800);
-}
 
 /* ── KEYBOARD ── */
 document.addEventListener("keydown", e => {
