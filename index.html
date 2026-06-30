@@ -109,12 +109,13 @@
     letter-spacing: 1px;
   }
 
-  /* ══ LAYOUT ══ */
-  .app {
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    height: calc(100vh - 61px);
-  }
+  /* ══ LAYOUT ONAYI ══ */
+.app {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  height: calc(100vh - 61px);
+  overflow: hidden; /* Dışarı taşmaları engellemek için */
+}
 
   /* ══ SIDEBAR ══ */
   .sidebar {
@@ -329,13 +330,15 @@
   /* ══ PLAYER ══ */
   .player-wrap { position: relative; background: #000; flex-shrink: 0; }
 
-  .player-ratio {
-    position: relative;
-    width: 100%;
-    padding-top: 50%;
-    background: #000;
-    overflow: hidden;
-  }
+  /* ══ PLAYER ORANI VE YÜKSEKLİK SINIRI ══ */
+.player-ratio {
+  position: relative;
+  width: 100%;
+  padding-top: 48%; /* %50 olan değeri hafifçe %48'e çekerek alt bara yer açıyoruz */
+  max-height: calc(100vh - 180px); /* Ekran çok geniş olduğunda videonun aşağı taşmasını engeller */
+  background: #000;
+  overflow: hidden;
+}
 
   .player-idle {
     position: absolute; inset: 0;
@@ -361,12 +364,16 @@
     color: var(--muted);
   }
 
-  #video {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%;
-    background: #000;
-    display: none;
-  }
+  /* ══ VİDEO BOYUTLANDIRMASI ══ */
+#video {
+  position: absolute; 
+  inset: 0;
+  width: 100%; 
+  height: 100%;
+  background: #000;
+  display: none;
+  object-fit: contain; /* Videonun en-boy oranını korumasını sağlar */
+}
 
   /* Fullscreen hint */
   .fs-hint {
@@ -389,17 +396,17 @@
     font-family: 'DM Sans', sans-serif; font-weight: 500;
   }
 
-  /* ══ CONTROLS BAR ══ */
-  .ctrl-bar {
-    background: linear-gradient(to right, var(--bg2), var(--bg3));
-    border-top: 1px solid var(--border);
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-shrink: 0;
-  }
+ /* ══ KONTROL BARI (Opsiyonel Rahatlatma) ══ */
+.ctrl-bar {
+  background: linear-gradient(to right, var(--bg2), var(--bg3));
+  border-top: 1px solid var(--border);
+  padding: 14px 20px; /* İç boşluğu hafif artırarak butonları daha okunaklı yapıyoruz */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-shrink: 0;
+}
 
   .np {
     display: flex;
