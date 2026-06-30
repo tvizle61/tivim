@@ -557,7 +557,6 @@ function play(idx) {
 
   document.getElementById("playerIdle").style.display = "none";
   
-  // Önceki oynatıcı kalıntılarını tamamen temizle
   if (hls) { hls.destroy(); hls = null; }
   video.pause(); video.src = ""; video.style.display = "none";
   
@@ -566,13 +565,11 @@ function play(idx) {
     ytPlayerInstance = null; 
   }
   ytPlayerWrap.style.display = "none";
-  ytPlayerWrap.innerHTML = ""; // DOM kalıntılarını temizle
+  ytPlayerWrap.innerHTML = "";
 
   // 🔴 YOUTUBE VİDEOSU OYNATMA
   if (ch.youtubeId) {
     ytPlayerWrap.style.display = "block";
-    
-    // Çakışmayı önlemek için yeni bir hedef div oluşturuyoruz
     const ytTarget = document.createElement("div");
     ytTarget.id = "ytPlayerActual";
     ytPlayerWrap.appendChild(ytTarget);
@@ -586,14 +583,50 @@ function play(idx) {
       }
     });
   } 
-  // 🔵 NORMAL LIVE (.M3U8) OYNATMA
+  // 🔵 NORMAL LIVE (.M3U8) OYNATMA (Star TV gibi korumalı linkler dahil)
   else if (ch.url) {
     video.style.display = "block";
+    
     if (Hls.isSupported()) {
-      hls = new Hls();
+      // 🛠 AKILLI CORS VE HATA YÖNETİMİ AYARLARI 🛠
+      hls = new Hls({
+        maxBufferLength: 30,
+        maxMaxBufferLength: 600,
+        enableWorker: true,
+        lowLatencyMode: true,
+        // Korumalı yayınların CORS blokajına takılmaması için kimlik bilgilerini zorla
+        xhrSetup: function (xhr, url) {
+          xhr.withCredentials = false; 
+        }
+      });
+      
       hls.loadSource(ch.url);
       hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
+      
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play().catch(() => {});
+      });
+
+      // 🛠 OTOMATİK HATA KURTARICI (Star TV donma/blokaj çözümü)
+      hls.on(Hls.Events.ERROR, function (event, data) {
+        if (data.fatal) {
+          switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+              console.log("Ağ hatası, yayın yeniden deneniyor...");
+              hls.startLoad();
+              break;
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              console.log("Medya hatası, kurtarılmaya çalışılıyor...");
+              hls.recoverMediaError();
+              break;
+            default:
+              console.log("Kurtarılamayan hata. Sonraki kanala geçiliyor.");
+              nextCh();
+              break;
+          }
+        }
+      });
+
     } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
       video.src = ch.url;
       video.play().catch(() => {});
@@ -611,7 +644,6 @@ function onPlayerStateChange(event) {
   }
 }
 
-// Canlı yayın bittiğinde de sonrakine geçmesi için event ekliyoruz
 video.addEventListener('ended', function() {
   showToast("Yayın sona erdi, sonrakine geçiliyor...");
   nextCh();
