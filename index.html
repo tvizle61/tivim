@@ -397,23 +397,25 @@
   }
 
  /* ══ KONTROL BARI (Opsiyonel Rahatlatma) ══ */
+/* ══ CONTROLS BAR (Sola Hizalı ve Sade) ══ */
 .ctrl-bar {
   background: linear-gradient(to right, var(--bg2), var(--bg3));
   border-top: 1px solid var(--border);
-  padding: 14px 20px; /* İç boşluğu hafif artırarak butonları daha okunaklı yapıyoruz */
+  padding: 12px 20px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  justify-content: flex-start; /* İçerikleri tamamen sola yanaştırır */
+  gap: 20px;
   flex-shrink: 0;
 }
 
-  .np {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1; min-width: 0;
-  }
+.np {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0; /* Kanal bilgisinin ezilmesini önler */
+  max-width: 60%;
+}
 
   .np-logo {
     width: 36px; height: 36px;
@@ -447,7 +449,11 @@
 
   .np-group { font-size: 11px; color: var(--muted); margin-top: 1px; }
 
-  .ctrl-btns { display: flex; align-items: center; gap: 8px; }
+  .ctrl-btns { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+}
 
   .cb {
     width: 36px; height: 36px;
@@ -601,18 +607,18 @@
   ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); border-radius: 2px; }
 
-  /* ══ MOBİL ══ */
-  @media (max-width: 768px) {
-
-    header { padding: 11px 14px; }
-    .logo  { font-size: 20px; }
-    .logo-dot { width: 8px; height: 8px; }
-    .header-right { gap: 8px; }
-    #ch-counter { display: none; }
-
-    .search-bar { padding: 7px 10px; gap: 6px; }
-    .search-bar input { width: 110px; font-size: 12px; }
-
+  /* Mobil için esneklik ayarı */
+@media (max-width: 768px) {
+  .ctrl-bar {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 14px;
+    gap: 10px;
+  }
+  .np { max-width: 50%; }
+  .ctrl-btns { width: auto; gap: 6px; }
+  .cb { flex: none; width: 34px; height: 34px; }
+}
     /* Sidebar alta, main üste */
     .app {
       grid-template-columns: 1fr;
