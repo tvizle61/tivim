@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌟 CANLI TV & YOUTUBE PLAYER</title>
+<title>🌟 CANLI TV & YOUTUBE PLAYER (HİBRİT)</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<!-- YouTube Iframe API için gerekli kütüphane -->
+<!-- YouTube Iframe API -->
 <script src="https://www.youtube.com/iframe_api"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -178,19 +178,8 @@
     margin-top: 1px;
   }
 
-  .live-badge {
-    background: var(--accent); color: #fff;
-    font-size: 8px; font-weight: 700;
-    padding: 1px 4px; border-radius: 2px;
-    flex-shrink: 0;
-  }
-
-  .yt-badge {
-    background: #ff0000; color: #fff;
-    font-size: 8px; font-weight: 700;
-    padding: 1px 4px; border-radius: 2px;
-    flex-shrink: 0;
-  }
+  .live-badge { background: var(--accent); color: #fff; font-size: 8px; font-weight: 700; padding: 1px 4px; border-radius: 2px; flex-shrink: 0; }
+  .yt-badge { background: #ff0000; color: #fff; font-size: 8px; font-weight: 700; padding: 1px 4px; border-radius: 2px; flex-shrink: 0; }
 
   .ch-group {
     font-size: 10px; color: var(--muted);
@@ -268,21 +257,9 @@
     z-index: 2;
   }
 
-  .idle-icon {
-    font-size: 64px; opacity: .13;
-    animation: breathe 3s ease-in-out infinite;
-  }
-
-  @keyframes breathe {
-    0%,100% { opacity:.08; transform:scale(1); }
-    50%      { opacity:.2;  transform:scale(1.05); }
-  }
-
-  .idle-txt {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px; letter-spacing: 4px;
-    color: var(--muted);
-  }
+  .idle-icon { font-size: 64px; opacity: .13; animation: breathe 3s ease-in-out infinite; }
+  @keyframes breathe { 0%,100% { opacity:.08; transform:scale(1); } 50% { opacity:.2; transform:scale(1.05); } }
+  .idle-txt { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 4px; color: var(--muted); }
 
   #video, #ytPlayer {
     width: 100%; 
@@ -292,13 +269,9 @@
     object-fit: fill; 
   }
 
-  #ytPlayer {
-    position: absolute;
-    inset: 0;
-    border: none;
-  }
+  #ytPlayer { position: absolute; inset: 0; border: none; }
 
-  /* ══ ALT BAR MÜKEMMEL POZİSYON ══ */
+  /* ══ ALT BAR KUSURSUZ SABİTLEME ══ */
   .ctrl-bar {
     background: linear-gradient(to right, var(--bg2), var(--bg3));
     border-top: 1px solid var(--border);
@@ -312,13 +285,7 @@
     position: relative;
   }
 
-  .ctrl-btns { 
-    display: flex; 
-    align-items: center; 
-    gap: 6px; 
-    flex-shrink: 0;
-    z-index: 10;
-  }
+  .ctrl-btns { display: flex; align-items: center; gap: 6px; flex-shrink: 0; z-index: 10; }
 
   .cb {
     width: 38px; height: 38px; 
@@ -335,7 +302,7 @@
   .cb:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-1px); }
   .cb.danger:hover { background: #c0392b; border-color: #c0392b; }
 
-  /* ══ TAM EKRAN AYARLARI (Sadece 4 buton kalır) ══ */
+  /* ══ TAM EKRAN AYARLARI (Sadece 4 Buton Kalır) ══ */
   .player-wrap:fullscreen .ctrl-bar,
   .player-wrap:-webkit-full-screen .ctrl-bar {
     position: absolute;
@@ -348,9 +315,7 @@
   }
 
   .player-wrap:fullscreen .cat-bar,
-  .player-wrap:-webkit-full-screen .cat-bar {
-    display: none !important;
-  }
+  .player-wrap:-webkit-full-screen .cat-bar { display: none !important; }
 
   .player-wrap:fullscreen .ctrl-btns,
   .player-wrap:-webkit-full-screen .ctrl-btns {
@@ -385,7 +350,7 @@
     <div class="channel-list" id="channelList">
       <div class="loading">
         <div class="spin"></div>
-        Kanallar yükleniyor...
+        Kanallar ve Videolar Yükleniyor...
       </div>
     </div>
   </aside>
@@ -400,10 +365,7 @@
           <div class="idle-txt">İZLEMEK İÇİN KANAL SEÇİN</div>
         </div>
         
-        <!-- Standart Canlı Yayın Playerı -->
         <video id="video" controls playsinline></video>
-        
-        <!-- YouTube Oynatıcı Alanı -->
         <div id="ytPlayer"></div>
       </div>
 
@@ -428,6 +390,12 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// İNTERNETTEKİ M3U LİNKLERİNİZ
+const M3U_URLS = [
+  "https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/playlist.m3u",
+  "https://raw.githubusercontent.com/tvizle61/tv/refs/heads/main/yerel1.m3u"
+];
+
 let hls;
 let ytPlayerInstance = null;
 let favorites   = JSON.parse(localStorage.getItem("favorites") || "[]");
@@ -436,30 +404,58 @@ let currentCh   = null;
 let currentTab  = "all";
 let currentCat  = "";
 
-// YouTube API hazır olduğunda tetiklenir
 function onYouTubeIframeAPIReady() {
   console.log("YouTube API Hazır.");
 }
 
-// ARTIK KANALLARI CHANNELS.JSON DOSYASINDAN ÇEKİYORUZ
-fetch("channels.json")
-  .then(r => {
-    if (!r.ok) throw new Error("JSON bulunamadı.");
-    return r.json();
+// 1. ADIM: ÖNCE İNTERNETTEN M3U LİSTELERİNİ ÇEKELİM
+const fetchM3uPromises = M3U_URLS.map(url => 
+  fetch(url)
+    .then(r => r.ok ? r.text() : "")
+    .catch(() => "")
+);
+
+Promise.all(fetchM3uPromises)
+  .then(m3uResults => {
+    m3uResults.forEach(text => {
+      if (!text) return;
+      const lines = text.split("\n");
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith("#EXTINF")) {
+          const name  = lines[i].split(",")[1]?.trim() || "Kanal";
+          const url   = lines[i + 1]?.trim() || "";
+          if (!url.startsWith("http")) continue;
+          const gm    = lines[i].match(/group-title="([^"]*)"/i);
+          const lm    = lines[i].match(/tvg-logo="([^"]*)"/i);
+          
+          allChannels.push({
+            name,
+            url,
+            group: gm ? gm[1].trim() || "Genel" : "Genel",
+            logo:  lm ? lm[1].trim() : ""
+          });
+        }
+      }
+    });
+    
+    // 2. ADIM: M3U'LAR BİTİNCE YEREL CHANNELS.JSON DOSYASINI DA ÜZERİNE EKLEYELİM
+    return fetch("channels.json").then(r => r.ok ? r.json() : {channels: []}).catch(() => ({channels: []}));
   })
-  .then(data => {
-    if(data && data.channels) {
-      allChannels = data.channels;
-      buildCats();
-      renderList();
-    } else {
-      throw new Error("Geçersiz JSON formatı.");
+  .then(jsonData => {
+    if (jsonData && jsonData.channels) {
+      // JSON'dan gelen kanalları/videoları listenin en önüne veya arkasına ekleyebiliriz (Push arkasına ekler)
+      jsonData.channels.forEach(ch => {
+        allChannels.push(ch);
+      });
     }
-  })
-  .catch((err) => {
-    console.error(err);
-    document.getElementById("channelList").innerHTML =
-      '<div style="padding:20px;color:var(--muted);font-size:13px;text-align:center">❌ channels.json yüklenemedi veya bulunamadı!</div>';
+    
+    if(allChannels.length === 0) {
+      document.getElementById("channelList").innerHTML = '<div style="padding:20px;color:var(--muted);text-align:center">❌ Hiç kaynak yüklenemedi.</div>';
+      return;
+    }
+
+    buildCats();
+    renderList();
   });
 
 function buildCats() {
@@ -503,7 +499,6 @@ function renderList() {
     const isAct = currentCh && (currentCh.url === ch.url && currentCh.youtubeId === ch.youtubeId);
     const isFav = favorites.includes(idKey);
     
-    // Logo ve X-logo kontrolü
     const logoSrc = ch.logo || ch["X-logo"];
     const logo  = logoSrc
       ? `<img src="${logoSrc}" loading="lazy" onerror="this.outerHTML='<span>📺</span>'">`
@@ -540,7 +535,6 @@ function play(idx) {
 
   document.getElementById("playerIdle").style.display = "none";
   
-  // Önce her iki playerı da durdurup gizleyelim
   if (hls) { hls.destroy(); hls = null; }
   video.pause(); video.src = ""; video.style.display = "none";
   ytDOM.style.display = "none";
