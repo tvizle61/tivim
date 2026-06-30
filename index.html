@@ -405,8 +405,7 @@
   padding: 12px 20px;
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* İçerikleri tamamen sola yanaştırır */
-  gap: 24px;
+  justify-content: flex-start; /* İçerikleri tamamen en sola yanaştırır */
   flex-shrink: 0;
 }
 
@@ -756,23 +755,15 @@
 
       </div>
 
-      <!-- CONTROLS -->
-<div class="ctrl-bar">
-  <div class="np">
-    <div class="np-logo" id="npLogo">📺</div>
-    <div style="min-width:0; margin-right: 15px;">
-      <div class="np-title" id="npTitle">Kanal Seçilmedi</div>
-      <div class="np-group" id="npGroup">Bir kanal seçin</div>
-    </div>
-  </div>
-
-  <div class="ctrl-btns">
-    <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
-    <button class="cb" onclick="nextCh()" title="Sonraki (→)">⏭</button>
-    <button class="cb danger" onclick="stopPlayer()" title="Durdur (Esc)">⏹</button>
-    <button class="cb" onclick="openFS()" title="Tam Ekran">⛶</button>
-  </div>
-</div>
+<!-- CONTROLS -->
+      <div class="ctrl-bar">
+        <div class="ctrl-btns">
+          <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
+          <button class="cb" onclick="nextCh()" title="Sonraki (→)">⏭</button>
+          <button class="cb danger" onclick="stopPlayer()" title="Durdur (Esc)">⏹</button>
+          <button class="cb" onclick="openFS()" title="Tam Ekran">⛶</button>
+        </div>
+      </div>
 
     <!-- ÖNERILEN -->
     <div class="info-bar">
