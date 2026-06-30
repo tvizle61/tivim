@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌟 CANLI TV</title>
+<title>🌟 CANLI TV & YOUTUBE PLAYER</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<!-- YouTube Iframe API için gerekli kütüphane -->
+<script src="https://www.youtube.com/iframe_api"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -183,6 +185,13 @@
     flex-shrink: 0;
   }
 
+  .yt-badge {
+    background: #ff0000; color: #fff;
+    font-size: 8px; font-weight: 700;
+    padding: 1px 4px; border-radius: 2px;
+    flex-shrink: 0;
+  }
+
   .ch-group {
     font-size: 10px; color: var(--muted);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -275,7 +284,7 @@
     color: var(--muted);
   }
 
-  #video {
+  #video, #ytPlayer {
     width: 100%; 
     height: 100%;
     background: #000;
@@ -283,7 +292,13 @@
     object-fit: fill; 
   }
 
-  /* ══ ALT BAR (MÜKEMMEL SABİTLENMİŞ DÜZEN) ══ */
+  #ytPlayer {
+    position: absolute;
+    inset: 0;
+    border: none;
+  }
+
+  /* ══ ALT BAR MÜKEMMEL POZİSYON ══ */
   .ctrl-bar {
     background: linear-gradient(to right, var(--bg2), var(--bg3));
     border-top: 1px solid var(--border);
@@ -297,7 +312,6 @@
     position: relative;
   }
 
-  /* ══ İŞARETLEDİĞİNİZ 4'LÜ BUTON GRUBU ══ */
   .ctrl-btns { 
     display: flex; 
     align-items: center; 
@@ -306,7 +320,6 @@
     z-index: 10;
   }
 
-  /* Barı genişletmeden/yükseltmeden kendi iç alanında büyük butonlar */
   .cb {
     width: 38px; height: 38px; 
     border-radius: 6px;
@@ -322,8 +335,7 @@
   .cb:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-1px); }
   .cb.danger:hover { background: #c0392b; border-color: #c0392b; }
 
-  /* ══ TAM EKRAN DÜZENİ SİHİRBAZLIĞI ══ */
-  /* Tam ekranda ana alt barın arka planını ve kategorileri tamamen yok et */
+  /* ══ TAM EKRAN AYARLARI (Sadece 4 buton kalır) ══ */
   .player-wrap:fullscreen .ctrl-bar,
   .player-wrap:-webkit-full-screen .ctrl-bar {
     position: absolute;
@@ -335,148 +347,34 @@
     z-index: 2147483647;
   }
 
-  /* Tam ekranda kategorileri tamamen gizle */
   .player-wrap:fullscreen .cat-bar,
   .player-wrap:-webkit-full-screen .cat-bar {
     display: none !important;
   }
 
-  /* Tam ekranda 4 butona özel şık, yüzen bir kutu giydir (Sol alt köşe) */
   .player-wrap:fullscreen .ctrl-btns,
   .player-wrap:-webkit-full-screen .ctrl-btns {
     background: rgba(14, 19, 24, 0.85);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 15px;
-    padding: 9px;
+    border-radius: 10px;
+    padding: 6px;
     backdrop-filter: blur(12px);
     box-shadow: 0 10px 30px rgba(0,0,0,0.7);
   }
 
-  .modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,.8); backdrop-filter: blur(8px);
-    z-index: 200; display: none;
-    align-items: center; justify-content: center;
-  }
-
-  .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: 16px; padding: 28px; width: 320px;
-    animation: slideUp .3s ease;
-  }
-
-  @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-
-  .modal-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px; letter-spacing: 2px;
-    margin-bottom: 20px;
-  }
-
-  .timer-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
-
-  .t-opt {
-    background: var(--bg3); border: 1px solid var(--border);
-    border-radius: 8px; padding: 10px; text-align: center;
-    cursor: pointer; font-size: 13px; font-weight: 600;
-    color: var(--text); transition: all .2s;
-  }
-
-  .t-opt:hover, .t-opt.sel {
-    background: rgba(232,55,61,.15);
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  .t-cd {
-    text-align: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 13px; letter-spacing: 2px;
-    color: var(--gold); padding: 6px 0;
-    display: none;
-  }
-
-  .modal-acts { display: flex; gap: 10px; }
-
-  .btn {
-    flex: 1; padding: 10px; border-radius: 8px; border: none;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px; font-weight: 600;
-    cursor: pointer; transition: all .2s;
-  }
-
-  .btn-p { background: var(--accent); color: #fff; }
-  .btn-p:hover { background: #c0392b; }
-  .btn-s { background: var(--bg3); color: var(--muted); border: 1px solid var(--border); }
-  .btn-s:hover { color: var(--text); }
-
-  .toast {
-    position: fixed; bottom: 24px; right: 24px;
-    background: var(--bg2); border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    border-radius: 8px; padding: 12px 18px;
-    font-size: 13px; font-weight: 500;
-    z-index: 500;
-    transform: translateY(60px); opacity: 0;
-    transition: all .3s; max-width: 280px;
-  }
-
-  .toast.show { transform: translateY(0); opacity: 1; }
-
-  ::-webkit-scrollbar { width: 4px; height: 4px; }
-  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); border-radius: 2px; }
-
   @media (max-width: 768px) {
-    .app {
-      grid-template-columns: 1fr;
-      height: auto;
-      min-height: 100vh;
-    }
-
-    .main    { order: 1; height: auto; }
+    .app { grid-template-columns: 1fr; height: auto; min-height: 100vh; }
+    .main { order: 1; height: auto; }
     .sidebar { order: 2; border-right: none; border-top: 1px solid var(--border); }
-
     .player-ratio { height: 56.25vw; flex: none; }
-    .idle-icon { font-size: 40px; }
-    .idle-txt  { font-size: 13px; letter-spacing: 2px; }
-
-    .ctrl-bar {
-      flex-wrap: nowrap !important;
-      justify-content: flex-start !important;
-      padding: 8px 12px;
-      gap: 10px;
-    }
-
-    .ctrl-btns { 
-      width: auto; 
-      gap: 6px; 
-    }
-    
-    .cb { 
-      flex: none !important; 
-      width: 34px; 
-      height: 34px; 
-      font-size: 13px; 
-    }
-
-    .sidebar-tabs  { padding: 0 12px; }
-    .tab-btn       { font-size: 10px; padding: 11px 4px; }
-    .ch-count      { padding: 6px 12px 2px; }
-    .channel-list  { max-height: 42vh; }
-
-    .channel  { padding: 8px 10px; gap: 10px; }
-    .ch-logo  { width: 34px; height: 34px; border-radius: 6px; flex-shrink: 0; }
-    .ch-name  { font-size: 12px; }
-    .ch-group { font-size: 10px; }
+    .ctrl-bar { padding: 8px 12px; gap: 10px; }
+    .channel-list { max-height: 42vh; }
   }
 </style>
 </head>
 <body>
 
 <div class="app">
-
   <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar">
     <div class="sidebar-tabs">
@@ -501,12 +399,16 @@
           <div class="idle-icon">📺</div>
           <div class="idle-txt">İZLEMEK İÇİN KANAL SEÇİN</div>
         </div>
+        
+        <!-- Standart Canlı Yayın Playerı -->
         <video id="video" controls playsinline></video>
+        
+        <!-- YouTube Oynatıcı Alanı -->
+        <div id="ytPlayer"></div>
       </div>
 
-      <!-- KONTROL VE KATEGORİ BARI (YAPISAL YERİ DEĞİŞMEDİ) -->
+      <!-- KONTROL BARI -->
       <div class="ctrl-bar">
-        <!-- 4'lü Buton Grubu (Tam Sol Sabit Pozisyon) -->
         <div class="ctrl-btns" id="actionButtons">
           <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
           <button class="cb" onclick="nextCh()" title="Sonraki (→)">⏭</button>
@@ -514,7 +416,6 @@
           <button class="cb" onclick="toggleFSSmart()" title="Tam Ekran">⛶</button>
         </div>
         
-        <!-- Kategoriler -->
         <div class="cat-bar" id="catBar">
           <button class="cat-pill active" onclick="filterCat('', this)">Tümü</button>
         </div>
@@ -524,91 +425,45 @@
   </main>
 </div>
 
-<!-- SLEEP MODAL -->
-<div class="modal-overlay" id="sleepModal">
-  <div class="modal">
-    <div class="modal-title">⏱ UYKU ZAMANLAYICISI</div>
-    <div class="timer-opts">
-      <div class="t-opt" onclick="pickTimer(15,this)">15 dk</div>
-      <div class="t-opt sel" onclick="pickTimer(30,this)">30 dk</div>
-      <div class="t-opt" onclick="pickTimer(60,this)">1 saat</div>
-      <div class="t-opt" onclick="pickTimer(90,this)">1.5 saat</div>
-      <div class="t-opt" onclick="pickTimer(120,this)">2 saat</div>
-      <div class="t-opt" onclick="pickTimer(0,this)">İptal Et</div>
-    </div>
-    <div class="t-cd" id="timerCd"></div>
-    <div class="modal-acts">
-      <button class="btn btn-s" onclick="closeSleep()">Vazgeç</button>
-      <button class="btn btn-p" onclick="startSleep()">Başlat</button>
-    </div>
-  </div>
-</div>
-
 <div class="toast" id="toast"></div>
 
 <script>
-const M3U_URLS = [
-  "https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/playlist.m3u",
-  "https://raw.githubusercontent.com/tvizle61/tv/refs/heads/main/yerel1.m3u"
-];
-
 let hls;
+let ytPlayerInstance = null;
 let favorites   = JSON.parse(localStorage.getItem("favorites") || "[]");
 let allChannels = [];
 let currentCh   = null;
 let currentTab  = "all";
 let currentCat  = "";
 
-const fetchPromises = M3U_URLS.map(url => 
-  fetch(url)
-    .then(r => {
-      if (!r.ok) throw new Error("Yüklenemedi");
-      return r.text();
-    })
-    .catch(err => {
-      console.error(`Link yüklenirken hata oluştu: ${url}`, err);
-      return "";
-    })
-);
+// YouTube API hazır olduğunda tetiklenir
+function onYouTubeIframeAPIReady() {
+  console.log("YouTube API Hazır.");
+}
 
-Promise.all(fetchPromises)
-  .then(results => {
-    results.forEach(text => {
-      if (!text) return;
-
-      const lines = text.split("\n");
-      for (let i = 0; i < lines.length; i++) {
-        if (lines[i].startsWith("#EXTINF")) {
-          const name  = lines[i].split(",")[1]?.trim() || "Kanal";
-          const url   = lines[i + 1]?.trim() || "";
-          if (!url.startsWith("http")) continue;
-          const gm    = lines[i].match(/group-title="([^"]*)"/i);
-          const lm    = lines[i].match(/tvg-logo="([^"]*)"/i);
-          
-          allChannels.push({
-            name,
-            url,
-            group: gm ? gm[1].trim() || "Genel" : "Genel",
-            logo:  lm ? lm[1].trim() : ""
-          });
-        }
-      }
-    });
-
-    if (allChannels.length === 0) {
-      throw new Error("Hiç kanal bulunamadı");
-    }
-
-    buildCats();
-    renderList();
+// ARTIK KANALLARI CHANNELS.JSON DOSYASINDAN ÇEKİYORUZ
+fetch("channels.json")
+  .then(r => {
+    if (!r.ok) throw new Error("JSON bulunamadı.");
+    return r.json();
   })
-  .catch(() => {
+  .then(data => {
+    if(data && data.channels) {
+      allChannels = data.channels;
+      buildCats();
+      renderList();
+    } else {
+      throw new Error("Geçersiz JSON formatı.");
+    }
+  })
+  .catch((err) => {
+    console.error(err);
     document.getElementById("channelList").innerHTML =
-      '<div style="padding:20px;color:var(--muted);font-size:13px;text-align:center">❌ Yükleme hatası (Hiçbir liste yüklenemedi)</div>';
+      '<div style="padding:20px;color:var(--muted);font-size:13px;text-align:center">❌ channels.json yüklenemedi veya bulunamadı!</div>';
   });
 
 function buildCats() {
-  const groups = ["", ...new Set(allChannels.map(c => c.group))].slice(0, 20);
+  const groups = ["", ...new Set(allChannels.map(c => c.group))];
   const bar = document.getElementById("catBar");
   bar.innerHTML = groups.map((g, i) =>
     `<button class="cat-pill ${i === 0 ? "active" : ""}" onclick="filterCat('${g.replace(/'/g,"\\'")}',this)">${i === 0 ? "Tümü" : g}</button>`
@@ -631,27 +486,31 @@ function switchTab(tab, btn) {
 
 function renderList() {
   let list = allChannels;
-  if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url));
+  if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url || c.youtubeId));
   if (currentCat)            list = list.filter(c => c.group === currentCat);
 
-  document.getElementById("chCount").textContent = list.length + " kanal";
+  document.getElementById("chCount").textContent = list.length + " kanal/video";
   const el = document.getElementById("channelList");
 
   if (!list.length) {
-    el.innerHTML = `<div style="text-align:center;padding:40px 16px;color:var(--muted);font-size:13px;">
-      ${currentTab === "fav" ? "⭐ Favori yok" : " Sonuç yok"}
-    </div>`;
+    el.innerHTML = `<div style="text-align:center;padding:40px 16px;color:var(--muted);font-size:13px;">Sonuç yok</div>`;
     return;
   }
 
   el.innerHTML = list.map(ch => {
     const idx   = allChannels.indexOf(ch);
-    const isAct = currentCh?.url === ch.url;
-    const isFav = favorites.includes(ch.url);
-    const logo  = ch.logo
-      ? `<img src="${ch.logo}" loading="lazy" onerror="this.outerHTML='<span>📺</span>'">`
+    const idKey = ch.url || ch.youtubeId;
+    const isAct = currentCh && (currentCh.url === ch.url && currentCh.youtubeId === ch.youtubeId);
+    const isFav = favorites.includes(idKey);
+    
+    // Logo ve X-logo kontrolü
+    const logoSrc = ch.logo || ch["X-logo"];
+    const logo  = logoSrc
+      ? `<img src="${logoSrc}" loading="lazy" onerror="this.outerHTML='<span>📺</span>'">`
       : `<span>📺</span>`;
-    const u = ch.url.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+      
+    const badge = ch.youtubeId ? `<span class="yt-badge">YOUTUBE</span>` : `<span class="live-badge">CANLI</span>`;
+    const u = idKey.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
 
     return `
       <div class="channel ${isAct ? "active" : ""}" onclick="play(${idx})">
@@ -659,7 +518,7 @@ function renderList() {
         <div class="ch-info">
           <div class="ch-name">${ch.name}</div>
           <div class="ch-meta">
-            <span class="live-badge">CANLI</span>
+            ${badge}
             <span class="ch-group">${ch.group}</span>
           </div>
         </div>
@@ -672,6 +531,7 @@ function renderList() {
 }
 
 const video = document.getElementById("video");
+const ytDOM = document.getElementById("ytPlayer");
 
 function play(idx) {
   const ch = allChannels[idx];
@@ -679,19 +539,42 @@ function play(idx) {
   currentCh = ch;
 
   document.getElementById("playerIdle").style.display = "none";
-  video.style.display = "block";
+  
+  // Önce her iki playerı da durdurup gizleyelim
+  if (hls) { hls.destroy(); hls = null; }
+  video.pause(); video.src = ""; video.style.display = "none";
+  ytDOM.style.display = "none";
+  if (ytPlayerInstance && ytPlayerInstance.stopVideo) { ytPlayerInstance.stopVideo(); }
 
-  if (Hls.isSupported()) {
-    if (hls) hls.destroy();
-    hls = new Hls();
-    hls.loadSource(ch.url);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
-  } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-    video.src = ch.url;
-    video.play().catch(() => {});
-  } else {
-    video.src = ch.url;
+  // YOUTUBE VİDEOSU OYNATMA
+  if (ch.youtubeId) {
+    ytDOM.style.display = "block";
+    if (ytPlayerInstance) {
+      ytPlayerInstance.loadVideoById(ch.youtubeId);
+    } else {
+      ytPlayerInstance = new YT.Player('ytPlayer', {
+        height: '100%',
+        width: '100%',
+        videoId: ch.youtubeId,
+        playerVars: { 'autoplay': 1, 'playsinline': 1 },
+        events: {
+          'onReady': (e) => e.target.playVideo()
+        }
+      });
+    }
+  } 
+  // STANDART M3U8 YAYIN OYNATMA
+  else if (ch.url) {
+    video.style.display = "block";
+    if (Hls.isSupported()) {
+      hls = new Hls();
+      hls.loadSource(ch.url);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = ch.url;
+      video.play().catch(() => {});
+    }
   }
 
   renderList();
@@ -701,6 +584,9 @@ function play(idx) {
 function stopPlayer() {
   if (hls) { hls.destroy(); hls = null; }
   video.pause(); video.src = ""; video.style.display = "none";
+  if (ytPlayerInstance && ytPlayerInstance.stopVideo) { ytPlayerInstance.stopVideo(); }
+  ytDOM.style.display = "none";
+  
   document.getElementById("playerIdle").style.display = "flex";
   currentCh = null;
   renderList();
@@ -708,7 +594,7 @@ function stopPlayer() {
 
 function getFiltered() {
   let list = allChannels;
-  if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url));
+  if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url || c.youtubeId));
   if (currentCat)            list = list.filter(c => c.group === currentCat);
   return list;
 }
@@ -716,14 +602,14 @@ function getFiltered() {
 function nextCh() {
   const list = getFiltered();
   if (!list.length) return;
-  const idx  = list.findIndex(c => c.url === currentCh?.url);
+  const idx = list.findIndex(c => (c.url && c.url === currentCh?.url) || (c.youtubeId && c.youtubeId === currentCh?.youtubeId));
   play(allChannels.indexOf(list[(idx + 1) % list.length]));
 }
 
 function prevCh() {
   const list = getFiltered();
   if (!list.length) return;
-  const idx  = list.findIndex(c => c.url === currentCh?.url);
+  const idx = list.findIndex(c => (c.url && c.url === currentCh?.url) || (c.youtubeId && c.youtubeId === currentCh?.youtubeId));
   play(allChannels.indexOf(list[(idx - 1 + list.length) % list.length]));
 }
 
@@ -738,14 +624,14 @@ function toggleFSSmart() {
   }
 }
 
-function toggleFavorite(url, btn) {
-  if (favorites.includes(url)) {
-    favorites = favorites.filter(u => u !== url);
+function toggleFavorite(idKey, btn) {
+  if (favorites.includes(idKey)) {
+    favorites = favorites.filter(u => u !== idKey);
     btn.textContent = "☆";
     btn.classList.remove("on");
     showToast("Favorilerden çıkarıldı");
   } else {
-    favorites.push(url);
+    favorites.push(idKey);
     btn.textContent = "★";
     btn.classList.add("on");
     showToast("⭐ Favorilere eklendi");
@@ -762,51 +648,12 @@ function showToast(msg) {
   toastT = setTimeout(() => t.classList.remove("show"), 2800);
 }
 
-let sleepSel = 30, sleepTimer = null, cdInterval = null;
-
-function pickTimer(min, el) {
-  sleepSel = min;
-  document.querySelectorAll(".t-opt").forEach(o => o.classList.remove("sel"));
-  el.classList.add("sel");
-}
-
-function openSleep()  { document.getElementById("sleepModal").classList.add("open"); }
-function closeSleep() { document.getElementById("sleepModal").classList.remove("open"); }
-
-function startSleep() {
-  clearTimeout(sleepTimer); clearInterval(cdInterval);
-  if (sleepSel === 0) {
-    document.getElementById("timerCd").style.display = "none";
-    showToast("Zamanlayıcı iptal edildi"); closeSleep(); return;
-  }
-  sleepTimer = setTimeout(() => {
-    stopPlayer();
-    showToast("⏱ " + sleepSel + " dk doldu. Yayın durduruldu.");
-  }, sleepSel * 60000);
-  let rem = sleepSel * 60;
-  const cd = document.getElementById("timerCd"); cd.style.display = "block";
-  cdInterval = setInterval(() => {
-    rem--;
-    if (rem <= 0) { clearInterval(cdInterval); cd.style.display = "none"; return; }
-    cd.textContent = "⏱ Kalan: " + Math.floor(rem / 60) + ":" + String(rem % 60).padStart(2, "0");
-  }, 1000);
-  showToast("⏱ " + sleepSel + " dk sonra kapanacak"); closeSleep();
-}
-
-document.getElementById("sleepModal").addEventListener("click", e => {
-  if (e.target === document.getElementById("sleepModal")) closeSleep();
-});
-
 document.addEventListener("keydown", e => {
   if (e.target.tagName === "INPUT") return;
   if (e.key === "ArrowRight") nextCh();
   if (e.key === "ArrowLeft")  prevCh();
   if (e.key === "Escape")     stopPlayer();
   if (e.key === "f" || e.key === "F") toggleFSSmart();
-  if (e.key === "m" || e.key === "M") {
-    video.muted = !video.muted;
-    showToast(video.muted ? "🔇 Sessiz" : "🔊 Ses Açık");
-  }
 });
 </script>
 </body>
