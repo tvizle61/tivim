@@ -38,82 +38,11 @@
     opacity: 0.4;
   }
 
-  /* ══ HEADER ══ */
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 28px;
-    background: rgba(8,11,16,0.97);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 26px;
-    letter-spacing: 3px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .logo-dot {
-    width: 10px; height: 10px;
-    background: var(--accent);
-    border-radius: 50%;
-    animation: pulseDot 1.5s infinite;
-  }
-
-  @keyframes pulseDot {
-    0%,100% { opacity:1; transform:scale(1); box-shadow:0 0 0 0 rgba(232,55,61,.4); }
-    50%      { opacity:.7; transform:scale(1.1); box-shadow:0 0 0 7px rgba(232,55,61,0); }
-  }
-
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .search-bar {
-    display: flex;
-    align-items: center;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 14px;
-    gap: 8px;
-    transition: border-color .2s;
-  }
-
-  .search-bar:focus-within { border-color: rgba(232,55,61,.4); }
-
-  .search-bar input {
-    background: none; border: none; outline: none;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    width: 200px;
-  }
-
-  .search-bar input::placeholder { color: var(--muted); }
-
-  #ch-counter {
-    font-size: 11px;
-    color: var(--muted);
-    font-weight: 600;
-    letter-spacing: 1px;
-  }
-
-  /* ══ LAYOUT ONAYI ══ */
+  /* ══ LAYOUT ONAYI (Üst bar kalktığı için tam ekran yapıldı) ══ */
   .app {
     display: grid;
     grid-template-columns: 280px 1fr;
-    height: calc(100vh - 61px);
+    height: 100vh;
     overflow: hidden;
   }
 
@@ -317,7 +246,7 @@
     position: relative;
     width: 100%;
     padding-top: 48%; 
-    max-height: calc(100vh - 180px);
+    max-height: calc(100vh - 120px);
     background: #000;
     overflow: hidden;
   }
@@ -377,7 +306,7 @@
     font-family: 'DM Sans', sans-serif; font-weight: 500;
   }
 
-  /* KONTROL BARI (Kategoriler Yanına Eklendi) */
+  /* KONTROL BARI */
   .ctrl-bar {
     background: linear-gradient(to right, var(--bg2), var(--bg3));
     border-top: 1px solid var(--border);
@@ -519,31 +448,11 @@
 
   .toast.show { transform: translateY(0); opacity: 1; }
 
-  /* DEV BTN */
-  .dev-btn {
-    display: flex; align-items: center;
-    background: var(--bg3); border: 1px solid var(--border);
-    border-radius: 8px; padding: 8px 14px;
-    color: var(--text); font-family: 'DM Sans', sans-serif;
-    font-size: 12px; font-weight: 600;
-    text-decoration: none; white-space: nowrap; transition: all .2s;
-  }
-  .dev-btn:hover { background: #229ED9; border-color: #229ED9; color: #fff; }
-
   ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); border-radius: 2px; }
 
   /* ══ MOBIL UYUM ══ */
   @media (max-width: 768px) {
-    header { padding: 11px 14px; }
-    .logo  { font-size: 20px; }
-    .logo-dot { width: 8px; height: 8px; }
-    .header-right { gap: 8px; }
-    #ch-counter { display: none; }
-
-    .search-bar { padding: 7px 10px; gap: 6px; }
-    .search-bar input { width: 110px; font-size: 12px; }
-
     .app {
       grid-template-columns: 1fr;
       height: auto;
@@ -596,28 +505,11 @@
   }
 
   @media (max-width: 380px) {
-    .search-bar input { width: 80px; }
     .ctrl-bar { gap: 8px; }
   }
 </style>
 </head>
 <body>
-
-<!-- HEADER -->
-<header>
-  <div class="logo">
-    <div class="logo-dot"></div>
-    CANLI TV
-  </div>
-  <div class="header-right">
-    <span id="ch-counter"></span>
-    <a href="https://t.me/Zaferri" target="_blank" rel="noopener" class="dev-btn">Developer'ı Görüntüle</a>
-    <div class="search-bar">
-      <span style="font-size:14px;color:var(--muted)">🔍</span>
-      <input type="text" placeholder="Kanal ara..." onkeyup="search(this.value)">
-    </div>
-  </div>
-</header>
 
 <div class="app">
 
@@ -669,7 +561,7 @@
           <button class="cb" onclick="openFS()" title="Tam Ekran">⛶</button>
         </div>
         
-        <!-- Kategoriler Buraya Taşındı -->
+        <!-- Kategoriler -->
         <div class="cat-bar" id="catBar">
           <button class="cat-pill active" onclick="filterCat('', this)">Tümü</button>
         </div>
@@ -763,7 +655,6 @@ Promise.all(fetchPromises)
       throw new Error("Hiç kanal bulunamadı");
     }
 
-    document.getElementById("ch-counter").textContent = allChannels.length + " KANAL";
     buildCats();
     renderList();
     renderRelated();
@@ -795,16 +686,10 @@ function switchTab(tab, btn) {
   renderList();
 }
 
-function search(q) {
-  searchQ = q.toLowerCase();
-  renderList();
-}
-
 function renderList() {
   let list = allChannels;
   if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url));
   if (currentCat)            list = list.filter(c => c.group === currentCat);
-  if (searchQ)               list = list.filter(c => c.name.toLowerCase().includes(searchQ));
 
   document.getElementById("chCount").textContent = list.length + " kanal";
 
@@ -812,7 +697,7 @@ function renderList() {
 
   if (!list.length) {
     el.innerHTML = `<div style="text-align:center;padding:40px 16px;color:var(--muted);font-size:13px;">
-      ${currentTab === "fav" ? "⭐ Favori yok" : "🔍 Sonuç yok"}
+      ${currentTab === "fav" ? "⭐ Favori yok" : " Sonu ç yok"}
     </div>`;
     return;
   }
@@ -883,7 +768,6 @@ function getFiltered() {
   let list = allChannels;
   if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url));
   if (currentCat)            list = list.filter(c => c.group === currentCat);
-  if (searchQ)               list = list.filter(c => c.name.toLowerCase().includes(searchQ));
   return list;
 }
 
@@ -919,6 +803,12 @@ function toggleFavorite(url, btn) {
     showToast("⭐ Favorilere eklendi");
   }
   localStorage.setItem("favorites", JSON.stringify(favorites));
+  renderList();
+}
+
+// Arama fonksiyonu (header kalktığı için işlevini korur ancak arama çubuğu yoktur)
+function search(q) {
+  searchQ = q.toLowerCase();
   renderList();
 }
 
