@@ -790,8 +790,8 @@
 // İstediğin kadar M3U linkini bu listenin içine ekleyebilirsin:
 const M3U_URLS = [
   "https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/playlist.m3u",
-  "https://raw.githubusercontent.com/tvizle61/tv/refs/heads/main/yerel1.m3u"
- 
+  "https://raw.githubusercontent.com/tvizle61/tv/refs/heads/main/yerel1.m3u",
+  "https://example.com/ucuncu_playlist.m3u"
 ];
 
 let hls;
@@ -803,26 +803,52 @@ let currentTab  = "all";
 let currentCat  = "";
 let searchQ     = "";
 
-/* ── M3U FETCH ── */
-fetch(M3U_URL)
-  .then(r => r.text())
-  .then(text => {
-    const lines = text.split("\n");
-    for (let i = 0; i < lines.length; i++) {
-      if (lines[i].startsWith("#EXTINF")) {
-        const name  = lines[i].split(",")[1]?.trim() || "Kanal";
-        const url   = lines[i + 1]?.trim() || "";
-        if (!url.startsWith("http")) continue;
-        const gm    = lines[i].match(/group-title="([^"]*)"/i);
-        const lm    = lines[i].match(/tvg-logo="([^"]*)"/i);
-        allChannels.push({
-          name,
-          url,
-          group: gm ? gm[1].trim() || "Genel" : "Genel",
-          logo:  lm ? lm[1].trim() : ""
-        });
+/* ── ÇOKLU M3U FETCH İŞLEMİ ── */
+// Tüm linkleri aynı anda indirmek için Promise haritası oluşturuyoruz
+const fetchPromises = M3U_URLS.map(url => 
+  fetch(url)
+    .then(r => {
+      if (!r.ok) throw new Error("Yüklenemedi");
+      return r.text();
+    })
+    .catch(err => {
+      console.error(`Link yüklenirken hata oluştu: ${url}`, err);
+      return ""; // Hata veren link olursa boş metin dön, diğerleri kırılmasın
+    })
+);
+
+// Tüm linklerin indirilmesi bittiğinde:
+Promise.all(fetchPromises)
+  .then(results => {
+    // results, her bir linkten gelen M3U metinlerini içeren bir dizidir.
+    results.forEach(text => {
+      if (!text) return; // Boşsa (veya hata verdiyse) atla
+
+      const lines = text.split("\n");
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith("#EXTINF")) {
+          const name  = lines[i].split(",")[1]?.trim() || "Kanal";
+          const url   = lines[i + 1]?.trim() || "";
+          if (!url.startsWith("http")) continue;
+          const gm    = lines[i].match(/group-title="([^"]*)"/i);
+          const lm    = lines[i].match(/tvg-logo="([^"]*)"/i);
+          
+          // Tüm kanallar tek bir havuzda (allChannels) birleşiyor
+          allChannels.push({
+            name,
+            url,
+            group: gm ? gm[1].trim() || "Genel" : "Genel",
+            logo:  lm ? lm[1].trim() : ""
+          });
+        }
       }
+    });
+
+    // Tüm linklerdeki kanallar yüklendikten sonra arayüzü çizdiriyoruz
+    if (allChannels.length === 0) {
+      throw new Error("Hiç kanal bulunamadı");
     }
+
     document.getElementById("ch-counter").textContent = allChannels.length + " KANAL";
     buildCats();
     renderList();
@@ -830,10 +856,10 @@ fetch(M3U_URL)
   })
   .catch(() => {
     document.getElementById("channelList").innerHTML =
-      '<div style="padding:20px;color:var(--muted);font-size:13px;text-align:center">❌ Yükleme hatası</div>';
+      '<div style="padding:20px;color:var(--muted);font-size:13px;text-align:center">❌ Yükleme hatası (Hiçbir liste yüklenemedi)</div>';
   });
 
-/* ── KATEGORİLER ── */
+/* ── KATEGORİLER (Aynen Kalıyor) ── */
 function buildCats() {
   const groups = ["", ...new Set(allChannels.map(c => c.group))].slice(0, 20);
   const bar = document.getElementById("catBar");
