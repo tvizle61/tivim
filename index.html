@@ -396,8 +396,9 @@
     font-family: 'DM Sans', sans-serif; font-weight: 500;
   }
 
- /* ══ KONTROL BARI (Opsiyonel Rahatlatma) ══ */
-/* ══ CONTROLS BAR (Sola Hizalı ve Sade) ══ */
+ /* ══════════════════════════════════════════
+   KONTROL BARI VE BUTONLAR (MASAÜSTÜ)
+══════════════════════════════════════════ */
 .ctrl-bar {
   background: linear-gradient(to right, var(--bg2), var(--bg3));
   border-top: 1px solid var(--border);
@@ -405,7 +406,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start; /* İçerikleri tamamen sola yanaştırır */
-  gap: 20px;
+  gap: 24px;
   flex-shrink: 0;
 }
 
@@ -414,9 +415,12 @@
   align-items: center;
   gap: 12px;
   flex-shrink: 0; /* Kanal bilgisinin ezilmesini önler */
-  max-width: 60%;
 }
-
+.ctrl-btns { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+}
   .np-logo {
     width: 36px; height: 36px;
     border-radius: 8px;
@@ -608,74 +612,85 @@
   ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); border-radius: 2px; }
 
   /* Mobil için esneklik ayarı */
+/* ══════════════════════════════════════════
+   MÖBİL UYUM (KODUN EN ALTINDAKİ BLOKLA DEĞİŞTİRİN)
+══════════════════════════════════════════ */
 @media (max-width: 768px) {
+  header { padding: 11px 14px; }
+  .logo  { font-size: 20px; }
+  .logo-dot { width: 8px; height: 8px; }
+  .header-right { gap: 8px; }
+  #ch-counter { display: none; }
+
+  .search-bar { padding: 7px 10px; gap: 6px; }
+  .search-bar input { width: 110px; font-size: 12px; }
+
+  .app {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .main    { order: 1; }
+  .sidebar { order: 2; border-right: none; border-top: 1px solid var(--border); }
+
+  .player-ratio { padding-top: 56.25%; }
+  .idle-icon { font-size: 40px; }
+  .idle-txt  { font-size: 13px; letter-spacing: 2px; }
+
+  /* DÜZELTİLEN MOBİL KONTROL BARI (Yan yana ve sola hizalı kalır) */
   .ctrl-bar {
-    flex-direction: row;
-    justify-content: space-between;
+    flex-wrap: nowrap !important; /* Alt satıra taşmayı kesinlikle engeller */
+    justify-content: flex-start !important; /* Mobilde de sola yaslar */
     padding: 10px 14px;
-    gap: 10px;
+    gap: 16px;
   }
-  .np { max-width: 50%; }
-  .ctrl-btns { width: auto; gap: 6px; }
-  .cb { flex: none; width: 34px; height: 34px; }
+
+  .np { 
+    max-width: 55%; 
+  }
+  
+  .np-logo { width: 30px; height: 30px; }
+  .np-title { font-size: 12px; }
+  .np-group { font-size: 10px; }
+
+  .ctrl-btns { 
+    width: auto; 
+    gap: 6px; 
+  }
+  
+  .cb { 
+    flex: none !important; 
+    width: 34px; 
+    height: 34px; 
+    font-size: 13px; 
+  }
+
+  /* Sidebar içi */
+  .sidebar-tabs  { padding: 0 12px; }
+  .tab-btn       { font-size: 10px; padding: 11px 4px; }
+  .cat-bar       { padding: 10px 12px; }
+  .ch-count      { padding: 6px 12px 2px; }
+  .channel-list  { max-height: 42vh; }
+
+  .channel  { padding: 8px 10px; gap: 10px; }
+  .ch-logo  { width: 38px; height: 38px; border-radius: 8px; flex-shrink: 0; }
+  .ch-name  { font-size: 12px; }
+  .ch-group { font-size: 10px; }
+
+  /* Info bar */
+  .info-bar { padding: 12px 14px; }
+  .rel-grid { grid-template-columns: repeat(auto-fill, minmax(80px,1fr)); gap: 8px; }
+  .rel-card { padding: 10px 6px; }
+  .rel-card .rc-name  { font-size: 10px; }
+  .rel-card .rc-group { font-size: 9px; }
 }
-    /* Sidebar alta, main üste */
-    .app {
-      grid-template-columns: 1fr;
-      height: auto;
-      min-height: 100vh;
-    }
 
-    .main    { order: 1; }
-    .sidebar { order: 2; border-right: none; border-top: 1px solid var(--border); }
-
-    /* Player 16:9 */
-    .player-ratio { padding-top: 56.25%; }
-    .idle-icon { font-size: 40px; }
-    .idle-txt  { font-size: 13px; letter-spacing: 2px; }
-
-    /* Controls 2 satır */
-    .ctrl-bar {
-      flex-wrap: wrap;
-      padding: 10px 14px;
-      gap: 8px;
-    }
-
-    .np          { width: 100%; min-width: 0; }
-    .np-logo     { width: 30px; height: 30px; }
-    .np-title    { font-size: 12px; }
-    .np-group    { font-size: 10px; }
-
-    .ctrl-btns   { width: 100%; justify-content: space-between; gap: 5px; }
-    .cb          { flex: 1; height: 34px; font-size: 13px; }
-    .vol-wrap    { flex: 2; gap: 5px; }
-    .vol-sl      { width: 100%; }
-
-    /* Sidebar içi */
-    .sidebar-tabs  { padding: 0 12px; }
-    .tab-btn       { font-size: 10px; padding: 11px 4px; }
-    .cat-bar       { padding: 10px 12px; }
-    .ch-count      { padding: 6px 12px 2px; }
-    .channel-list  { max-height: 42vh; }
-
-    .channel  { padding: 8px 10px; gap: 10px; }
-    .ch-logo  { width: 38px; height: 38px; border-radius: 8px; flex-shrink: 0; }
-    .ch-name  { font-size: 12px; }
-    .ch-group { font-size: 10px; }
-
-    /* Info bar */
-    .info-bar { padding: 12px 14px; }
-    .rel-grid { grid-template-columns: repeat(auto-fill, minmax(80px,1fr)); gap: 8px; }
-    .rel-card { padding: 10px 6px; }
-    .rel-card .rc-name  { font-size: 10px; }
-    .rel-card .rc-group { font-size: 9px; }
-  }
-
-  /* 380px altı */
-  @media (max-width: 380px) {
-    .search-bar input { width: 80px; }
-    .vol-wrap { display: none; }
-  }
+/* 380px altı */
+@media (max-width: 380px) {
+  .search-bar input { width: 80px; }
+  .ctrl-bar { gap: 8px; } /* Çok küçük ekranlarda logolar sıkışmasın diye mesafe azalır */
+}
 </style>
 </head>
 <body>
