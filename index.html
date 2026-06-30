@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌟 ARAC TV & YOUTUBE PLAYER (CORS BYPASS V3)</title>
+<title>🌟 ARAC TV & YOUTUBE PLAYER (PRIVATE CLOUDFLARE BYPASS)</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <!-- YouTube Iframe API -->
 <script src="https://www.youtube.com/iframe_api"></script>
@@ -391,14 +391,8 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// 🛠 KÜRESEL AÇIK KAYNAK CORS PROXY SUNUCULARI (Araçlar için Koruma Çözümü)
-const CORS_PROXIES = [
-  "https://cors-anywhere.herokuapp.com/",
-  "https://api.allorigins.win/raw?url=",
-  "https://corsproxy.io/?",
-  "https://thingproxy.freeboard.io/fetch/"
-];
-let currentProxyIndex = 2; // En kararlı çalışan corsproxy.io varsayılan seçildi
+// ⚠️ KENDİ BULUT PROXY ADRESİNİZİ BURAYA YAZIN (Sonunda ?url= olmalı)
+const PRIVATE_CLOUDFLARE_PROXY = "https://ancient-hall-8d94.deepblueee61.workers.dev/?url=";
 
 const M3U_URLS = [
   "https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/pplaylist.m3u",
@@ -596,11 +590,14 @@ function play(idx, useProxy = false) {
   else if (ch.url) {
     video.style.display = "block";
     
-    // Star TV gibi inatçı kanallarda CORS algılandıysa veya zorlanıyorsa linki Proxy tüneline sokuyoruz
+    // YAYIN STRATEJİSİ: Diğer kanalları bozmamak için varsayılan olarak doğrudan orijinal linkten aç. 
+    // Star TV (daioncdn) gibi bilinen sorunlu adreslerde veya araç ekranı hata verirse kendi Cloudflare tüneline sok.
     let finalStreamUrl = ch.url;
-    if (useProxy || ch.url.includes("daioncdn.net") || ch.url.includes("puhu")) {
-      finalStreamUrl = CORS_PROXIES[currentProxyIndex] + encodeURIComponent(ch.url);
-      console.log("CORS Engeli Aşılıyor. İstek tünelleniyor:", finalStreamUrl);
+    if (useProxy || ch.url.includes("daioncdn.net") || ch.url.includes("puhu") || ch.url.includes("startv")) {
+      finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
+      console.log("🔒 Özel Tünel Devrede:", finalStreamUrl);
+    } else {
+      console.log("🌐 Doğrudan Bağlantı:", finalStreamUrl);
     }
 
     if (Hls.isSupported()) {
@@ -617,19 +614,15 @@ function play(idx, useProxy = false) {
         video.play().catch(() => {});
       });
 
-      // 🛠 ARAÇ İÇİN OTOMATİK CORS VE HATA YAKALAMA
+      // 🛠 ARAÇ İÇİN AKILLI BULUT PROXY HATA TAKİBİ
       hls.on(Hls.Events.ERROR, function (event, data) {
         if (data.fatal) {
-          if (data.details === "manifestLoadError" && !useProxy) {
-            // Eğer normal yüklemede CORS veya Ağ hatası aldıysa otomatik Proxy moduna geç ve tekrar dene
-            console.warn("Araç ekranında CORS engeli tespit edildi! Proxy moduna geçiliyor...");
+          // Eğer normal yüklemede CORS, mixed-content veya ağ hatası aldıysa otomatik kendi Cloudflare tüneline yönlendir
+          if ((data.details === "manifestLoadError" || data.type === Hls.ErrorTypes.NETWORK_ERROR) && !useProxy) {
+            console.warn("Araç ekranında CORS/Erişim engeli tespit edildi! Özel bulut tüneline geçiliyor...");
             play(idx, true);
           } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
             hls.recoverMediaError();
-          } else {
-            // Alternatif proxy sunucusunu dene
-            currentProxyIndex = (currentProxyIndex + 1) % CORS_PROXIES.length;
-            console.log("Alternatif proxy deneniyor...");
           }
         }
       });
