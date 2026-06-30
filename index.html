@@ -302,6 +302,31 @@
   .cb:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-1px); }
   .cb.danger:hover { background: #c0392b; border-color: #c0392b; }
 
+  /* ══ BİLDİRİM (TOAST) CSS STİLLERİ ══ */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: rgba(14, 19, 24, 0.9);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 99999;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   /* ══ TAM EKRAN AYARLARI ══ */
   .player-wrap:fullscreen .ctrl-bar,
   .player-wrap:-webkit-full-screen .ctrl-bar {
@@ -391,6 +416,9 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// 🛠 DÜZELTİLMİŞ PROXY DEĞİŞKENİ (deepblueee61 adresi deepbluee61 yapıldı)
+const PRIVATE_CLOUDFLARE_PROXY = "https://ancient-hall-8d94.deepbluee61.workers.dev/?url=";
+
 const M3U_URLS = [
   "https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/pplaylist.m3u",
   "https://raw.githubusercontent.com/tvizle61/tv/refs/heads/main/yerel1.m3u",
@@ -585,10 +613,9 @@ function play(idx, useProxy = false) {
     video.style.display = "block";
     
     let finalStreamUrl = ch.url;
-    // 🔒 PROXY DOĞRUDAN BURAYA ENJEKTE EDİLDİ
     if (useProxy || ch.url.includes("daioncdn.net") || ch.url.includes("puhu") || ch.url.includes("startv")) {
-      finalStreamUrl = "https://ancient-hall-8d94.deepblueee61.workers.dev/?url=" + encodeURIComponent(ch.url);
-      console.log("🔒 Kırılmaz Özel Tünel Devrede:", finalStreamUrl);
+      finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
+      console.log("🔒 Özel Tünel Devrede:", finalStreamUrl);
     } else {
       console.log("🌐 Doğrudan Bağlantı:", finalStreamUrl);
     }
@@ -610,7 +637,7 @@ function play(idx, useProxy = false) {
       hls.on(Hls.Events.ERROR, function (event, data) {
         if (data.fatal) {
           if ((data.details === "manifestLoadError" || data.type === Hls.ErrorTypes.NETWORK_ERROR) && !useProxy) {
-            console.warn("CORS engeli! Tünele zorlanıyor...");
+            console.warn("CORS/Erişim engeli tespit edildi! Tünele geçiliyor...");
             play(idx, true);
           } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
             hls.recoverMediaError();
