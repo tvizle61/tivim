@@ -283,28 +283,7 @@
     object-fit: fill; 
   }
 
-  .fs-hint {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0; transition: opacity .2s;
-    pointer-events: none;
-    z-index: 3;
-  }
-
-  .player-ratio:hover .fs-hint { opacity: 1; }
-
-  .fs-btn {
-    background: rgba(0,0,0,.6);
-    border: 1px solid rgba(255,255,255,.2);
-    border-radius: 8px; color: #fff;
-    font-size: 12px; padding: 6px 14px;
-    backdrop-filter: blur(4px);
-    pointer-events: all;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif; font-weight: 500;
-  }
-
-  /* ══ ALT BAR YÜKSEKLİĞİ DEĞİŞMEDİ ══ */
+  /* ══ ALT BAR (MÜKEMMEL SABİTLENMİŞ DÜZEN) ══ */
   .ctrl-bar {
     background: linear-gradient(to right, var(--bg2), var(--bg3));
     border-top: 1px solid var(--border);
@@ -313,8 +292,9 @@
     align-items: center;
     justify-content: flex-start;
     flex-shrink: 0;
-    gap: 12px;
+    gap: 16px;
     z-index: 5;
+    position: relative;
   }
 
   /* ══ İŞARETLEDİĞİNİZ 4'LÜ BUTON GRUBU ══ */
@@ -323,49 +303,53 @@
     align-items: center; 
     gap: 6px; 
     flex-shrink: 0;
+    z-index: 10;
   }
 
-  /* ══ Sadece Butonlar Büyütüldü (Barı Esnetmez) ══ */
+  /* Barı genişletmeden/yükseltmeden kendi iç alanında büyük butonlar */
   .cb {
-    width: 36px; height: 36px; /* 30px'den 36px'e çıkarılarak iç alanı kaplaması sağlandı */
+    width: 38px; height: 38px; 
     border-radius: 6px;
     background: var(--bg3);
     border: 1px solid var(--border);
     color: var(--text);
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    font-size: 15px; /* İkonlar daha okunaklı yapıldı */
+    font-size: 14px;
     transition: all .2s;
   }
 
   .cb:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-1px); }
   .cb.danger:hover { background: #c0392b; border-color: #c0392b; }
 
-  /* ══ TAM EKRANDA DA GÖZÜKMESİ İÇİN CSS SİHİRBAZLIĞI ══ */
-  .player-ratio:-webkit-full-screen .ctrl-btns {
+  /* ══ TAM EKRAN DÜZENİ SİHİRBAZLIĞI ══ */
+  /* Tam ekranda ana alt barın arka planını ve kategorileri tamamen yok et */
+  .player-wrap:fullscreen .ctrl-bar,
+  .player-wrap:-webkit-full-screen .ctrl-bar {
     position: absolute;
-    bottom: 20px;
-    left: 20px;
-    z-index: 2147483647; /* En üst katman */
-    background: rgba(14, 19, 24, 0.85);
-    padding: 8px;
-    border-radius: 10px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    bottom: 24px;
+    left: 24px;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    z-index: 2147483647;
   }
 
-  .player-ratio:fullscreen .ctrl-btns {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    z-index: 2147483647;
+  /* Tam ekranda kategorileri tamamen gizle */
+  .player-wrap:fullscreen .cat-bar,
+  .player-wrap:-webkit-full-screen .cat-bar {
+    display: none !important;
+  }
+
+  /* Tam ekranda 4 butona özel şık, yüzen bir kutu giydir (Sol alt köşe) */
+  .player-wrap:fullscreen .ctrl-btns,
+  .player-wrap:-webkit-full-screen .ctrl-btns {
     background: rgba(14, 19, 24, 0.85);
-    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 10px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    padding: 6px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
   }
 
   .modal-overlay {
@@ -474,7 +458,7 @@
       flex: none !important; 
       width: 34px; 
       height: 34px; 
-      font-size: 14px; 
+      font-size: 13px; 
     }
 
     .sidebar-tabs  { padding: 0 12px; }
@@ -486,10 +470,6 @@
     .ch-logo  { width: 34px; height: 34px; border-radius: 6px; flex-shrink: 0; }
     .ch-name  { font-size: 12px; }
     .ch-group { font-size: 10px; }
-  }
-
-  @media (max-width: 380px) {
-    .ctrl-bar { gap: 6px; }
   }
 </style>
 </head>
@@ -514,31 +494,27 @@
 
   <!-- ══ MAIN ══ -->
   <main class="main">
-    <div class="player-wrap">
+    <div class="player-wrap" id="playerWrapContainer">
       
-      <div class="player-ratio" id="playerContainer">
+      <div class="player-ratio">
         <div class="player-idle" id="playerIdle">
           <div class="idle-icon">📺</div>
           <div class="idle-txt">İZLEMEK İÇİN KANAL SEÇİN</div>
         </div>
         <video id="video" controls playsinline></video>
-        <div class="fs-hint">
-          <button class="fs-btn" onclick="openFS()">⛶ TAM EKRAN</button>
-        </div>
+      </div>
 
-        <!-- HTML DEĞİŞTİRİLDİ: Butonlar tam ekran kapsayıcısının içine taşındı ki tam ekranda da kaybolmasınlar -->
+      <!-- KONTROL VE KATEGORİ BARI (YAPISAL YERİ DEĞİŞMEDİ) -->
+      <div class="ctrl-bar">
+        <!-- 4'lü Buton Grubu (Tam Sol Sabit Pozisyon) -->
         <div class="ctrl-btns" id="actionButtons">
           <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
           <button class="cb" onclick="nextCh()" title="Sonraki (→)">⏭</button>
           <button class="cb danger" onclick="stopPlayer()" title="Durdur (Esc)">⏹</button>
           <button class="cb" onclick="toggleFSSmart()" title="Tam Ekran">⛶</button>
         </div>
-      </div>
-
-      <!-- KATEGORİ BARI -->
-      <div class="ctrl-bar">
-        <!-- Boş alan doldurucu yer işareti (Hizalamayı bozmamak için) -->
-        <div style="width: 162px;" class="desktop-spacer"></div>
+        
+        <!-- Kategoriler -->
         <div class="cat-bar" id="catBar">
           <button class="cat-pill active" onclick="filterCat('', this)">Tümü</button>
         </div>
@@ -625,7 +601,6 @@ Promise.all(fetchPromises)
 
     buildCats();
     renderList();
-    handleBarResponsive();
   })
   .catch(() => {
     document.getElementById("channelList").innerHTML =
@@ -752,35 +727,16 @@ function prevCh() {
   play(allChannels.indexOf(list[(idx - 1 + list.length) % list.length]));
 }
 
-/* Kapsayıcıyı tam ekran yapma fonksiyonu (Butonlar görünmeye devam eder) */
-function openFS() {
-  const el = document.getElementById("playerContainer");
-  if (el.requestFullscreen) {
-    el.requestFullscreen();
-  } else if (el.webkitRequestFullscreen) {
-    el.webkitRequestFullscreen();
-  }
-}
-
 function toggleFSSmart() {
+  const el = document.getElementById("playerWrapContainer");
   if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-    openFS();
+    if (el.requestFullscreen) el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
   } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    }
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
   }
 }
-
-function handleBarResponsive() {
-  const spacer = document.querySelector('.desktop-spacer');
-  if(window.innerWidth <= 768 && spacer) {
-    spacer.style.display = 'none';
-  }
-}
-window.addEventListener('resize', handleBarResponsive);
 
 function toggleFavorite(url, btn) {
   if (favorites.includes(url)) {
