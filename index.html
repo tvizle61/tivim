@@ -394,7 +394,7 @@ const M3U_URLS = [
   "https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/pplaylist.m3u",
   "https://raw.githubusercontent.com/tvizle61/tv/refs/heads/main/yerel1.m3u",
   "https://raw.githubusercontent.com/tvizle61/plustv/refs/heads/main/tv.m3u",
-    "https://raw.githubusercontent.com/tvizle61/plustv/refs/heads/main/tv1.m3u"
+  "https://raw.githubusercontent.com/tvizle61/plustv/refs/heads/main/tv1.m3u"
 ];
 
 let hls;
@@ -404,6 +404,9 @@ let allChannels = [];
 let currentCh   = null;
 let currentTab  = "all";
 let currentCat  = "";
+
+// Mükerrer (aynı) linkleri engellemek için benzersiz anahtar havuzu
+const uniqueKeys = new Set();
 
 function onYouTubeIframeAPIReady() {
   console.log("YouTube API Hazır.");
@@ -426,9 +429,14 @@ Promise.all(fetchM3uPromises)
           const name  = lines[i].split(",")[1]?.trim() || "Kanal";
           const url   = lines[i + 1]?.trim() || "";
           if (!url.startsWith("http")) continue;
+          
+          // MÜKERRER KONTROLÜ: Eğer bu link daha önce eklendiyse pas geç
+          if (uniqueKeys.has(url)) continue;
+          
           const gm    = lines[i].match(/group-title="([^"]*)"/i);
           const lm    = lines[i].match(/tvg-logo="([^"]*)"/i);
           
+          uniqueKeys.add(url);
           allChannels.push({
             name,
             url,
@@ -445,7 +453,12 @@ Promise.all(fetchM3uPromises)
   .then(jsonData => {
     if (jsonData && jsonData.channels) {
       jsonData.channels.forEach(ch => {
-        allChannels.push(ch);
+        const idKey = ch.url || ch.youtubeId;
+        // MÜKERRER KONTROLÜ: JSON'daki link/id havuzda varsa ekleme
+        if (idKey && !uniqueKeys.has(idKey)) {
+          uniqueKeys.add(idKey);
+          allChannels.push(ch);
+        }
       });
     }
     
@@ -458,25 +471,16 @@ Promise.all(fetchM3uPromises)
     renderList();
   });
 
-// 🌟 AKILLI GRUP AKILLI EŞLEŞTİRME FONKSİYONU 🌟
 function getSmartGroup(groupName) {
   if (!groupName) return "Genel";
   const name = groupName.toLowerCase().trim();
-  
-  // Spor Kontrolü
   if (name.includes("spor") || name.includes("sport")) return "Spor";
-  
-  // Çocuk Kontrolü
   if (name.includes("çocuk") || name.includes("cocuk") || name.includes("kid")) return "Çocuk";
-  
-  // Müzik Kontrolü
   if (name.includes("müzik") || name.includes("muzik") || name.includes("music")) return "Müzik";
-  
-  return groupName; // Eşleşme yoksa kendi adını koru
+  return groupName;
 }
 
 function buildCats() {
-  // Tüm kanalların gruplarını akıllı isimlere dönüştürüp benzersiz liste yapıyoruz
   const mappedGroups = allChannels.map(c => getSmartGroup(c.group));
   const groups = ["", ...new Set(mappedGroups)];
   
@@ -503,11 +507,7 @@ function switchTab(tab, btn) {
 function renderList() {
   let list = allChannels;
   if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url || c.youtubeId));
-  
-  // Akıllı Filtreleme Alanı
-  if (currentCat) {
-    list = list.filter(c => getSmartGroup(c.group) === currentCat);
-  }
+  if (currentCat)            list = list.filter(c => getSmartGroup(c.group) === currentCat);
 
   document.getElementById("chCount").textContent = list.length + " kanal/video";
   const el = document.getElementById("channelList");
@@ -573,7 +573,10 @@ function play(idx) {
       ytPlayerInstance = new YT.Player('ytPlayer', {
         height: '100%', width: '100%', videoId: ch.youtubeId,
         playerVars: { 'autoplay': 1, 'playsinline': 1 },
-        events: { 'onReady': (e) => e.target.playVideo() }
+        events: { 
+          'onReady': (e) => e.target.playVideo(),
+          'onStateChange': onPlayerStateChange // Video bitişini yakalayan event
+        }
       });
     }
   } 
@@ -592,6 +595,15 @@ function play(idx) {
 
   renderList();
   showToast("▶ " + ch.name);
+}
+
+// YouTube oynatıcı durum değişikliklerini izler
+function onPlayerStateChange(event) {
+  // YT.PlayerState.ENDED = 0 (Video tamamen bittiğinde tetiklenir)
+  if (event.data === YT.PlayerState.ENDED) {
+    showToast("Video bitti, sonrakine geçiliyor...");
+    nextCh();
+  }
 }
 
 function stopPlayer() {
