@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌟 CANLI TV & YOUTUBE PLAYER (AKILLI KATEGORİ V2)</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<!-- YouTube Iframe API -->
+<script src="https://www.youtube.com/iframe_api"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:     #080b10;
+    --bg2:    #0e1318;
+    --bg3:    #141a22;
+    --border: rgba(255,255,255,0.06);
+    --accent: #e8373d;
+    --gold:   #f5c842;
+    --text:   #e8eaf0;
+    --muted:  #5a6478;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  .app {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .sidebar {
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .sidebar-tabs {
+    display: flex;
+    padding: 0 12px;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tab-btn {
+    flex: 1;
+    background: none; border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    padding: 12px 4px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
+
+  .cat-bar {
+    display: flex;
+    gap: 6px;
+    padding: 0 4px;
+    overflow-x: auto;
+    flex: 1;
+    align-items: center;
+  }
+
+  .cat-bar::-webkit-scrollbar { height: 3px; }
+  .cat-bar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  .cat-pill {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all .2s;
+  }
+
+  .cat-pill.active, .cat-pill:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .ch-count {
+    padding: 6px 12px 2px;
+    font-size: 11px;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .channel-list {
+    overflow-y: auto;
+    flex: 1;
+    padding: 4px 6px;
+  }
+
+  .channel-list::-webkit-scrollbar { width: 4px; }
+  .channel-list::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
+
+  .channel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all .2s;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .channel:hover { background: var(--bg3); }
+
+  .channel.active {
+    background: rgba(232,55,61,.15);
+    border: 2px solid var(--accent) !important;
+  }
+
+  .ch-logo {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .ch-logo img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    padding: 2px;
+    background: #0e1318;
+  }
+
+  .ch-info { flex: 1; min-width: 0; }
+
+  .ch-name {
+    font-size: 12px; font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ch-meta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 1px;
+  }
+
+  .live-badge { background: var(--accent); color: #fff; font-size: 8px; font-weight: 700; padding: 1px 4px; border-radius: 2px; flex-shrink: 0; }
+  .yt-badge { background: #ff0000; color: #fff; font-size: 8px; font-weight: 700; padding: 1px 4px; border-radius: 2px; flex-shrink: 0; }
+
+  .ch-group {
+    font-size: 10px; color: var(--muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .fav-btn {
+    background: none; border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 14px;
+    transition: color .2s, transform .2s;
+    flex-shrink: 0;
+    padding: 2px;
+    line-height: 1;
+  }
+
+  .fav-btn:hover  { color: var(--gold); transform: scale(1.2); }
+  .fav-btn.on     { color: var(--gold); }
+
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 40px 20px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .spin {
+    width: 32px; height: 32px;
+    border: 2px solid var(--bg3);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: #000;
+    overflow: hidden;
+  }
+
+  .player-wrap { 
+    position: relative; 
+    background: #000; 
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .player-ratio {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    background: #000;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .player-idle {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, #0d1520 0%, #000 70%);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 16px;
+    z-index: 2;
+  }
+
+  .idle-icon { font-size: 64px; opacity: .13; animation: breathe 3s ease-in-out infinite; }
+  @keyframes breathe { 0%,100% { opacity:.08; transform:scale(1); } 50% { opacity:.2; transform:scale(1.05); } }
+  .idle-txt { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 4px; color: var(--muted); }
+
+  #video, #ytPlayer {
+    width: 100%; 
+    height: 100%;
+    background: #000;
+    display: none;
+    object-fit: fill; 
+  }
+
+  #ytPlayer { position: absolute; inset: 0; border: none; }
+
+  /* ══ KONTROL BARI ══ */
+  .ctrl-bar {
+    background: linear-gradient(to right, var(--bg2), var(--bg3));
+    border-top: 1px solid var(--border);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-shrink: 0;
+    gap: 16px;
+    z-index: 5;
+    position: relative;
+  }
+
+  .ctrl-btns { display: flex; align-items: center; gap: 6px; flex-shrink: 0; z-index: 10; }
+
+  .cb {
+    width: 38px; height: 38px; 
+    border-radius: 6px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    transition: all .2s;
+  }
+
+  .cb:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-1px); }
+  .cb.danger:hover { background: #c0392b; border-color: #c0392b; }
+
+  /* ══ TAM EKRAN AYARLARI ══ */
+  .player-wrap:fullscreen .ctrl-bar,
+  .player-wrap:-webkit-full-screen .ctrl-bar {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    z-index: 2147483647;
+  }
+
+  .player-wrap:fullscreen .cat-bar,
+  .player-wrap:-webkit-full-screen .cat-bar { display: none !important; }
+
+  .player-wrap:fullscreen .ctrl-btns,
+  .player-wrap:-webkit-full-screen .ctrl-btns {
+    background: rgba(14, 19, 24, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 6px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+  }
+
+  @media (max-width: 768px) {
+    .app { grid-template-columns: 1fr; height: auto; min-height: 100vh; }
+    .main { order: 1; height: auto; }
+    .sidebar { order: 2; border-right: none; border-top: 1px solid var(--border); }
+    .player-ratio { height: 56.25vw; flex: none; }
+    .ctrl-bar { padding: 8px 12px; gap: 10px; }
+    .channel-list { max-height: 42vh; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar">
+    <div class="sidebar-tabs">
+      <button class="tab-btn active" onclick="switchTab('all', this)">TÜM KANALLAR</button>
+      <button class="tab-btn" onclick="switchTab('fav', this)">⭐ FAVORİLER</button>
+    </div>
+    <div class="ch-count" id="chCount"></div>
+    <div class="channel-list" id="channelList">
+      <div class="loading">
+        <div class="spin"></div>
+        Kanallar ve Videolar Yükleniyor...
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ══ -->
+  <main class="main">
+    <div class="player-wrap" id="playerWrapContainer">
+      
+      <div class="player-ratio">
+        <div class="player-idle" id="playerIdle">
+          <div class="idle-icon">📺</div>
+          <div class="idle-txt">İZLEMEK İÇİN KANAL SEÇİN</div>
+        </div>
+        
+        <video id="video" controls playsinline></video>
+        <div id="ytPlayer"></div>
+      </div>
+
+      <!-- KONTROL BARI -->
+      <div class="ctrl-bar">
+        <div class="ctrl-btns" id="actionButtons">
+          <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
+          <button class="cb" onclick="nextCh()" title="Sonraki (→)">⏭</button>
+          <button class="cb danger" onclick="stopPlayer()" title="Durdur (Esc)">⏹</button>
+          <button class="cb" onclick="toggleFSSmart()" title="Tam Ekran">⛶</button>
+        </div>
+        
+        <div class="cat-bar" id="catBar">
+          <button class="cat-pill active" onclick="filterCat('', this)">Tümü</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const M3U_URLS = [
+  "https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/pplaylist.m3u",
+  "https://raw.githubusercontent.com/tvizle61/tv/refs/heads/main/yerel1.m3u",
+  "https://raw.githubusercontent.com/tvizle61/plustv/refs/heads/main/tv.m3u",
+    "https://raw.githubusercontent.com/tvizle61/plustv/refs/heads/main/tv1.m3u"
+];
+
+let hls;
+let ytPlayerInstance = null;
+let favorites   = JSON.parse(localStorage.getItem("favorites") || "[]");
+let allChannels = [];
+let currentCh   = null;
+let currentTab  = "all";
+let currentCat  = "";
+
+function onYouTubeIframeAPIReady() {
+  console.log("YouTube API Hazır.");
+}
+
+// 1. ADIM: M3U LİSTELERİNİ ÇEK
+const fetchM3uPromises = M3U_URLS.map(url => 
+  fetch(url)
+    .then(r => r.ok ? r.text() : "")
+    .catch(() => "")
+);
+
+Promise.all(fetchM3uPromises)
+  .then(m3uResults => {
+    m3uResults.forEach(text => {
+      if (!text) return;
+      const lines = text.split("\n");
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith("#EXTINF")) {
+          const name  = lines[i].split(",")[1]?.trim() || "Kanal";
+          const url   = lines[i + 1]?.trim() || "";
+          if (!url.startsWith("http")) continue;
+          const gm    = lines[i].match(/group-title="([^"]*)"/i);
+          const lm    = lines[i].match(/tvg-logo="([^"]*)"/i);
+          
+          allChannels.push({
+            name,
+            url,
+            group: gm ? gm[1].trim() || "Genel" : "Genel",
+            logo:  lm ? lm[1].trim() : ""
+          });
+        }
+      }
+    });
+    
+    // 2. ADIM: CHANNELS.JSON DOSYASINI EKLE
+    return fetch("channels.json").then(r => r.ok ? r.json() : {channels: []}).catch(() => ({channels: []}));
+  })
+  .then(jsonData => {
+    if (jsonData && jsonData.channels) {
+      jsonData.channels.forEach(ch => {
+        allChannels.push(ch);
+      });
+    }
+    
+    if(allChannels.length === 0) {
+      document.getElementById("channelList").innerHTML = '<div style="padding:20px;color:var(--muted);text-align:center">❌ Kaynak yüklenemedi.</div>';
+      return;
+    }
+
+    buildCats();
+    renderList();
+  });
+
+// 🌟 AKILLI GRUP AKILLI EŞLEŞTİRME FONKSİYONU 🌟
+function getSmartGroup(groupName) {
+  if (!groupName) return "Genel";
+  const name = groupName.toLowerCase().trim();
+  
+  // Spor Kontrolü
+  if (name.includes("spor") || name.includes("sport")) return "Spor";
+  
+  // Çocuk Kontrolü
+  if (name.includes("çocuk") || name.includes("cocuk") || name.includes("kid")) return "Çocuk";
+  
+  // Müzik Kontrolü
+  if (name.includes("müzik") || name.includes("muzik") || name.includes("music")) return "Müzik";
+  
+  return groupName; // Eşleşme yoksa kendi adını koru
+}
+
+function buildCats() {
+  // Tüm kanalların gruplarını akıllı isimlere dönüştürüp benzersiz liste yapıyoruz
+  const mappedGroups = allChannels.map(c => getSmartGroup(c.group));
+  const groups = ["", ...new Set(mappedGroups)];
+  
+  const bar = document.getElementById("catBar");
+  bar.innerHTML = groups.map((g, i) =>
+    `<button class="cat-pill ${i === 0 ? "active" : ""}" onclick="filterCat('${g.replace(/'/g,"\\'")}',this)">${i === 0 ? "Tümü" : g}</button>`
+  ).join("");
+}
+
+function filterCat(cat, el) {
+  currentCat = cat;
+  document.querySelectorAll(".cat-pill").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+  renderList();
+}
+
+function switchTab(tab, btn) {
+  currentTab = tab;
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderList();
+}
+
+function renderList() {
+  let list = allChannels;
+  if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url || c.youtubeId));
+  
+  // Akıllı Filtreleme Alanı
+  if (currentCat) {
+    list = list.filter(c => getSmartGroup(c.group) === currentCat);
+  }
+
+  document.getElementById("chCount").textContent = list.length + " kanal/video";
+  const el = document.getElementById("channelList");
+
+  if (!list.length) {
+    el.innerHTML = `<div style="text-align:center;padding:40px 16px;color:var(--muted);font-size:13px;">Sonuç yok</div>`;
+    return;
+  }
+
+  el.innerHTML = list.map(ch => {
+    const idx   = allChannels.indexOf(ch);
+    const idKey = ch.url || ch.youtubeId;
+    const isAct = currentCh && (currentCh.url === ch.url && currentCh.youtubeId === ch.youtubeId);
+    const isFav = favorites.includes(idKey);
+    
+    const logoSrc = ch.logo || ch["X-logo"];
+    const logo  = logoSrc
+      ? `<img src="${logoSrc}" loading="lazy" onerror="this.outerHTML='<span>📺</span>'">`
+      : `<span>📺</span>`;
+      
+    const badge = ch.youtubeId ? `<span class="yt-badge">YOUTUBE</span>` : `<span class="live-badge">CANLI</span>`;
+    const displayGroup = getSmartGroup(ch.group);
+    const u = idKey.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+
+    return `
+      <div class="channel ${isAct ? "active" : ""}" onclick="play(${idx})">
+        <div class="ch-logo">${logo}</div>
+        <div class="ch-info">
+          <div class="ch-name">${ch.name}</div>
+          <div class="ch-meta">
+            ${badge}
+            <span class="ch-group">${displayGroup}</span>
+          </div>
+        </div>
+        <button class="fav-btn ${isFav ? "on" : ""}"
+          onclick="event.stopPropagation(); toggleFavorite('${u}', this)">
+          ${isFav ? "★" : "☆"}
+        </button>
+      </div>`;
+  }).join("");
+}
+
+const video = document.getElementById("video");
+const ytDOM = document.getElementById("ytPlayer");
+
+function play(idx) {
+  const ch = allChannels[idx];
+  if (!ch) return;
+  currentCh = ch;
+
+  document.getElementById("playerIdle").style.display = "none";
+  
+  if (hls) { hls.destroy(); hls = null; }
+  video.pause(); video.src = ""; video.style.display = "none";
+  ytDOM.style.display = "none";
+  if (ytPlayerInstance && ytPlayerInstance.stopVideo) { ytPlayerInstance.stopVideo(); }
+
+  if (ch.youtubeId) {
+    ytDOM.style.display = "block";
+    if (ytPlayerInstance) {
+      ytPlayerInstance.loadVideoById(ch.youtubeId);
+    } else {
+      ytPlayerInstance = new YT.Player('ytPlayer', {
+        height: '100%', width: '100%', videoId: ch.youtubeId,
+        playerVars: { 'autoplay': 1, 'playsinline': 1 },
+        events: { 'onReady': (e) => e.target.playVideo() }
+      });
+    }
+  } 
+  else if (ch.url) {
+    video.style.display = "block";
+    if (Hls.isSupported()) {
+      hls = new Hls();
+      hls.loadSource(ch.url);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = ch.url;
+      video.play().catch(() => {});
+    }
+  }
+
+  renderList();
+  showToast("▶ " + ch.name);
+}
+
+function stopPlayer() {
+  if (hls) { hls.destroy(); hls = null; }
+  video.pause(); video.src = ""; video.style.display = "none";
+  if (ytPlayerInstance && ytPlayerInstance.stopVideo) { ytPlayerInstance.stopVideo(); }
+  ytDOM.style.display = "none";
+  document.getElementById("playerIdle").style.display = "flex";
+  currentCh = null;
+  renderList();
+}
+
+function getFiltered() {
+  let list = allChannels;
+  if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url || c.youtubeId));
+  if (currentCat)            list = list.filter(c => getSmartGroup(c.group) === currentCat);
+  return list;
+}
+
+function nextCh() {
+  const list = getFiltered();
+  if (!list.length) return;
+  const idx = list.findIndex(c => (c.url && c.url === currentCh?.url) || (c.youtubeId && c.youtubeId === currentCh?.youtubeId));
+  play(allChannels.indexOf(list[(idx + 1) % list.length]));
+}
+
+function prevCh() {
+  const list = getFiltered();
+  if (!list.length) return;
+  const idx = list.findIndex(c => (c.url && c.url === currentCh?.url) || (c.youtubeId && c.youtubeId === currentCh?.youtubeId));
+  play(allChannels.indexOf(list[(idx - 1 + list.length) % list.length]));
+}
+
+function toggleFSSmart() {
+  const el = document.getElementById("playerWrapContainer");
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    if (el.requestFullscreen) el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  } else {
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+  }
+}
+
+function toggleFavorite(idKey, btn) {
+  if (favorites.includes(idKey)) {
+    favorites = favorites.filter(u => u !== idKey);
+    btn.textContent = "☆"; btn.classList.remove("on");
+    showToast("Favorilerden çıkarıldı");
+  } else {
+    favorites.push(idKey);
+    btn.textContent = "★"; btn.classList.add("on");
+    showToast("⭐ Favorilere eklendi");
+  }
+  localStorage.setItem("favorites", JSON.stringify(favorites));
+  renderList();
+}
+
+let toastT;
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove("show"), 2800);
+}
+
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT") return;
+  if (e.key === "ArrowRight") nextCh();
+  if (e.key === "ArrowLeft")  prevCh();
+  if (e.key === "Escape")     stopPlayer();
+  if (e.key === "f" || e.key === "F") toggleFSSmart();
+});
+</script>
+</body>
+</html>
