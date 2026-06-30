@@ -38,7 +38,7 @@
     opacity: 0.4;
   }
 
-  /* ══ LAYOUT (İstediğin Dar Sol Bar Korundu) ══ */
+  /* ══ LAYOUT (Dar Sol Bar) ══ */
   .app {
     display: grid;
     grid-template-columns: 240px 1fr;
@@ -78,7 +78,7 @@
 
   .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
 
-  /* Alt bar için Category pills ayarları */
+  /* Kategori barı */
   .cat-bar {
     display: flex;
     gap: 6px;
@@ -91,7 +91,7 @@
   .cat-bar::-webkit-scrollbar { height: 3px; }
   .cat-bar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
 
-  /* İstediğin Dar Kategori Hapları Korundu */
+  /* Dar Kategori Hapları */
   .cat-pill {
     background: var(--bg3);
     border: 1px solid var(--border);
@@ -289,10 +289,10 @@
   #video {
     width: 100%; 
     height: 100%;
-    max-height: 100%;
     background: #000;
     display: none;
-    object-fit: cover; /* Siyah boşlukları yok edip alanı tamamen kaplaması sağlandı */
+    /* OTOMASYON ÇÖZÜMÜ: Siyah boşlukları sıfırlar, çakışmayı ve taşmayı önler */
+    object-fit: fill; 
   }
 
   /* Fullscreen hint */
@@ -317,7 +317,7 @@
     font-family: 'DM Sans', sans-serif; font-weight: 500;
   }
 
-  /* ALT KONTROL BARI (İstediğin Dar Düzen ve Küçük Padding Korundu) */
+  /* ALT KONTROL BARI (Küçük Ölçekli) */
   .ctrl-bar {
     background: linear-gradient(to right, var(--bg2), var(--bg3));
     border-top: 1px solid var(--border);
@@ -325,7 +325,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Alt barın ezilmesini ve videonun arkasında kalmasını önler */
     gap: 12px;
     z-index: 5;
   }
