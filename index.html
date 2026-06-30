@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌟 CANLI TV & YOUTUBE PLAYER (AKILLI KATEGORİ V2)</title>
+<title>🌟 ARAC TV & YOUTUBE PLAYER (CORS BYPASS V3)</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <!-- YouTube Iframe API -->
 <script src="https://www.youtube.com/iframe_api"></script>
@@ -391,6 +391,15 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// 🛠 KÜRESEL AÇIK KAYNAK CORS PROXY SUNUCULARI (Araçlar için Koruma Çözümü)
+const CORS_PROXIES = [
+  "https://cors-anywhere.herokuapp.com/",
+  "https://api.allorigins.win/raw?url=",
+  "https://corsproxy.io/?",
+  "https://thingproxy.freeboard.io/fetch/"
+];
+let currentProxyIndex = 2; // En kararlı çalışan corsproxy.io varsayılan seçildi
+
 const M3U_URLS = [
   "https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/pplaylist.m3u",
   "https://raw.githubusercontent.com/tvizle61/tv/refs/heads/main/yerel1.m3u",
@@ -412,7 +421,7 @@ function onYouTubeIframeAPIReady() {
   console.log("YouTube API Hazır.");
 }
 
-// 1. ADIM: M3U LİSTELERİNİ ÇEK
+// M3U listelerini yükleme
 const fetchM3uPromises = M3U_URLS.map(url => 
   fetch(url)
     .then(r => r.ok ? r.text() : "")
@@ -550,7 +559,7 @@ function renderList() {
 const video = document.getElementById("video");
 const ytPlayerWrap = document.getElementById("ytPlayerWrap");
 
-function play(idx) {
+function play(idx, useProxy = false) {
   const ch = allChannels[idx];
   if (!ch) return;
   currentCh = ch;
@@ -567,7 +576,7 @@ function play(idx) {
   ytPlayerWrap.style.display = "none";
   ytPlayerWrap.innerHTML = "";
 
-  // 🔴 YOUTUBE VİDEOSU OYNATMA
+  // 🔴 YOUTUBE OYNATMA
   if (ch.youtubeId) {
     ytPlayerWrap.style.display = "block";
     const ytTarget = document.createElement("div");
@@ -583,52 +592,50 @@ function play(idx) {
       }
     });
   } 
-  // 🔵 NORMAL LIVE (.M3U8) OYNATMA (Star TV gibi korumalı linkler dahil)
+  // 🔵 CANLI TV (.M3U8) OYNATMA
   else if (ch.url) {
     video.style.display = "block";
     
+    // Star TV gibi inatçı kanallarda CORS algılandıysa veya zorlanıyorsa linki Proxy tüneline sokuyoruz
+    let finalStreamUrl = ch.url;
+    if (useProxy || ch.url.includes("daioncdn.net") || ch.url.includes("puhu")) {
+      finalStreamUrl = CORS_PROXIES[currentProxyIndex] + encodeURIComponent(ch.url);
+      console.log("CORS Engeli Aşılıyor. İstek tünelleniyor:", finalStreamUrl);
+    }
+
     if (Hls.isSupported()) {
-      // 🛠 AKILLI CORS VE HATA YÖNETİMİ AYARLARI 🛠
       hls = new Hls({
-        maxBufferLength: 30,
-        maxMaxBufferLength: 600,
+        maxBufferLength: 20,
         enableWorker: true,
-        lowLatencyMode: true,
-        // Korumalı yayınların CORS blokajına takılmaması için kimlik bilgilerini zorla
-        xhrSetup: function (xhr, url) {
-          xhr.withCredentials = false; 
-        }
+        lowLatencyMode: true
       });
       
-      hls.loadSource(ch.url);
+      hls.loadSource(finalStreamUrl);
       hls.attachMedia(video);
       
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         video.play().catch(() => {});
       });
 
-      // 🛠 OTOMATİK HATA KURTARICI (Star TV donma/blokaj çözümü)
+      // 🛠 ARAÇ İÇİN OTOMATİK CORS VE HATA YAKALAMA
       hls.on(Hls.Events.ERROR, function (event, data) {
         if (data.fatal) {
-          switch (data.type) {
-            case Hls.ErrorTypes.NETWORK_ERROR:
-              console.log("Ağ hatası, yayın yeniden deneniyor...");
-              hls.startLoad();
-              break;
-            case Hls.ErrorTypes.MEDIA_ERROR:
-              console.log("Medya hatası, kurtarılmaya çalışılıyor...");
-              hls.recoverMediaError();
-              break;
-            default:
-              console.log("Kurtarılamayan hata. Sonraki kanala geçiliyor.");
-              nextCh();
-              break;
+          if (data.details === "manifestLoadError" && !useProxy) {
+            // Eğer normal yüklemede CORS veya Ağ hatası aldıysa otomatik Proxy moduna geç ve tekrar dene
+            console.warn("Araç ekranında CORS engeli tespit edildi! Proxy moduna geçiliyor...");
+            play(idx, true);
+          } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+            hls.recoverMediaError();
+          } else {
+            // Alternatif proxy sunucusunu dene
+            currentProxyIndex = (currentProxyIndex + 1) % CORS_PROXIES.length;
+            console.log("Alternatif proxy deneniyor...");
           }
         }
       });
 
     } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = ch.url;
+      video.src = finalStreamUrl;
       video.play().catch(() => {});
     }
   }
@@ -639,13 +646,11 @@ function play(idx) {
 
 function onPlayerStateChange(event) {
   if (event.data === YT.PlayerState.ENDED) {
-    showToast("Video bitti, sonrakine geçiliyor...");
     nextCh();
   }
 }
 
 video.addEventListener('ended', function() {
-  showToast("Yayın sona erdi, sonrakine geçiliyor...");
   nextCh();
 });
 
