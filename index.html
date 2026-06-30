@@ -736,28 +736,22 @@
       </div>
 
       <!-- CONTROLS -->
-      <div class="ctrl-bar">
-        <div class="np">
-          <div class="np-logo" id="npLogo">📺</div>
-          <div style="min-width:0">
-            <div class="np-title" id="npTitle">Kanal Seçilmedi</div>
-            <div class="np-group" id="npGroup">Bir kanal seçin</div>
-          </div>
-        </div>
-
-        <div class="ctrl-btns">
-          <div class="vol-wrap">
-            <span style="font-size:14px">🔊</span>
-            <input type="range" class="vol-sl" min="0" max="100" value="90" oninput="setVol(this.value)">
-          </div>
-          <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
-          <button class="cb" onclick="nextCh()" title="Sonraki (→)">⏭</button>
-          <button class="cb" id="favCurBtn" onclick="favToggleCurrent()" title="Favoriye ekle">☆</button>
-          <button class="cb" onclick="openSleep()" title="Uyku zamanlayıcı">⏱</button>
-          <button class="cb danger" onclick="stopPlayer()" title="Durdur (Esc)">⏹</button>
-        </div>
-      </div>
+<div class="ctrl-bar">
+  <div class="np">
+    <div class="np-logo" id="npLogo">📺</div>
+    <div style="min-width:0; margin-right: 15px;">
+      <div class="np-title" id="npTitle">Kanal Seçilmedi</div>
+      <div class="np-group" id="npGroup">Bir kanal seçin</div>
     </div>
+  </div>
+
+  <div class="ctrl-btns">
+    <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
+    <button class="cb" onclick="nextCh()" title="Sonraki (→)">⏭</button>
+    <button class="cb danger" onclick="stopPlayer()" title="Durdur (Esc)">⏹</button>
+    <button class="cb" onclick="openFS()" title="Tam Ekran">⛶</button>
+  </div>
+</div>
 
     <!-- ÖNERILEN -->
     <div class="info-bar">
