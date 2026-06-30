@@ -110,12 +110,12 @@
   }
 
   /* ══ LAYOUT ONAYI ══ */
-.app {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  height: calc(100vh - 61px);
-  overflow: hidden; /* Dışarı taşmaları engellemek için */
-}
+  .app {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    height: calc(100vh - 61px);
+    overflow: hidden;
+  }
 
   /* ══ SIDEBAR ══ */
   .sidebar {
@@ -149,17 +149,18 @@
 
   .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
 
-  /* Category pills */
+  /* Alt bar için Category pills ayarları */
   .cat-bar {
     display: flex;
     gap: 6px;
-    padding: 12px 16px;
+    padding: 0 10px;
     overflow-x: auto;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
+    flex: 1;
+    align-items: center;
   }
 
-  .cat-bar::-webkit-scrollbar { display: none; }
+  .cat-bar::-webkit-scrollbar { height: 3px; }
+  .cat-bar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
 
   .cat-pill {
     background: var(--bg3);
@@ -167,7 +168,7 @@
     color: var(--muted);
     font-family: 'DM Sans', sans-serif;
     font-size: 11px; font-weight: 500;
-    padding: 5px 12px;
+    padding: 6px 14px;
     border-radius: 20px;
     cursor: pointer;
     white-space: nowrap;
@@ -197,25 +198,6 @@
   .channel-list::-webkit-scrollbar { width: 4px; }
   .channel-list::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
 
-  /* Section title inside list */
-  .section-label {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 13px;
-    letter-spacing: 2px;
-    color: var(--muted);
-    padding: 10px 4px 6px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
   /* Channel item */
   .channel {
     display: flex;
@@ -232,9 +214,10 @@
 
   .channel:hover { background: var(--bg3); }
 
+  /* Aktif olan kanala renkli kalın çerçeve */
   .channel.active {
-    background: rgba(232,55,61,.1);
-    border-color: rgba(232,55,61,.25);
+    background: rgba(232,55,61,.15);
+    border: 2px solid var(--accent) !important;
   }
 
   .ch-logo {
@@ -330,15 +313,14 @@
   /* ══ PLAYER ══ */
   .player-wrap { position: relative; background: #000; flex-shrink: 0; }
 
-  /* ══ PLAYER ORANI VE YÜKSEKLİK SINIRI ══ */
-.player-ratio {
-  position: relative;
-  width: 100%;
-  padding-top: 48%; /* %50 olan değeri hafifçe %48'e çekerek alt bara yer açıyoruz */
-  max-height: calc(100vh - 180px); /* Ekran çok geniş olduğunda videonun aşağı taşmasını engeller */
-  background: #000;
-  overflow: hidden;
-}
+  .player-ratio {
+    position: relative;
+    width: 100%;
+    padding-top: 48%; 
+    max-height: calc(100vh - 180px);
+    background: #000;
+    overflow: hidden;
+  }
 
   .player-idle {
     position: absolute; inset: 0;
@@ -364,16 +346,15 @@
     color: var(--muted);
   }
 
-  /* ══ VİDEO BOYUTLANDIRMASI ══ */
-#video {
-  position: absolute; 
-  inset: 0;
-  width: 100%; 
-  height: 100%;
-  background: #000;
-  display: none;
-  object-fit: contain; /* Videonun en-boy oranını korumasını sağlar */
-}
+  #video {
+    position: absolute; 
+    inset: 0;
+    width: 100%; 
+    height: 100%;
+    background: #000;
+    display: none;
+    object-fit: contain;
+  }
 
   /* Fullscreen hint */
   .fs-hint {
@@ -396,67 +377,24 @@
     font-family: 'DM Sans', sans-serif; font-weight: 500;
   }
 
- /* ══════════════════════════════════════════
-   KONTROL BARI VE BUTONLAR (MASAÜSTÜ)
-══════════════════════════════════════════ */
-.ctrl-bar {
-  background: linear-gradient(to right, var(--bg2), var(--bg3));
-  border-top: 1px solid var(--border);
-  padding: 12px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start; /* İçerikleri tamamen en sola yanaştırır */
-  flex-shrink: 0;
-}
-
-.np {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0; /* Kanal bilgisinin ezilmesini önler */
-}
-.ctrl-btns { 
-  display: flex; 
-  align-items: center; 
-  gap: 8px; 
-}
-  .np-logo {
-    width: 36px; height: 36px;
-    border-radius: 8px;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    overflow: hidden; flex-shrink: 0;
-    font-size: 18px;
+  /* KONTROL BARI (Kategoriler Yanına Eklendi) */
+  .ctrl-bar {
+    background: linear-gradient(to right, var(--bg2), var(--bg3));
+    border-top: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-shrink: 0;
+    gap: 16px;
   }
-
-  .np-logo img {
-    width: 100%; height: 100%;
-    object-fit: contain; padding: 2px; background: #0e1318;
-  }
-
-  .np-title {
-    font-size: 13px; font-weight: 700;
-    display: flex; align-items: center; gap: 6px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-
-  .on-air {
-    background: var(--accent); color: #fff;
-    font-size: 9px; font-weight: 700;
-    padding: 2px 6px; border-radius: 3px;
-    animation: blink 2s infinite; flex-shrink: 0;
-  }
-
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.5} }
-
-  .np-group { font-size: 11px; color: var(--muted); margin-top: 1px; }
 
   .ctrl-btns { 
-  display: flex; 
-  align-items: center; 
-  gap: 8px; 
-}
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    flex-shrink: 0;
+  }
 
   .cb {
     width: 36px; height: 36px;
@@ -472,21 +410,6 @@
 
   .cb:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-1px); }
   .cb.danger:hover { background: #c0392b; border-color: #c0392b; }
-
-  .vol-wrap { display: flex; align-items: center; gap: 8px; }
-
-  .vol-sl {
-    -webkit-appearance: none; appearance: none;
-    width: 80px; height: 4px;
-    background: var(--bg3); border-radius: 2px;
-    outline: none; cursor: pointer;
-  }
-
-  .vol-sl::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 14px; height: 14px;
-    background: var(--accent); border-radius: 50%; cursor: pointer;
-  }
 
   /* ══ INFO BAR ══ */
   .info-bar { flex: 1; overflow-y: auto; padding: 16px 20px; }
@@ -610,86 +533,72 @@
   ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); border-radius: 2px; }
 
-  /* Mobil için esneklik ayarı */
-/* ══════════════════════════════════════════
-   MÖBİL UYUM (KODUN EN ALTINDAKİ BLOKLA DEĞİŞTİRİN)
-══════════════════════════════════════════ */
-@media (max-width: 768px) {
-  header { padding: 11px 14px; }
-  .logo  { font-size: 20px; }
-  .logo-dot { width: 8px; height: 8px; }
-  .header-right { gap: 8px; }
-  #ch-counter { display: none; }
+  /* ══ MOBIL UYUM ══ */
+  @media (max-width: 768px) {
+    header { padding: 11px 14px; }
+    .logo  { font-size: 20px; }
+    .logo-dot { width: 8px; height: 8px; }
+    .header-right { gap: 8px; }
+    #ch-counter { display: none; }
 
-  .search-bar { padding: 7px 10px; gap: 6px; }
-  .search-bar input { width: 110px; font-size: 12px; }
+    .search-bar { padding: 7px 10px; gap: 6px; }
+    .search-bar input { width: 110px; font-size: 12px; }
 
-  .app {
-    grid-template-columns: 1fr;
-    height: auto;
-    min-height: 100vh;
+    .app {
+      grid-template-columns: 1fr;
+      height: auto;
+      min-height: 100vh;
+    }
+
+    .main    { order: 1; }
+    .sidebar { order: 2; border-right: none; border-top: 1px solid var(--border); }
+
+    .player-ratio { padding-top: 56.25%; }
+    .idle-icon { font-size: 40px; }
+    .idle-txt  { font-size: 13px; letter-spacing: 2px; }
+
+    .ctrl-bar {
+      flex-wrap: nowrap !important;
+      justify-content: flex-start !important;
+      padding: 10px 14px;
+      gap: 12px;
+    }
+
+    .ctrl-btns { 
+      width: auto; 
+      gap: 6px; 
+    }
+    
+    .cb { 
+      flex: none !important; 
+      width: 34px; 
+      height: 34px; 
+      font-size: 13px; 
+    }
+
+    /* Sidebar içi */
+    .sidebar-tabs  { padding: 0 12px; }
+    .tab-btn       { font-size: 10px; padding: 11px 4px; }
+    .ch-count      { padding: 6px 12px 2px; }
+    .channel-list  { max-height: 42vh; }
+
+    .channel  { padding: 8px 10px; gap: 10px; }
+    .ch-logo  { width: 38px; height: 38px; border-radius: 8px; flex-shrink: 0; }
+    .ch-name  { font-size: 12px; }
+    .ch-group { font-size: 10px; }
+
+    /* Info bar */
+    .info-bar { padding: 12px 14px; }
+    .rel-grid { grid-template-columns: repeat(auto-fill, minmax(80px,1fr)); gap: 8px; }
+    .rel-card { padding: 10px 6px; }
+    .rel-card .rc-name  { font-size: 10px; }
+    .rel-card .rc-group { font-size: 9px; }
   }
 
-  .main    { order: 1; }
-  .sidebar { order: 2; border-right: none; border-top: 1px solid var(--border); }
-
-  .player-ratio { padding-top: 56.25%; }
-  .idle-icon { font-size: 40px; }
-  .idle-txt  { font-size: 13px; letter-spacing: 2px; }
-
-  /* DÜZELTİLEN MOBİL KONTROL BARI (Yan yana ve sola hizalı kalır) */
-  .ctrl-bar {
-    flex-wrap: nowrap !important; /* Alt satıra taşmayı kesinlikle engeller */
-    justify-content: flex-start !important; /* Mobilde de sola yaslar */
-    padding: 10px 14px;
-    gap: 16px;
+  @media (max-width: 380px) {
+    .search-bar input { width: 80px; }
+    .ctrl-bar { gap: 8px; }
   }
-
-  .np { 
-    max-width: 55%; 
-  }
-  
-  .np-logo { width: 30px; height: 30px; }
-  .np-title { font-size: 12px; }
-  .np-group { font-size: 10px; }
-
-  .ctrl-btns { 
-    width: auto; 
-    gap: 6px; 
-  }
-  
-  .cb { 
-    flex: none !important; 
-    width: 34px; 
-    height: 34px; 
-    font-size: 13px; 
-  }
-
-  /* Sidebar içi */
-  .sidebar-tabs  { padding: 0 12px; }
-  .tab-btn       { font-size: 10px; padding: 11px 4px; }
-  .cat-bar       { padding: 10px 12px; }
-  .ch-count      { padding: 6px 12px 2px; }
-  .channel-list  { max-height: 42vh; }
-
-  .channel  { padding: 8px 10px; gap: 10px; }
-  .ch-logo  { width: 38px; height: 38px; border-radius: 8px; flex-shrink: 0; }
-  .ch-name  { font-size: 12px; }
-  .ch-group { font-size: 10px; }
-
-  /* Info bar */
-  .info-bar { padding: 12px 14px; }
-  .rel-grid { grid-template-columns: repeat(auto-fill, minmax(80px,1fr)); gap: 8px; }
-  .rel-card { padding: 10px 6px; }
-  .rel-card .rc-name  { font-size: 10px; }
-  .rel-card .rc-group { font-size: 9px; }
-}
-
-/* 380px altı */
-@media (max-width: 380px) {
-  .search-bar input { width: 80px; }
-  .ctrl-bar { gap: 8px; } /* Çok küçük ekranlarda logolar sıkışmasın diye mesafe azalır */
-}
 </style>
 </head>
 <body>
@@ -718,10 +627,6 @@
     <div class="sidebar-tabs">
       <button class="tab-btn active" onclick="switchTab('all', this)">TÜM KANALLAR</button>
       <button class="tab-btn" onclick="switchTab('fav', this)">⭐ FAVORİLER</button>
-    </div>
-
-    <div class="cat-bar" id="catBar">
-      <button class="cat-pill active" onclick="filterCat('', this)">Tümü</button>
     </div>
 
     <div class="ch-count" id="chCount"></div>
@@ -755,7 +660,7 @@
 
       </div>
 
-<!-- CONTROLS -->
+      <!-- CONTROLS + CATEGORIES -->
       <div class="ctrl-bar">
         <div class="ctrl-btns">
           <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
@@ -763,7 +668,14 @@
           <button class="cb danger" onclick="stopPlayer()" title="Durdur (Esc)">⏹</button>
           <button class="cb" onclick="openFS()" title="Tam Ekran">⛶</button>
         </div>
+        
+        <!-- Kategoriler Buraya Taşındı -->
+        <div class="cat-bar" id="catBar">
+          <button class="cat-pill active" onclick="filterCat('', this)">Tümü</button>
+        </div>
       </div>
+
+    </div>
 
     <!-- ÖNERILEN -->
     <div class="info-bar">
@@ -797,10 +709,6 @@
 <div class="toast" id="toast"></div>
 
 <script>
-/* ══════════════════════════════════════════
-   M3U + PLAYER — Çoklu Link Destekli
-══════════════════════════════════════════ */
-// İstediğin kadar M3U linkini bu listenin içine ekleyebilirsin:
 const M3U_URLS = [
   "https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/playlist.m3u",
   "https://raw.githubusercontent.com/tvizle61/tv/refs/heads/main/yerel1.m3u",
@@ -809,15 +717,12 @@ const M3U_URLS = [
 
 let hls;
 let favorites   = JSON.parse(localStorage.getItem("favorites") || "[]");
-let allChannels = [];   // { name, url, group, logo }
-let activeDiv   = null;
+let allChannels = [];
 let currentCh   = null;
 let currentTab  = "all";
 let currentCat  = "";
 let searchQ     = "";
 
-/* ── ÇOKLU M3U FETCH İŞLEMİ ── */
-// Tüm linkleri aynı anda indirmek için Promise haritası oluşturuyoruz
 const fetchPromises = M3U_URLS.map(url => 
   fetch(url)
     .then(r => {
@@ -826,16 +731,14 @@ const fetchPromises = M3U_URLS.map(url =>
     })
     .catch(err => {
       console.error(`Link yüklenirken hata oluştu: ${url}`, err);
-      return ""; // Hata veren link olursa boş metin dön, diğerleri kırılmasın
+      return "";
     })
 );
 
-// Tüm linklerin indirilmesi bittiğinde:
 Promise.all(fetchPromises)
   .then(results => {
-    // results, her bir linkten gelen M3U metinlerini içeren bir dizidir.
     results.forEach(text => {
-      if (!text) return; // Boşsa (veya hata verdiyse) atla
+      if (!text) return;
 
       const lines = text.split("\n");
       for (let i = 0; i < lines.length; i++) {
@@ -846,7 +749,6 @@ Promise.all(fetchPromises)
           const gm    = lines[i].match(/group-title="([^"]*)"/i);
           const lm    = lines[i].match(/tvg-logo="([^"]*)"/i);
           
-          // Tüm kanallar tek bir havuzda (allChannels) birleşiyor
           allChannels.push({
             name,
             url,
@@ -857,7 +759,6 @@ Promise.all(fetchPromises)
       }
     });
 
-    // Tüm linklerdeki kanallar yüklendikten sonra arayüzü çizdiriyoruz
     if (allChannels.length === 0) {
       throw new Error("Hiç kanal bulunamadı");
     }
@@ -872,7 +773,6 @@ Promise.all(fetchPromises)
       '<div style="padding:20px;color:var(--muted);font-size:13px;text-align:center">❌ Yükleme hatası (Hiçbir liste yüklenemedi)</div>';
   });
 
-/* ── KATEGORİLER (Aynen Kalıyor) ── */
 function buildCats() {
   const groups = ["", ...new Set(allChannels.map(c => c.group))].slice(0, 20);
   const bar = document.getElementById("catBar");
@@ -888,7 +788,6 @@ function filterCat(cat, el) {
   renderList();
 }
 
-/* ── TAB SWITCH ── */
 function switchTab(tab, btn) {
   currentTab = tab;
   document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
@@ -896,18 +795,16 @@ function switchTab(tab, btn) {
   renderList();
 }
 
-/* ── SEARCH ── */
 function search(q) {
   searchQ = q.toLowerCase();
   renderList();
 }
 
-/* ── RENDER LIST ── */
 function renderList() {
   let list = allChannels;
   if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url));
-  if (currentCat)           list = list.filter(c => c.group === currentCat);
-  if (searchQ)              list = list.filter(c => c.name.toLowerCase().includes(searchQ));
+  if (currentCat)            list = list.filter(c => c.group === currentCat);
+  if (searchQ)               list = list.filter(c => c.name.toLowerCase().includes(searchQ));
 
   document.getElementById("chCount").textContent = list.length + " kanal";
 
@@ -947,7 +844,6 @@ function renderList() {
   }).join("");
 }
 
-/* ── PLAY (senin orijinal mantığın) ── */
 const video = document.getElementById("video");
 
 function play(idx) {
@@ -955,11 +851,9 @@ function play(idx) {
   if (!ch) return;
   currentCh = ch;
 
-  // Göster
   document.getElementById("playerIdle").style.display = "none";
   video.style.display = "block";
 
-  // HLS — aynen senin kodundan
   if (Hls.isSupported()) {
     if (hls) hls.destroy();
     hls = new Hls();
@@ -973,42 +867,23 @@ function play(idx) {
     video.src = ch.url;
   }
 
-  video.volume = document.querySelector(".vol-sl").value / 100;
-
-  // Now Playing bar
-  const npLogo = document.getElementById("npLogo");
-  npLogo.innerHTML = ch.logo
-    ? `<img src="${ch.logo}" style="width:100%;height:100%;object-fit:contain;padding:2px;background:#0e1318" onerror="this.outerHTML='📺'">`
-    : "📺";
-
-  document.getElementById("npTitle").innerHTML  = `${ch.name} <span class="on-air">ON AIR</span>`;
-  document.getElementById("npGroup").textContent = ch.group;
-
-  updateFavBtn();
   renderList();
   showToast("▶ " + ch.name);
 }
 
-/* ── STOP ── */
 function stopPlayer() {
   if (hls) { hls.destroy(); hls = null; }
   video.pause(); video.src = ""; video.style.display = "none";
   document.getElementById("playerIdle").style.display = "flex";
   currentCh = null;
-  document.getElementById("npTitle").innerHTML   = "Kanal Seçilmedi";
-  document.getElementById("npGroup").textContent = "Bir kanal seçin";
-  document.getElementById("npLogo").innerHTML    = "📺";
-  document.getElementById("favCurBtn").textContent = "☆";
-  document.getElementById("favCurBtn").style.color  = "";
   renderList();
 }
 
-/* ── PREV / NEXT ── */
 function getFiltered() {
   let list = allChannels;
   if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url));
-  if (currentCat)           list = list.filter(c => c.group === currentCat);
-  if (searchQ)              list = list.filter(c => c.name.toLowerCase().includes(searchQ));
+  if (currentCat)            list = list.filter(c => c.group === currentCat);
+  if (searchQ)               list = list.filter(c => c.name.toLowerCase().includes(searchQ));
   return list;
 }
 
@@ -1026,14 +901,11 @@ function prevCh() {
   play(allChannels.indexOf(list[(idx - 1 + list.length) % list.length]));
 }
 
-function setVol(v) { video.volume = v / 100; }
-
 function openFS() {
   const el = document.querySelector(".player-ratio");
   (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
 }
 
-/* ── FAVORİLER (senin orijinal mantığın) ── */
 function toggleFavorite(url, btn) {
   if (favorites.includes(url)) {
     favorites = favorites.filter(u => u !== url);
@@ -1047,25 +919,9 @@ function toggleFavorite(url, btn) {
     showToast("⭐ Favorilere eklendi");
   }
   localStorage.setItem("favorites", JSON.stringify(favorites));
-  updateFavBtn();
   renderList();
 }
 
-function favToggleCurrent() {
-  if (!currentCh) return;
-  const btn = document.getElementById("favCurBtn");
-  toggleFavorite(currentCh.url, btn);
-}
-
-function updateFavBtn() {
-  if (!currentCh) return;
-  const on  = favorites.includes(currentCh.url);
-  const btn = document.getElementById("favCurBtn");
-  btn.textContent  = on ? "★" : "☆";
-  btn.style.color  = on ? "var(--gold)" : "";
-}
-
-/* ── ÖNERILEN ── */
 function renderRelated() {
   const pick = [...allChannels].sort(() => Math.random() - .5).slice(0, 10);
   document.getElementById("relGrid").innerHTML = pick.map(ch => {
@@ -1077,6 +933,13 @@ function renderRelated() {
         <div class="rc-group">${ch.group}</div>
       </div>`;
   }).join("");
+}
+
+/* ── TOAST ── */
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(t.to); t.to = setTimeout(() => t.classList.remove("show"), 3000);
 }
 
 /* ── SLEEP TIMER ── */
@@ -1114,6 +977,9 @@ function startSleep() {
 document.getElementById("sleepModal").addEventListener("click", e => {
   if (e.target === document.getElementById("sleepModal")) closeSleep();
 });
+</script>
+</body>
+</html>
 
 /* ── TOAST ── */
 let toastT;
