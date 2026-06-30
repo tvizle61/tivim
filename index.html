@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌟 CANLI TV & YOUTUBE PLAYER (AKILLI KATEGORİ V2)</title>
+<title>🌟 CANLI TV & YOUTUBE PLAYER (HIZLANDIRILMIŞ)</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <!-- YouTube Iframe API -->
 <script src="https://www.youtube.com/iframe_api"></script>
@@ -391,10 +391,8 @@
 
 <script>
 const M3U_URLS = [
-  "https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/pplaylist.m3u",
-  "https://raw.githubusercontent.com/tvizle61/tv/refs/heads/main/yerel1.m3u",
-  "https://raw.githubusercontent.com/tvizle61/plustv/refs/heads/main/tv.m3u",
-    "https://raw.githubusercontent.com/tvizle61/plustv/refs/heads/main/tv1.m3u"
+  "https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/playlist.m3u",
+  "https://raw.githubusercontent.com/tvizle61/tv/refs/heads/main/yerel1.m3u"
 ];
 
 let hls;
@@ -409,17 +407,28 @@ function onYouTubeIframeAPIReady() {
   console.log("YouTube API Hazır.");
 }
 
-// 1. ADIM: M3U LİSTELERİNİ ÇEK
-const fetchM3uPromises = M3U_URLS.map(url => 
-  fetch(url)
-    .then(r => r.ok ? r.text() : "")
-    .catch(() => "")
+// 🚀 PARALEL (EŞZAMANLI) YÜKLEME SİSTEMİ 🚀
+// Tüm istekler (M3U ve JSON) aynı anda tetiklenir.
+
+const m3uPromises = M3U_URLS.map(url => 
+  fetch(url).then(r => r.ok ? r.text() : "").catch(() => "")
 );
 
-Promise.all(fetchM3uPromises)
-  .then(m3uResults => {
-    m3uResults.forEach(text => {
-      if (!text) return;
+const jsonPromise = fetch("channels.json")
+  .then(r => r.ok ? r.json() : {channels: []})
+  .catch(() => ({channels: []}));
+
+// Hepsinin bitmesini aynı anda bekliyoruz (Hız artışının kaynağı burası)
+Promise.all([...m3uPromises, jsonPromise])
+  .then(results => {
+    // Son eleman her zaman JSON verisidir
+    const jsonData = results[results.length - 1];
+    
+    // İlk elemanlar M3U verileridir
+    for (let k = 0; k < results.length - 1; k++) {
+      const text = results[k];
+      if (!text) continue;
+      
       const lines = text.split("\n");
       for (let i = 0; i < lines.length; i++) {
         if (lines[i].startsWith("#EXTINF")) {
@@ -437,16 +446,11 @@ Promise.all(fetchM3uPromises)
           });
         }
       }
-    });
+    }
     
-    // 2. ADIM: CHANNELS.JSON DOSYASINI EKLE
-    return fetch("channels.json").then(r => r.ok ? r.json() : {channels: []}).catch(() => ({channels: []}));
-  })
-  .then(jsonData => {
+    // JSON'dan gelen senin özel videolarını listenin Başına yerleştiriyoruz (Öncelikli gözüksünler)
     if (jsonData && jsonData.channels) {
-      jsonData.channels.forEach(ch => {
-        allChannels.push(ch);
-      });
+      allChannels = [...jsonData.channels, ...allChannels];
     }
     
     if(allChannels.length === 0) {
@@ -458,25 +462,16 @@ Promise.all(fetchM3uPromises)
     renderList();
   });
 
-// 🌟 AKILLI GRUP AKILLI EŞLEŞTİRME FONKSİYONU 🌟
 function getSmartGroup(groupName) {
   if (!groupName) return "Genel";
   const name = groupName.toLowerCase().trim();
-  
-  // Spor Kontrolü
   if (name.includes("spor") || name.includes("sport")) return "Spor";
-  
-  // Çocuk Kontrolü
   if (name.includes("çocuk") || name.includes("cocuk") || name.includes("kid")) return "Çocuk";
-  
-  // Müzik Kontrolü
   if (name.includes("müzik") || name.includes("muzik") || name.includes("music")) return "Müzik";
-  
-  return groupName; // Eşleşme yoksa kendi adını koru
+  return groupName;
 }
 
 function buildCats() {
-  // Tüm kanalların gruplarını akıllı isimlere dönüştürüp benzersiz liste yapıyoruz
   const mappedGroups = allChannels.map(c => getSmartGroup(c.group));
   const groups = ["", ...new Set(mappedGroups)];
   
@@ -503,11 +498,7 @@ function switchTab(tab, btn) {
 function renderList() {
   let list = allChannels;
   if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url || c.youtubeId));
-  
-  // Akıllı Filtreleme Alanı
-  if (currentCat) {
-    list = list.filter(c => getSmartGroup(c.group) === currentCat);
-  }
+  if (currentCat)            list = list.filter(c => getSmartGroup(c.group) === currentCat);
 
   document.getElementById("chCount").textContent = list.length + " kanal/video";
   const el = document.getElementById("channelList");
