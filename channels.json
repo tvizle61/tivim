@@ -9,6 +9,15 @@
       "url": "https://beyaztv-live.daioncdn.net/beyaztv/beyaztv_1080p.m3u8"
     },
     {
+      "name": "4.CNN Türk ",
+      "youtubeId": "Z5xqm9OnO8c",
+      "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
+      "group": "Haber",
+      "epgId": ""
+    },
+
+    
+    {
       "name": "Gaybana Dünya ",
       "youtubeId": "PnEaxDYbGCQ",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
