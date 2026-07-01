@@ -295,12 +295,12 @@
     {
       "name": "2. Haber Türk",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/HaberturkTV.tr.png",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": "HaberturkTV.tr",
       "url": "https://tv.ensonhaber.com/haberturk/haberturk.m3u8"
     },
     {
-      "name": "2. Haber Türk 1",
+      "name": "2. Haber Türk ",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/HaberturkTV.tr.png",
       "group": "Haber",
       "epgId": "HaberturkTV.tr",
@@ -308,7 +308,7 @@
     },
   
  {
-      "name": "9.ATV HD 2",
+      "name": "9.ATV HD ",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/ATV.tr.png",
       "group": "Ulusal",
       "epgId": "ATV.HD",
@@ -388,27 +388,27 @@
       "name": "3.TV 100",
       "youtubeId": "ebVRSmBYC60",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/TV100.tr.png",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": ""
     },
     {
       "name": "Ulke TV",
       "youtubeId": "YwUf2IfT4Pw",
       "logo": "https://play-lh.googleusercontent.com/rbQZxGEu1kM-YysIlM9NzVLobrkI41XUcTLJOW5nRpn0OnmOSfKzqsuUQm5KJPnPANE=w240-h480-rw",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": "ulketv.tr"
     },
     {
       "name": "3.TV 100-",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/TV100.tr.png",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": "TV100.tr",
       "url": "https://tv100-live.daioncdn.net/tv100/tv100_1080p.m3u8"
     },
      {
-      "name": "3.TV 100-2",
+      "name": "3.TV 100",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/TV100.tr.png",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": "TV100.tr",
       "url": "https://tv.ensonhaber.com/tv100/tv100_360p.m3u8"
     },
@@ -529,7 +529,7 @@
       "name": "Tv 360",
       "url": "https://turkmedya-live.ercdn.net/tv360/tv360_720p.m3u8",
       "logo": "https://i.ibb.co/s3gJCGL/360.png",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": ""
     },
     {
@@ -571,57 +571,57 @@
       "name": "6. TRT HABER",
       "url": "https://tv-trthaber.medya.trt.com.tr/master_720.m3u8",
       "logo": "https://i.ibb.co/LzcNGmm8/unnamed.png",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": ""
     },
     {
       "name": "2. HABERTURK",
       "url": "https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/haberturktv/haberturktv.m3u8",
       "logo": "https://i.ibb.co/Q79Lh4Cb/Ads-z-tasar-m-9.png",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": ""
     },
     {
       "name": "TV 24 HD",
       "url": "https://turkmedya-live.ercdn.net/tv24/tv24.m3u8",
       "logo": "https://i.ibb.co/tHQpWvn/24.png",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": ""
     },
     {
       "name": "7. TVNET",
       "url": "https://mn-nl.mncdn.com/tvnet/tvnet/playlist.m3u8",
       "logo": "https://i.ibb.co/RpyvJDrM/Ads-z-tasar-m-12.png",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": ""
     },
  
     {
-      "name": "6. AKIT TV-1",
+      "name": "6. AKIT TV",
       "youtubeId": "X8Ib4ype8w8",
       "logo": "https://i.ibb.co/3mPpV9kp/Ads-z-tasar-m-11.png",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": ""
     },
     {
       "name": "5.TGRT HABER HD",
       "url": "https://canli.tgrthaber.com/tgrt.m3u8",
       "logo": "https://i.ibb.co/KYdPPbs/Ads-z-tasar-m-13.png",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": ""
     },
     {
       "name": "5.TGRT HABER HD 1",
       "youtubeId": "0SAUIyvNA5s",
       "logo": "https://i.ibb.co/KYdPPbs/Ads-z-tasar-m-13.png",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": ""
     },
     {
       "name": "8. TURKHABER",
       "url": "https://edge1.socialsmart.tv/turkhaber/bant1/playlist.m3u8",
       "logo": "https://i.ibb.co/1JMFDj8X/Ads-z-tasar-m-14.png",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": ""
     },
     {
@@ -670,7 +670,7 @@
       "name": "1. A HABER HD",
       "youtubeId": "nmY9i63t6qo",
       "logo": "https://i.ytimg.com/vi/nmY9i63t6qo/sddefault.jpg",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": ""
     },
     {
@@ -698,14 +698,14 @@
       "name": "2. CNN Türk",
       "youtubeId": "6N8_r2uwLEc",
       "logo": "https://i.ytimg.com/vi/6N8_r2uwLEc/sddefault.jpg",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": ""
     },
     {
       "name": "3. Haber Global",
       "youtubeId": "EqoCJ8BPxtE",
       "logo": "https://i.ytimg.com/vi/EqoCJ8BPxtE/sddefault.jpg",
-      "group": "Ulusal Haber",
+      "group": "Haber",
       "epgId": ""
     },
       {
