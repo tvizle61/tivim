@@ -11,7 +11,30 @@
     {
       "name": "4.CNN Türk ",
       "youtubeId": "Z5xqm9OnO8c",
-      "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
+      "X-logo": "https://i.ytimg.com/vi/6N8_r2uwLEc/sddefault.jpg",
+      "group": "Haber",
+      "epgId": ""
+    },
+
+    {
+      "name": "9.ATV ",
+      "youtubeId": "P3wREkPcQ1U",
+      "X-logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/ATV.tr.png",
+      "group": "Ulusal",
+      "epgId": ""
+    },
+    {
+      "name": "1.A Haber ",
+      "youtubeId": "RlHW5wX9Iqc",
+      "X-logo": "https://static.wikia.nocookie.net/logopedia/images/5/5b/A-haber-tr.png/revision/latest?cb=20220108102203",
+      "group": "Haber",
+      "epgId": ""
+    },
+
+    {
+      "name": "9. Akit Tv ",
+      "youtubeId": "ds7aS4H1fbs",
+      "X-logo": "https://upload.wikimedia.org/wikipedia/tr/c/cf/Akit_TV.png",
       "group": "Haber",
       "epgId": ""
     },
