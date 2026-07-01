@@ -76,17 +76,26 @@
 
   .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
 
+  /* 🛠 DOKUNMATİK VE KAYDIRMA AYARLARI GÜNCELLENDİ */
   .cat-bar {
     display: flex;
     gap: 6px;
-    padding: 0 4px;
+    padding: 4px 8px;
     overflow-x: auto;
     flex: 1;
     align-items: center;
+    user-select: none;
+    cursor: grab;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* iOS için akıcı kaydırma */
   }
 
-  .cat-bar::-webkit-scrollbar { height: 3px; }
-  .cat-bar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+  .cat-bar:active {
+    cursor: grabbing;
+  }
+
+  /* Araç ekranlarında çirkin scroll bar görünmesin ama kaymaya devam etsin */
+  .cat-bar::-webkit-scrollbar { height: 0px; display: none; }
 
   .cat-pill {
     background: var(--bg3);
@@ -94,11 +103,13 @@
     color: var(--muted);
     font-family: 'DM Sans', sans-serif;
     font-size: 11px; font-weight: 500;
-    padding: 4px 10px;
+    padding: 6px 14px;
     border-radius: 20px;
     cursor: pointer;
     white-space: nowrap;
     transition: all .2s;
+    user-select: none;
+    -webkit-user-drag: none;
   }
 
   .cat-pill.active, .cat-pill:hover {
@@ -283,6 +294,7 @@
     gap: 16px;
     z-index: 5;
     position: relative;
+    overflow: hidden;
   }
 
   .ctrl-btns { display: flex; align-items: center; gap: 6px; flex-shrink: 0; z-index: 10; }
@@ -416,7 +428,6 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// 🛠 DÜZELTİLMİŞ PROXY DEĞİŞKENİ (deepblueee61 adresi deepbluee61 yapıldı)
 const PRIVATE_CLOUDFLARE_PROXY = "https://ancient-hall-8d94.deepbluee61.workers.dev/?url=";
 
 const M3U_URLS = [
@@ -454,7 +465,7 @@ Promise.all(fetchM3uPromises)
       for (let i = 0; i < lines.length; i++) {
         if (lines[i].startsWith("#EXTINF")) {
           const name  = lines[i].split(",")[1]?.trim() || "Kanal";
-          const url   = lines[i + 1]?.trim() || "";
+          const url     = lines[i + 1]?.trim() || "";
           if (!url.startsWith("http")) continue;
           
           if (uniqueKeys.has(url)) continue;
@@ -512,6 +523,67 @@ function buildCats() {
   bar.innerHTML = groups.map((g, i) =>
     `<button class="cat-pill ${i === 0 ? "active" : ""}" onclick="filterCat('${g.replace(/'/g,"\\'")}',this)">${i === 0 ? "Tümü" : g}</button>`
   ).join("");
+
+  // 🛠 KATEGORİLER YÜKLENDİKTEN SONRA DOKUNMATİK SÜRÜKLEME SİHRİNİ BAĞLA
+  initDragToScroll();
+}
+
+// 🛠 YENİ EKLENEN FONKSİYON: KAT BARINI PARMAKLA/FAREYLE SURUKLEME MEKANİZMASI
+function initDragToScroll() {
+  const slider = document.getElementById('catBar');
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+  let isDragging = false;
+
+  // Fare basıldığında veya ekrana dokunulduğunda
+  const startAction = (e) => {
+    isDown = true;
+    isDragging = false;
+    slider.style.scrollBehavior = 'auto'; // Sürüklerken gecikmesiz takip etsin
+    startX = (e.pageX || e.touches[0].pageX) - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+  };
+
+  // Fare bırakıldığında veya parmak ekrandan çekildiğinde
+  const stopAction = () => {
+    isDown = false;
+    slider.style.scrollBehavior = 'smooth';
+    // Eğer hafifçe sürüklendiyse buton tıklamasını engellemek için kısa süreli kilit koyuyoruz
+    setTimeout(() => { isDragging = false; }, 50);
+  };
+
+  // Sürükleme esnasında
+  const moveAction = (e) => {
+    if (!isDown) return;
+    const x = (e.pageX || e.touches[0].pageX) - slider.offsetLeft;
+    const walk = (x - startX) * 1.5; // 1.5 hassasiyet katsayısı (isteğe göre hızı değiştirebilirsin)
+    if (Math.abs(walk) > 5) {
+      isDragging = true; // Sadece tıklama değil, sürükleme yapıldığını anla
+    }
+    slider.scrollLeft = scrollLeft - walk;
+  };
+
+  // Mouse Olayları
+  slider.addEventListener('mousedown', startAction);
+  slider.addEventListener('mouseleave', stopAction);
+  slider.addEventListener('mouseup', stopAction);
+  slider.addEventListener('mousemove', moveAction);
+
+  // Dokunmatik Ekran Olayları
+  slider.addEventListener('touchstart', startAction, { passive: true });
+  slider.addEventListener('touchend', stopAction, { passive: true });
+  slider.addEventListener('touchmove', moveAction, { passive: true });
+
+  // Sürüklerken yanlışlıkla kategori butonlarının tıklanmasını önleme filtresi
+  slider.querySelectorAll('.cat-pill').forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      if (isDragging) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+  });
 }
 
 function filterCat(cat, el) {
@@ -737,7 +809,7 @@ document.addEventListener("keydown", e => {
   if (e.target.tagName === "INPUT") return;
   if (e.key === "ArrowRight") nextCh();
   if (e.key === "ArrowLeft")  prevCh();
-  if (e.key === "Escape")     stopPlayer();
+  if (e.key === "Escape")      stopPlayer();
   if (e.key === "f" || e.key === "F") toggleFSSmart();
 });
 </script>
