@@ -519,9 +519,9 @@ Promise.all(fetchM3uPromises)
 function getSmartGroup(groupName) {
   if (!groupName) return "Genel";
   const name = groupName.toLowerCase().trim();
-  if (name.includes("spor") || name.includes("sport")) return "Spor";
-  if (name.includes("çocuk") || name.includes("cocuk") || name.includes("kid")) return "Çocuk";
-  if (name.includes("müzik") || name.includes("muzik") || name.includes("music")) return "Müzik";
+  if (name.includes("spor") || name.includes("sport")) return "5.Spor";
+  if (name.includes("çocuk") || name.includes("cocuk") || name.includes("kid")) return "4.Çocuk";
+  if (name.includes("müzik") || name.includes("muzik") || name.includes("music")) return "3.Müzik";
   return groupName;
 }
 
