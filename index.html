@@ -9,9 +9,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:     #080b10;
-    --bg2:    #0e1318;
-    --bg3:    #141a22;
+    --bg:      #080b10;
+    --bg2:     #0e1318;
+    --bg3:     #141a22;
     --border: rgba(255,255,255,0.06);
     --accent: #e8373d;
     --gold:   #f5c842;
@@ -96,12 +96,13 @@
 
   .cat-bar::-webkit-scrollbar { height: 0px; display: none; }
 
+  /* 🛠 GÜNEŞ YANSIMASINA KARŞI PARLAK BEYAZ VE YÜKSEK KONTRAST AYARI */
   .cat-pill {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    color: var(--muted);
+    background: #1c2530; /* Arka plan biraz daha belirgin yapıldı */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Çerçeve parlatıldı */
+    color: #ffffff !important; /* Pasif kategoriler de artık PARLAK SAF BEYAZ */
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px; font-weight: 500;
+    font-size: 11px; font-weight: 700; /* Yazı kalınlığı artırıldı */
     padding: 6px 14px;
     border-radius: 20px;
     cursor: pointer;
@@ -109,12 +110,16 @@
     transition: all .2s;
     user-select: none;
     -webkit-user-drag: none;
+    text-shadow: 0px 1px 2px rgba(0,0,0,0.8); /* Yazının arkasına hafif gölge ile ekstra okunurluk */
   }
 
+  /* Aktif olan veya üzerine gelinen kategori butonu */
   .cat-pill.active, .cat-pill:hover {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
+    background: #ffffff !important; /* Aktif buton arka planı bembeyaz */
+    border-color: #ffffff !important;
+    color: #000000 !important; /* Beyaz üstüne siyah yazı (Maksimum güneş kontrastı) */
+    text-shadow: none;
+    font-weight: 800;
   }
 
   /* 🛠 SAYAÇ METNİ DARALTILDI */
