@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🌟 ARAC TV & YOUTUBE PLAYER </title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<!-- YouTube Iframe API -->
 <script src="https://www.youtube.com/iframe_api"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -39,9 +38,10 @@
     opacity: 0.4;
   }
 
+  /* 🛠 GRID SÜTUN GENİŞLİĞİ 240px'DEN 185px'E DÜŞÜRÜLDÜ */
   .app {
     display: grid;
-    grid-template-columns: 240px 1fr;
+    grid-template-columns: 185px 1fr;
     height: 100vh;
     overflow: hidden;
   }
@@ -54,9 +54,10 @@
     overflow: hidden;
   }
 
+  /* 🛠 SEKME ALANI VE YAZI BOYUTU DARALTILDI */
   .sidebar-tabs {
     display: flex;
-    padding: 0 12px;
+    padding: 0 6px;
     flex-shrink: 0;
     border-bottom: 1px solid var(--border);
   }
@@ -67,16 +68,15 @@
     border-bottom: 2px solid transparent;
     color: var(--muted);
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px; font-weight: 600;
-    letter-spacing: 0.5px; text-transform: uppercase;
-    padding: 12px 4px;
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.3px; text-transform: uppercase;
+    padding: 10px 2px;
     cursor: pointer;
     transition: all .2s;
   }
 
   .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
 
-  /* 🛠 DOKUNMATİK VE KAYDIRMA AYARLARI GÜNCELLENDİ */
   .cat-bar {
     display: flex;
     gap: 6px;
@@ -87,14 +87,13 @@
     user-select: none;
     cursor: grab;
     scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch; /* iOS için akıcı kaydırma */
+    -webkit-overflow-scrolling: touch;
   }
 
   .cat-bar:active {
     cursor: grabbing;
   }
 
-  /* Araç ekranlarında çirkin scroll bar görünmesin ama kaymaya devam etsin */
   .cat-bar::-webkit-scrollbar { height: 0px; display: none; }
 
   .cat-pill {
@@ -118,49 +117,54 @@
     color: #fff;
   }
 
+  /* 🛠 SAYAÇ METNİ DARALTILDI */
   .ch-count {
-    padding: 6px 12px 2px;
-    font-size: 11px;
+    padding: 4px 8px 1px;
+    font-size: 10px;
     color: var(--muted);
     flex-shrink: 0;
   }
 
+  /* 🛠 KANAL LİSTESİ İÇ BOŞLUĞU AZALTILDI */
   .channel-list {
     overflow-y: auto;
     flex: 1;
-    padding: 4px 6px;
+    padding: 3px 4px;
   }
 
   .channel-list::-webkit-scrollbar { width: 4px; }
   .channel-list::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
 
+  /* 🛠 KANAL ÇERÇEVESİ DİKEYDE VE YATAYDA DARALTILDI */
   .channel {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 10px;
-    border-radius: 8px;
-    margin-bottom: 4px;
+    gap: 6px;
+    padding: 5px 6px;
+    border-radius: 6px;
+    margin-bottom: 3px;
     cursor: pointer;
     border: 1px solid transparent;
     transition: all .2s;
     background: rgba(255,255,255,0.02);
+    width: 100%;
   }
 
   .channel:hover { background: var(--bg3); }
 
   .channel.active {
     background: rgba(232,55,61,.15);
-    border: 2px solid var(--accent) !important;
+    border: 1.5px solid var(--accent) !important;
   }
 
+  /* 🛠 LOGO BOYUTU 36px'DEN 24px'E DÜŞÜRÜLDÜ */
   .ch-logo {
-    width: 36px; height: 36px;
-    border-radius: 8px;
+    width: 24px; height: 24px;
+    border-radius: 4px;
     background: var(--bg3);
     border: 1px solid var(--border);
     display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
+    font-size: 12px;
     flex-shrink: 0;
     overflow: hidden;
   }
@@ -168,18 +172,20 @@
   .ch-logo img {
     width: 100%; height: 100%;
     object-fit: contain;
-    padding: 2px;
+    padding: 1px;
     background: #0e1318;
   }
 
   .ch-info { flex: 1; min-width: 0; }
 
+  /* 🛠 KANAL İSMİ 12px'DEN 10px'E DÜŞÜRÜLDÜ VE KÜÇÜLTÜLDÜ */
   .ch-name {
-    font-size: 12px; font-weight: 600;
+    font-size: 10px; font-weight: 600;
     color: var(--text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.2;
   }
 
   .ch-meta {
@@ -187,28 +193,31 @@
     align-items: center;
     gap: 4px;
     margin-top: 1px;
+    line-height: 1;
   }
 
-  .live-badge { background: var(--accent); color: #fff; font-size: 8px; font-weight: 700; padding: 1px 4px; border-radius: 2px; flex-shrink: 0; }
-  .yt-badge { background: #ff0000; color: #fff; font-size: 8px; font-weight: 700; padding: 1px 4px; border-radius: 2px; flex-shrink: 0; }
+  /* 🛠 ROZETLER VE GRUP METİNLERİ KÜÇÜLTÜLDÜ */
+  .live-badge { background: var(--accent); color: #fff; font-size: 7px; font-weight: 700; padding: 1px 3px; border-radius: 2px; flex-shrink: 0; }
+  .yt-badge { background: #ff0000; color: #fff; font-size: 7px; font-weight: 700; padding: 1px 3px; border-radius: 2px; flex-shrink: 0; }
 
   .ch-group {
-    font-size: 10px; color: var(--muted);
+    font-size: 9px; color: var(--muted);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
 
+  /* 🛠 YILDIZ BUTONU BOYUTU KÜÇÜLTÜLDÜ */
   .fav-btn {
     background: none; border: none;
     color: var(--muted);
     cursor: pointer;
-    font-size: 14px;
+    font-size: 11px;
     transition: color .2s, transform .2s;
     flex-shrink: 0;
-    padding: 2px;
+    padding: 1px;
     line-height: 1;
   }
 
-  .fav-btn:hover  { color: var(--gold); transform: scale(1.2); }
+  .fav-btn:hover  { color: var(--gold); transform: scale(1.1); }
   .fav-btn.on     { color: var(--gold); }
 
   .loading {
@@ -218,11 +227,11 @@
     gap: 12px;
     padding: 40px 20px;
     color: var(--muted);
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .spin {
-    width: 32px; height: 32px;
+    width: 24px; height: 24px;
     border: 2px solid var(--bg3);
     border-top-color: var(--accent);
     border-radius: 50%;
@@ -377,7 +386,6 @@
 <body>
 
 <div class="app">
-  <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar">
     <div class="sidebar-tabs">
       <button class="tab-btn active" onclick="switchTab('all', this)">TÜM KANALLAR</button>
@@ -392,7 +400,6 @@
     </div>
   </aside>
 
-  <!-- ══ MAIN ══ -->
   <main class="main">
     <div class="player-wrap" id="playerWrapContainer">
       
@@ -403,11 +410,9 @@
         </div>
         
         <video id="video" controls playsinline></video>
-        <!-- YouTube Oynatıcı Kapsayıcısı -->
         <div id="ytPlayerWrap" class="yt-container"></div>
       </div>
 
-      <!-- KONTROL BARI -->
       <div class="ctrl-bar">
         <div class="ctrl-btns" id="actionButtons">
           <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
@@ -502,7 +507,6 @@ Promise.all(fetchM3uPromises)
       return;
     }
 
-    // 🔢 NUMARATİK SIRALAMA ALGORİTMASI EKLEDİM
     allChannels.sort((a, b) => {
       const numA = parseInt(a.name.match(/^\d+/)?.[0], 10);
       const numB = parseInt(b.name.match(/^\d+/)?.[0], 10);
@@ -538,11 +542,9 @@ function buildCats() {
     `<button class="cat-pill ${i === 0 ? "active" : ""}" onclick="filterCat('${g.replace(/'/g,"\\'")}',this)">${i === 0 ? "Tümü" : g}</button>`
   ).join("");
 
-  // 🛠 KATEGORİLER YÜKLENDİKTEN SONRA DOKUNMATİK SÜRÜKLEME SİHRİNİ BAĞLA
   initDragToScroll();
 }
 
-// 🛠 YENİ EKLENEN FONKSİYON: KAT BARINI PARMAKLA/FAREYLE SURUKLEME MEKANİZMASI
 function initDragToScroll() {
   const slider = document.getElementById('catBar');
   let isDown = false;
@@ -550,46 +552,39 @@ function initDragToScroll() {
   let scrollLeft;
   let isDragging = false;
 
-  // Fare basıldığında veya ekrana dokunulduğunda
   const startAction = (e) => {
     isDown = true;
     isDragging = false;
-    slider.style.scrollBehavior = 'auto'; // Sürüklerken gecikmesiz takip etsin
+    slider.style.scrollBehavior = 'auto';
     startX = (e.pageX || e.touches[0].pageX) - slider.offsetLeft;
     scrollLeft = slider.scrollLeft;
   };
 
-  // Fare bırakıldığında veya parmak ekrandan çekildiğinde
   const stopAction = () => {
     isDown = false;
     slider.style.scrollBehavior = 'smooth';
-    // Eğer hafifçe sürüklendiyse buton tıklamasını engellemek için kısa süreli kilit koyuyoruz
     setTimeout(() => { isDragging = false; }, 50);
   };
 
-  // Sürükleme esnasında
   const moveAction = (e) => {
     if (!isDown) return;
     const x = (e.pageX || e.touches[0].pageX) - slider.offsetLeft;
-    const walk = (x - startX) * 1.5; // 1.5 hassasiyet katsayısı (isteğe göre hızı değiştirebilirsin)
+    const walk = (x - startX) * 1.5;
     if (Math.abs(walk) > 5) {
-      isDragging = true; // Sadece tıklama değil, sürükleme yapıldığını anla
+      isDragging = true;
     }
     slider.scrollLeft = scrollLeft - walk;
   };
 
-  // Mouse Olayları
   slider.addEventListener('mousedown', startAction);
   slider.addEventListener('mouseleave', stopAction);
   slider.addEventListener('mouseup', stopAction);
   slider.addEventListener('mousemove', moveAction);
 
-  // Dokunmatik Ekran Olayları
   slider.addEventListener('touchstart', startAction, { passive: true });
   slider.addEventListener('touchend', stopAction, { passive: true });
   slider.addEventListener('touchmove', moveAction, { passive: true });
 
-  // Sürüklerken yanlışlıkla kategori butonlarının tıklanmasını önleme filtresi
   slider.querySelectorAll('.cat-pill').forEach(pill => {
     pill.addEventListener('click', (e) => {
       if (isDragging) {
@@ -822,7 +817,7 @@ function showToast(msg) {
 document.addEventListener("keydown", e => {
   if (e.target.tagName === "INPUT") return;
   if (e.key === "ArrowRight") nextCh();
-  if (e.key === "ArrowLeft")  prevCh();
+  if (e.key === "ArrowLeft")   prevCh();
   if (e.key === "Escape")      stopPlayer();
   if (e.key === "f" || e.key === "F") toggleFSSmart();
 });
