@@ -370,7 +370,7 @@
       "youtubeId": "pqq5c6k70kk"
     },
     {
-      "name": "Number 1 TV",
+      "name": "1.Number 1 TV",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/Number1TV.tr.png",
       "group": "3.Müzik",
       "epgId": "Number1TV.tr",
@@ -440,21 +440,21 @@
       "url": "http://dygvideo.dygdigital.com/live/hls/kralpop"
     },
     {
-      "name": "Number 1 Ask",
+      "name": "1. Number 1 Ask",
       "logo": "https://i.ibb.co/5cJ0KtQ/nr1-ask.png",
       "group": "3.Müzik",
       "epgId": "Number1Ask.tr",
       "url": "https://b01c02nl.mediatriple.net/videoonlylive/mtkgeuihrlfwlive/u_stream_5c9e18f9cea15_1/playlist.m3u8"
     },
     {
-      "name": "Number 1 Damar",
+      "name": "1. Number 1 Damar",
       "logo": "https://i.ibb.co/2yCF7ms/nr1-damar.png",
       "group": "3.Müzik",
       "epgId": "Number1Damar.tr",
       "url": "https://b01c02nl.mediatriple.net/videoonlylive/mtkgeuihrlfwlive/u_stream_5c9e198784bdc_1/playlist.m3u8"
     },
     {
-      "name": "Number 1 Dance",
+      "name": "1.Number 1 Dance",
       "logo": "https://i.ibb.co/kXFSFTN/nr1-dance.png",
       "group": "3.Müzik",
       "epgId": "Number1Dance.tr",
@@ -468,49 +468,49 @@
       "url": "https://tv-trtmuzik.medya.trt.com.tr/master_720.m3u8"
     },
     {
-      "name": "PowerTurk TV",
+      "name": "2. PowerTurk TV",
       "logo": "https://i.ibb.co/xXcBD2C/powerturk.png",
       "group": "3.Müzik",
       "epgId": "PowerTurkTV.tr",
       "url": "https://livetv.powerapp.com.tr/powerturkTV/powerturkhd.smil/chunks.m3u8"
     },
     {
-      "name": "Power TV",
+      "name": "2. Power TV",
       "logo": "https://i.ibb.co/JrXDQJy/power-tv.png",
       "group": "3.Müzik",
       "epgId": "PowerTV.tr",
       "url": "https://livetv.powerapp.com.tr/powerTV/powerhd.smil/chunks.m3u8"
     },
     {
-      "name": "POWER TURK TAPTAZE",
+      "name": "2. POWER TURK TAPTAZE",
       "logo": "https://i.ibb.co/F5K5xs9/powerturk-taptaze.png",
       "group": "3.Müzik",
       "epgId": "",
       "url": "http://livetv.powerapp.com.tr/pturktaptaze/taptaze.smil/playlist.m3u8"
     },
     {
-      "name": "POWER DANCE",
+      "name": "2.POWER DANCE",
       "logo": "https://i.ibb.co/5hwZ7xw/power-dance.png",
       "group": "3.Müzik",
       "epgId": "",
       "url": "https://listen.powerapp.com.tr/dance/dance.smil/chunks.m3u8"
     },
     {
-      "name": "POWER LOVE",
+      "name": "2. POWER LOVE",
       "logo": "https://i.ibb.co/bJL1VnX/power-love.png",
       "group": "3.Müzik",
       "epgId": "",
       "url": "https://listen.powerapp.com.tr/plove/love.smil/chunks.m3u8"
     },
     {
-      "name": "POWER TURK AKUSTIK",
+      "name": "2. POWER TURK AKUSTIK",
       "logo": "https://i.ibb.co/XFY7dCW/powerturk-akustik.png",
       "group": "3.Müzik",
       "epgId": "",
       "url": "https://listen.powerapp.com.tr/pturkakustik/akustik.smil/chunks.m3u8"
     },
     {
-      "name": "POWER TURK SLOW",
+      "name": "2. POWER TURK SLOW",
       "logo": "https://i.ibb.co/R4pcKqK/powerturk-slow.png",
       "group": "3.Müzik",
       "epgId": "",
@@ -645,14 +645,14 @@
       "epgId": ""
     },
     {
-      "name": "NR1",
+      "name": "1. NR1",
       "url": "https://b01c02nl.mediatriple.net/videoonlylive/mtkgeuihrlfwlive/u_stream_5c9e17cd6360b_1/playlist.m3u8",
       "logo": "https://i.ibb.co/YBqnDxdN/Ads-z-tasar-m-17.png",
       "group": "3.Müzik",
       "epgId": ""
     },
     {
-      "name": "POWER TURK",
+      "name": "2. POWER TURK",
       "url": "https://livetv.powerapp.com.tr/powerturkTV/powerturkhd.smil/playlist.m3u8",
       "logo": "https://i.ibb.co/xXcBD2C/powerturk.png",
       "group": "3.Müzik",
