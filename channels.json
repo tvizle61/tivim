@@ -611,7 +611,7 @@
     {
       "name": "9. TVNET",
       "url": "https://mn-nl.mncdn.com/tvnet/tvnet/playlist.m3u8",
-      "logo": "https://www.tvnet.com.tr/img/logo-tvnet-light.svg",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Tvnet_logo_%282022%29.svg/960px-Tvnet_logo_%282022%29.svg.png",
       "group": "2.Haber",
       "epgId": ""
     },
