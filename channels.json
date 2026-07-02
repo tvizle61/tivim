@@ -317,13 +317,7 @@
       "group": "EDHO",
       "epgId": ""
     },
-    {
-      "name": "A SPOR",
-      "logo": "https://upload.wikimedia.org/wikipedia/tr/archive/e/e9/20140920094552%21A_Spor_logosu.png",
-      "group": "Spor",
-      "epgId": "Spor",
-      "url": "https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/aspor/aspor_1080p.m3u8"
-    },
+   
     {
       "name": "2. Haber Türk",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/HaberturkTV.tr.png",
@@ -367,13 +361,7 @@
       "epgId": "MinikaCocuk.tr",
       "url": "https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/minikago_cocuk/minikago_cocuk_720p.m3u8"
     },
-    {
-      "name": "NOW",
-      "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/NOWTV.tr.png",
-      "group": "Ulusal",
-      "epgId": "NOWTV.tr",
-      "url": "https://uycyyuuzyh.turknet.ercdn.net/nphindgytw/nowtv/nowtv.m3u8"
-    },
+  
     {
       "name": "3.NTV",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/NTV.tr.png",
