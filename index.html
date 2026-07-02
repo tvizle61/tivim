@@ -38,7 +38,6 @@
     opacity: 0.4;
   }
 
-  /* 🛠 GRID SÜTUN GENİŞLİĞİ 240px'DEN 185px'E DÜŞÜRÜLDÜ */
   .app {
     display: grid;
     grid-template-columns: 185px 1fr;
@@ -54,7 +53,6 @@
     overflow: hidden;
   }
 
-  /* 🛠 SEKME ALANI VE YAZI BOYUTU DARALTILDI */
   .sidebar-tabs {
     display: flex;
     padding: 0 6px;
@@ -80,7 +78,7 @@
   .cat-bar {
     display: flex;
     gap: 6px;
-    padding: 4px 8px;
+    padding: 2px 8px; /* Dikey padding azaltıldı */
     overflow-x: auto;
     flex: 1;
     align-items: center;
@@ -96,33 +94,30 @@
 
   .cat-bar::-webkit-scrollbar { height: 0px; display: none; }
 
-  /* 🛠 GÜNEŞ YANSIMASINA KARŞI PARLAK BEYAZ VE YÜKSEK KONTRAST AYARI */
   .cat-pill {
-    background: #1c2530; /* Arka plan biraz daha belirgin yapıldı */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Çerçeve parlatıldı */
-    color: #ffffff !important; /* Pasif kategoriler de artık PARLAK SAF BEYAZ */
+    background: #1c2530; 
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    color: #ffffff !important; 
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px; font-weight: 700; /* Yazı kalınlığı artırıldı */
-    padding: 6px 14px;
+    font-size: 11px; font-weight: 700; 
+    padding: 3px 12px; /* Dikey padding düşürülerek buton yüksekliği daraltıldı */
     border-radius: 20px;
     cursor: pointer;
     white-space: nowrap;
     transition: all .2s;
     user-select: none;
     -webkit-user-drag: none;
-    text-shadow: 0px 1px 2px rgba(0,0,0,0.8); /* Yazının arkasına hafif gölge ile ekstra okunurluk */
+    text-shadow: 0px 1px 2px rgba(0,0,0,0.8); 
   }
 
-  /* Aktif olan veya üzerine gelinen kategori butonu */
   .cat-pill.active, .cat-pill:hover {
-    background: #ffffff !important; /* Aktif buton arka planı bembeyaz */
+    background: #ffffff !important; 
     border-color: #ffffff !important;
-    color: #000000 !important; /* Beyaz üstüne siyah yazı (Maksimum güneş kontrastı) */
+    color: #000000 !important; 
     text-shadow: none;
     font-weight: 800;
   }
 
-  /* 🛠 SAYAÇ METNİ DARALTILDI */
   .ch-count {
     padding: 4px 8px 1px;
     font-size: 10px;
@@ -130,7 +125,6 @@
     flex-shrink: 0;
   }
 
-  /* 🛠 KANAL LİSTESİ İÇ BOŞLUĞU AZALTILDI */
   .channel-list {
     overflow-y: auto;
     flex: 1;
@@ -140,7 +134,6 @@
   .channel-list::-webkit-scrollbar { width: 4px; }
   .channel-list::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
 
-  /* 🛠 KANAL ÇERÇEVESİ DİKEYDE VE YATAYDA DARALTILDI */
   .channel {
     display: flex;
     align-items: center;
@@ -162,7 +155,6 @@
     border: 1.5px solid var(--accent) !important;
   }
 
-  /* 🛠 LOGO BOYUTU 36px'DEN 24px'E DÜŞÜRÜLDÜ */
   .ch-logo {
     width: 24px; height: 24px;
     border-radius: 4px;
@@ -183,7 +175,6 @@
 
   .ch-info { flex: 1; min-width: 0; }
 
-  /* 🛠 KANAL İSMİ 12px'DEN 10px'E DÜŞÜRÜLDÜ VE KÜÇÜLTÜLDÜ */
   .ch-name {
     font-size: 10px; font-weight: 600;
     color: var(--text);
@@ -201,7 +192,6 @@
     line-height: 1;
   }
 
-  /* 🛠 ROZETLER VE GRUP METİNLERİ KÜÇÜLTÜLDÜ */
   .live-badge { background: var(--accent); color: #fff; font-size: 7px; font-weight: 700; padding: 1px 3px; border-radius: 2px; flex-shrink: 0; }
   .yt-badge { background: #ff0000; color: #fff; font-size: 7px; font-weight: 700; padding: 1px 3px; border-radius: 2px; flex-shrink: 0; }
 
@@ -210,7 +200,6 @@
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
 
-  /* 🛠 YILDIZ BUTONU BOYUTU KÜÇÜLTÜLDÜ */
   .fav-btn {
     background: none; border: none;
     color: var(--muted);
@@ -296,11 +285,11 @@
 
   .yt-container { position: absolute; inset: 0; border: none; }
 
-  /* ══ KONTROL BARI ══ */
+  /* ══ KONTROL BARI (BOŞLUKLAR SIFIRA YAKIN DARALTILDI) ══ */
   .ctrl-bar {
     background: linear-gradient(to right, var(--bg2), var(--bg3));
     border-top: 1px solid var(--border);
-    padding: 8px 14px;
+    padding: 2px 14px; /* Üst ve alt iç boşluk 8px'den 2px'ye düşürüldü */
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -314,21 +303,20 @@
   .ctrl-btns { display: flex; align-items: center; gap: 6px; flex-shrink: 0; z-index: 10; }
 
   .cb {
-    width: 38px; height: 38px; 
+    width: 32px; height: 32px; /* Buton boyutları kontrol barına uyması için 38px'den 32px'ye düşürüldü */
     border-radius: 6px;
     background: var(--bg3);
     border: 1px solid var(--border);
     color: var(--text);
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    font-size: 14px;
+    font-size: 12px;
     transition: all .2s;
   }
 
   .cb:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-1px); }
   .cb.danger:hover { background: #c0392b; border-color: #c0392b; }
 
-  /* ══ BİLDİRİM (TOAST) CSS STİLLERİ ══ */
   .toast {
     position: fixed;
     bottom: 24px;
@@ -353,7 +341,6 @@
     transform: translateY(0);
   }
 
-  /* ══ TAM EKRAN AYARLARI ══ */
   .player-wrap:fullscreen .ctrl-bar,
   .player-wrap:-webkit-full-screen .ctrl-bar {
     position: absolute;
@@ -383,7 +370,7 @@
     .main { order: 1; height: auto; }
     .sidebar { order: 2; border-right: none; border-top: 1px solid var(--border); }
     .player-ratio { height: 56.25vw; flex: none; }
-    .ctrl-bar { padding: 8px 12px; gap: 10px; }
+    .ctrl-bar { padding: 4px 12px; gap: 10px; }
     .channel-list { max-height: 42vh; }
   }
 </style>
