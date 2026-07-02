@@ -527,7 +527,13 @@ function getSmartGroup(groupName) {
 
 function buildCats() {
   const mappedGroups = allChannels.map(c => getSmartGroup(c.group));
-  const groups = ["", ...new Set(mappedGroups)];
+  // Benzersiz grupları al ve alfabetik/sayısal olarak sırala
+  const uniqueGroups = [...new Set(mappedGroups)].sort((a, b) => 
+    a.localeCompare(b, 'tr', { sensitivity: 'base', numeric: true })
+  );
+  
+  // Boş veya "Genel" gibi değersiz grupları temizleyip en başa boş string (Tümü) ekleyelim
+  const groups = ["", ...uniqueGroups.filter(g => g && g.trim() !== "")];
   
   const bar = document.getElementById("catBar");
   bar.innerHTML = groups.map((g, i) =>
