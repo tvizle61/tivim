@@ -26,7 +26,7 @@
     {
       "name": "1. A Haber ",
       "youtubeId": "RlHW5wX9Iqc",
-      "X-logo": "https://i.ytimg.com/vi/nmY9i63t6qo/sddefault.jpg",
+      "X-logo": "https://st01.ahaber.com.tr/images/logo.png",
       "group": "2.Haber",
       "epgId": ""
     },
@@ -611,7 +611,7 @@
     {
       "name": "9. TVNET",
       "url": "https://mn-nl.mncdn.com/tvnet/tvnet/playlist.m3u8",
-      "logo": "https://i.ibb.co/RpyvJDrM/Ads-z-tasar-m-12.png",
+      "logo": "https://www.tvnet.com.tr/img/logo-tvnet-light.svg",
       "group": "2.Haber",
       "epgId": ""
     },
@@ -689,7 +689,7 @@
     {
       "name": "1. A HABER HD",
       "youtubeId": "nmY9i63t6qo",
-      "logo": "https://i.ytimg.com/vi/nmY9i63t6qo/sddefault.jpg",
+      "logo": "https://st01.ahaber.com.tr/images/logo.png",
       "group": "2.Haber",
       "epgId": ""
     },
@@ -717,14 +717,14 @@
     {
       "name": "2. CNN Türk",
       "youtubeId": "6N8_r2uwLEc",
-      "logo": "https://i.ytimg.com/vi/6N8_r2uwLEc/sddefault.jpg",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/5/59/CNN_T%C3%BCrk_logo.svg",
       "group": "2.Haber",
       "epgId": ""
     },
     {
       "name": "5. Haber Global",
       "youtubeId": "EqoCJ8BPxtE",
-      "logo": "https://i.ytimg.com/vi/EqoCJ8BPxtE/sddefault.jpg",
+      "logo": "https://i.haberglobal.com/storage/files/images/2022/01/11/mikrofon-logo-1-1-QENs.png",
       "group": "2.Haber",
       "epgId": ""
     },
