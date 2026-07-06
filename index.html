@@ -78,7 +78,7 @@
   .cat-bar {
     display: flex;
     gap: 6px;
-    padding: 2px 8px; /* Dikey padding azaltıldı */
+    padding: 2px 8px;
     overflow-x: auto;
     flex: 1;
     align-items: center;
@@ -100,7 +100,7 @@
     color: #ffffff !important; 
     font-family: 'DM Sans', sans-serif;
     font-size: 11px; font-weight: 700; 
-    padding: 3px 12px; /* Dikey padding düşürülerek buton yüksekliği daraltıldı */
+    padding: 3px 12px;
     border-radius: 20px;
     cursor: pointer;
     white-space: nowrap;
@@ -285,11 +285,10 @@
 
   .yt-container { position: absolute; inset: 0; border: none; }
 
-  /* ══ KONTROL BARI (BOŞLUKLAR SIFIRA YAKIN DARALTILDI) ══ */
   .ctrl-bar {
     background: linear-gradient(to right, var(--bg2), var(--bg3));
     border-top: 1px solid var(--border);
-    padding: 2px 14px; /* Üst ve alt iç boşluk 8px'den 2px'ye düşürüldü */
+    padding: 2px 14px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -303,7 +302,7 @@
   .ctrl-btns { display: flex; align-items: center; gap: 6px; flex-shrink: 0; z-index: 10; }
 
   .cb {
-    width: 32px; height: 32px; /* Buton boyutları kontrol barına uyması için 38px'den 32px'ye düşürüldü */
+    width: 32px; height: 32px;
     border-radius: 6px;
     background: var(--bg3);
     border: 1px solid var(--border);
@@ -425,7 +424,13 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const PRIVATE_CLOUDFLARE_PROXY = "https://ancient-hall-8d94.deepbluee61.workers.dev/?url=";
+// Genel amaçlı açık / alternatif CORS tünelleri (İlki hata verirse yedeklere geçecek)
+const PROXIES = [
+  "https://ancient-hall-8d94.deepbluee61.workers.dev/?url=",
+  "https://cors-anywhere.herokuapp.com/",
+  "https://api.allorigins.win/raw?url="
+];
+let currentProxyIndex = 0;
 
 const M3U_URLS = [
   "https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/pplaylist.m3u",
@@ -519,21 +524,30 @@ Promise.all(fetchM3uPromises)
 function getSmartGroup(groupName) {
   if (!groupName) return "Genel";
   const name = groupName.toLowerCase().trim();
+  
+  if (/^\d+\./.test(groupName)) return groupName.trim();
+
   if (name.includes("spor") || name.includes("sport")) return "5.Spor";
   if (name.includes("çocuk") || name.includes("cocuk") || name.includes("kid")) return "4.Çocuk";
   if (name.includes("müzik") || name.includes("muzik") || name.includes("music")) return "3.Müzik";
-  return groupName;
+  if (name.includes("haber")) return "2.Haber";
+  if (name.includes("ulusal")) return "1.Ulusal";
+  if (name.includes("belgesel")) return "10.Belgesel";
+  if (name.includes("sinema") || name.includes("film")) return "8.Sinema";
+  
+  return groupName.trim();
 }
 
 function buildCats() {
   const mappedGroups = allChannels.map(c => getSmartGroup(c.group));
-  // Benzersiz grupları al ve alfabetik/sayısal olarak sırala
-  const uniqueGroups = [...new Set(mappedGroups)].sort((a, b) => 
+  const uniqueGroups = [...new Set(mappedGroups)].filter(g => g && g.trim() !== "");
+
+  // Başına numara koyduğun kategorileri tam sıralı dizecek kural
+  uniqueGroups.sort((a, b) => 
     a.localeCompare(b, 'tr', { sensitivity: 'base', numeric: true })
   );
   
-  // Boş veya "Genel" gibi değersiz grupları temizleyip en başa boş string (Tümü) ekleyelim
-  const groups = ["", ...uniqueGroups.filter(g => g && g.trim() !== "")];
+  const groups = ["", ...uniqueGroups];
   
   const bar = document.getElementById("catBar");
   bar.innerHTML = groups.map((g, i) =>
@@ -656,7 +670,7 @@ function renderList() {
 const video = document.getElementById("video");
 const ytPlayerWrap = document.getElementById("ytPlayerWrap");
 
-function play(idx, useProxy = false) {
+function play(idx, forceProxy = false) {
   const ch = allChannels[idx];
   if (!ch) return;
   currentCh = ch;
@@ -692,18 +706,31 @@ function play(idx, useProxy = false) {
     video.style.display = "block";
     
     let finalStreamUrl = ch.url;
-    if (useProxy || ch.url.includes("daioncdn.net") || ch.url.includes("puhu") || ch.url.includes("startv")) {
-      finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
-      console.log("🔒 Özel Tünel Devrede:", finalStreamUrl);
+    
+    // HTTP (Mixed-Content) veya belirli korumalı domainleri otomatik tünelden geçir
+    const isHttp = ch.url.startsWith("http://");
+    const needsProxy = isHttp || forceProxy || ch.url.includes("daioncdn.net") || ch.url.includes("puhu") || ch.url.includes("startv") || ch.url.includes("linetv");
+
+    if (needsProxy) {
+      finalStreamUrl = PROXIES[currentProxyIndex] + encodeURIComponent(ch.url);
+      console.log("🔒 Güvenli Tünel Aktif (" + currentProxyIndex + "):", finalStreamUrl);
     } else {
       console.log("🌐 Doğrudan Bağlantı:", finalStreamUrl);
     }
 
     if (Hls.isSupported()) {
       hls = new Hls({
-        maxBufferLength: 20,
+        maxBufferLength: 30,
         enableWorker: true,
-        lowLatencyMode: true
+        lowLatencyMode: true,
+        // Korumalı sunucuların ts segment isteklerinde CORS patlamasını engellemek için tüneli alt isteklere de geçiriyoruz
+        xhrSetup: function (xhr, url) {
+          if (needsProxy && !url.startsWith("http") && !url.includes("workers.dev")) {
+            // Bağıl (relative) ts segmentlerini de proxy üzerinden geçir
+            const resolvedUrl = new URL(url, ch.url).href;
+            xhr.open('GET', PROXIES[currentProxyIndex] + encodeURIComponent(resolvedUrl), true);
+          }
+        }
       });
       
       hls.loadSource(finalStreamUrl);
@@ -715,9 +742,21 @@ function play(idx, useProxy = false) {
 
       hls.on(Hls.Events.ERROR, function (event, data) {
         if (data.fatal) {
-          if ((data.details === "manifestLoadError" || data.type === Hls.ErrorTypes.NETWORK_ERROR) && !useProxy) {
-            console.warn("CORS/Erişim engeli tespit edildi! Tünele geçiliyor...");
-            play(idx, true);
+          console.warn("HLS Hatası algılandı:", data.details);
+          // Eğer hata ağ veya manifest yükleme hatasıysa ve henüz tünel denemediysek veya tünel patladıysa alternatife geç
+          if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+            if (!forceProxy) {
+              console.log("Sunucu engeli! Birinci tünel deneniyor...");
+              play(idx, true);
+            } else if (currentProxyIndex < PROXIES.length - 1) {
+              currentProxyIndex++;
+              console.log("Tünel yanıt vermedi, yedek tünele geçiliyor...");
+              play(idx, true);
+            } else {
+              // Tüneller tükendiyse sıfırla ve hata ver
+              currentProxyIndex = 0;
+              showToast("❌ Yayın sunucusu şu an yanıt vermiyor.");
+            }
           } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
             hls.recoverMediaError();
           }
@@ -816,7 +855,7 @@ document.addEventListener("keydown", e => {
   if (e.target.tagName === "INPUT") return;
   if (e.key === "ArrowRight") nextCh();
   if (e.key === "ArrowLeft")   prevCh();
-  if (e.key === "Escape")      stopPlayer();
+  if (e.key === "Escape")       stopPlayer();
   if (e.key === "f" || e.key === "F") toggleFSSmart();
 });
 </script>
