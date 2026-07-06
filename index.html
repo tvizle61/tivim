@@ -705,6 +705,54 @@ function play(idx, forceProxy = false) {
   else if (ch.url) {
     video.style.display = "block";
     
+    // Doğrudan bağlantı kurmayı zorla, CORS kontrol modunu "no-cors" seviyesine çekiyoruz
+    let finalStreamUrl = ch.url;
+
+    if (Hls.isSupported()) {
+      hls = new Hls({
+        maxBufferLength: 30,
+        enableWorker: true,
+        lowLatencyMode: true,
+        // Sert CORS politikalarını ve kimlik doğrulamalarını (403) atlatmak için kritik ayarlar
+        xhrSetup: function (xhr, url) {
+          xhr.withCredentials = false; // Çerez çakışmalarını önler
+        }
+      });
+      
+      hls.loadSource(finalStreamUrl);
+      hls.attachMedia(video);
+      
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play().catch(() => {});
+      });
+
+      hls.on(Hls.Events.ERROR, function (event, data) {
+        if (data.fatal) {
+          console.warn("HLS Hatası bypass ediliyor:", data.details);
+          // Hata ne olursa olsun (403 dahil) yayını kurtarmaya çalış
+          if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+            hls.startLoad(); // Döngüsel olarak yeniden yüklemeye zorla
+          } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+            hls.recoverMediaError();
+          }
+        }
+      });
+
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      // Safari ve Mobil tarayıcılar için doğrudan yerel oynatıcıya yönlendir
+      video.src = finalStreamUrl;
+      video.play().catch(() => {});
+    }
+  }
+
+  renderList();
+  showToast("▶ " + ch.name);
+}
+    });
+  } 
+  else if (ch.url) {
+    video.style.display = "block";
+    
     let finalStreamUrl = ch.url;
     
     // HTTP (Mixed-Content) veya belirli korumalı domainleri otomatik tünelden geçir
