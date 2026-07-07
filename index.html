@@ -51,6 +51,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    position: relative;
   }
 
   .sidebar-tabs {
@@ -75,50 +76,6 @@
 
   .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
 
-  /* ══ KATEGORİ BARI ESKİ HALİNE GETİRİLDİ ══ */
-  .cat-bar {
-    display: flex;
-    gap: 6px;
-    padding: 2px 0; 
-    overflow-x: auto;
-    flex: 1;
-    align-items: center;
-    user-select: none;
-    cursor: grab;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .cat-bar:active {
-    cursor: grabbing;
-  }
-
-  .cat-bar::-webkit-scrollbar { height: 0px; display: none; }
-
-  .cat-pill {
-    background: #1c2530; 
-    border: 1px solid rgba(255, 255, 255, 0.2); 
-    color: #ffffff !important; 
-    font-family: 'DM Sans', sans-serif;
-    font-size: 11px; font-weight: 700; 
-    padding: 3px 10px; 
-    border-radius: 20px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all .2s;
-    user-select: none;
-    -webkit-user-drag: none;
-    text-shadow: 0px 1px 2px rgba(0,0,0,0.8); 
-  }
-
-  .cat-pill.active, .cat-pill:hover {
-    background: #ffffff !important; 
-    border-color: #ffffff !important;
-    color: #000000 !important; 
-    text-shadow: none;
-    font-weight: 800;
-  }
-
   .ch-count {
     padding: 4px 8px 1px;
     font-size: 10px;
@@ -126,10 +83,11 @@
     flex-shrink: 0;
   }
 
+  /* Kanal listesi altındaki buton alanı kadar (56px) boşluk bırakıldı */
   .channel-list {
     overflow-y: auto;
     flex: 1;
-    padding: 3px 4px 48px; 
+    padding: 3px 4px 56px; 
   }
 
   .channel-list::-webkit-scrollbar { width: 4px; }
@@ -235,6 +193,39 @@
 
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* ══ NEW: SIDEBAR SOL ALT BUTON PANELİ ══ */
+  .sidebar-ctrl {
+    position: absolute;
+    bottom: 0; left: 0; width: 100%;
+    height: 52px;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6px;
+    z-index: 10;
+  }
+
+  .sidebar-ctrl .cb {
+    flex: 1;
+    height: 40px;
+    margin: 0 2px;
+    border-radius: 5px;
+    background: var(--bg3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all .2s ease;
+  }
+
+  .sidebar-ctrl .cb:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .sidebar-ctrl .cb.danger:hover { background: #c0392b; border-color: #c0392b; }
+
   .main {
     display: flex;
     flex-direction: column;
@@ -261,7 +252,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-bottom: 44px; 
+    padding-bottom: 32px; /* İnce kategori barı için ideal pay */
   }
 
   .player-idle {
@@ -271,7 +262,7 @@
     align-items: center; justify-content: center;
     gap: 16px;
     z-index: 2;
-    padding-bottom: 44px;
+    padding-bottom: 32px;
   }
 
   .idle-icon { font-size: 64px; opacity: .13; animation: breathe 3s ease-in-out infinite; }
@@ -286,58 +277,67 @@
     object-fit: fill; 
   }
 
-  .yt-container { position: absolute; inset: 0; border: none; padding-bottom: 44px; }
+  .yt-container { position: absolute; inset: 0; border: none; padding-bottom: 32px; }
 
-  /* ══ KONTROL BARI AYARLARI GÜNCELLENDİ ══ */
+  /* ══ ALT KATEGORİ BARI (ORİJİNAL İNCE HALİ) ══ */
   .ctrl-bar {
     background: var(--bg2);
     border-top: 1px solid var(--border);
     padding: 0 12px; 
     display: flex;
-    flex-direction: row; 
     align-items: center;
     justify-content: flex-start;
     flex-shrink: 0;
-    gap: 16px;
-    z-index: 99999;
+    z-index: 9;
     
     position: fixed;
     bottom: 0;
-    left: 0;
-    width: 100%; 
-    height: 44px; 
-    box-shadow: 0 -4px 15px rgba(0,0,0,0.6);
+    right: 0;
+    left: 185px; /* Sidebar genişliği kadar sağdan başlar */
+    height: 32px; 
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.4);
   }
 
-  .ctrl-btns { 
-    display: flex; 
-    align-items: center; 
-    gap: 6px; 
-    flex-shrink: 0; 
+  .cat-bar {
+    display: flex;
+    gap: 6px;
+    padding: 2px 0; 
+    overflow-x: auto;
+    flex: 1;
+    align-items: center;
+    user-select: none;
+    cursor: grab;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
 
-  /* ══ İDEAL DENGELİ BUTON BOYUTLARI ══ */
-  .cb {
-    width: 26px !important;       
-    height: 18px !important;      
-    border-radius: 5px !important; 
-    background: var(--bg3) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    color: var(--text) !important;
-    cursor: pointer !important;
-    display: flex !important; 
-    align-items: center !important; 
-    justify-content: center !important;
-    font-size: 14px !important;   /* Rahat okunan simge boyutu */
-    transition: all .2s ease !important;
+  .cat-bar::-webkit-scrollbar { height: 0px; display: none; }
+
+  .cat-pill {
+    background: #1c2530; 
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    color: #ffffff !important; 
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 700; 
+    padding: 2px 9px; 
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all .2s;
+    text-shadow: 0px 1px 2px rgba(0,0,0,0.8); 
   }
 
-  .cb:hover { background: var(--accent) !important; border-color: var(--accent) !important; color: #fff !important; transform: translateY(-1px) !important; }
-  .cb.danger:hover { background: #c0392b !important; border-color: #c0392b !important; }
+  .cat-pill.active, .cat-pill:hover {
+    background: #ffffff !important; 
+    border-color: #ffffff !important;
+    color: #000000 !important; 
+    text-shadow: none;
+    font-weight: 800;
+  }
 
   .toast {
     position: fixed;
-    bottom: 58px;
+    bottom: 45px;
     right: 24px;
     background: rgba(14, 19, 24, 0.9);
     border: 1px solid var(--border);
@@ -354,10 +354,7 @@
     backdrop-filter: blur(8px);
     box-shadow: 0 8px 24px rgba(0,0,0,0.5);
   }
-  .toast.show {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .toast.show { opacity: 1; transform: translateY(0); }
 
   /* ══ TAM EKRAN MODU AYARLARI ══ */
   .player-wrap:fullscreen .player-ratio,
@@ -366,40 +363,33 @@
   .player-wrap:fullscreen .yt-container,
   .player-wrap:-webkit-full-screen .yt-container { padding-bottom: 0; }
 
-  .player-wrap:fullscreen .ctrl-bar,
-  .player-wrap:-webkit-full-screen .ctrl-bar {
+  /* Tam ekranda butonlar sağ alta şık bir kontrol paneli olarak yerleşir */
+  .player-wrap:fullscreen .sidebar-ctrl,
+  .player-wrap:-webkit-full-screen .sidebar-ctrl {
     position: absolute !important;
     bottom: 24px !important;
     left: 24px !important;
-    width: auto !important; 
-    height: auto !important;
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
-    z-index: 2147483647 !important;
-    box-shadow: none !important;
-  }
-
-  .player-wrap:fullscreen .cat-bar,
-  .player-wrap:-webkit-full-screen .cat-bar { display: none !important; }
-
-  .player-wrap:fullscreen .ctrl-btns,
-  .player-wrap:-webkit-full-screen .ctrl-btns {
+    width: 220px !important; 
+    height: 54px !important;
     background: rgba(14, 19, 24, 0.9) !important;
     border: 1px solid rgba(255, 255, 255, 0.12) !important;
     border-radius: 10px !important;
     padding: 6px !important;
     backdrop-filter: blur(12px) !important;
     box-shadow: 0 12px 30px rgba(0,0,0,0.7) !important;
+    z-index: 2147483647 !important;
   }
+
+  .player-wrap:fullscreen .ctrl-bar,
+  .player-wrap:-webkit-full-screen .ctrl-bar { display: none !important; }
 
   @media (max-width: 768px) {
     .app { grid-template-columns: 1fr; height: auto; min-height: 100vh; }
     .main { order: 1; height: auto; }
     .sidebar { order: 2; border-right: none; border-top: 1px solid var(--border); height: 50vh; }
-    .player-ratio { height: 56.25vw; flex: none; padding-bottom: 44px; }
-    .ctrl-bar { position: fixed; bottom: 0; width: 100%; }
-    .channel-list { max-height: calc(50vh - 48px); padding-bottom: 48px; }
+    .player-ratio { height: 56.25vw; flex: none; padding-bottom: 32px; }
+    .ctrl-bar { position: fixed; bottom: 0; left: 0; width: 100%; }
+    .channel-list { max-height: calc(50vh - 108px); padding-bottom: 56px; }
   }
 </style>
 </head>
@@ -418,6 +408,13 @@
         Kanallar ve Videolar Yükleniyor...
       </div>
     </div>
+
+    <div class="sidebar-ctrl" id="actionButtons">
+      <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
+      <button class="cb" onclick="nextCh()" title="Sonraki (→)">⏭</button>
+      <button class="cb danger" onclick="stopPlayer()" title="Durdur (Esc)">⏹</button>
+      <button class="cb" onclick="toggleFSSmart()" title="Tam Ekran">⛶</button>
+    </div>
   </aside>
 
   <main class="main">
@@ -434,13 +431,6 @@
       </div>
 
       <div class="ctrl-bar">
-        <div class="ctrl-btns" id="actionButtons">
-          <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
-          <button class="cb" onclick="nextCh()" title="Sonraki (→)">⏭</button>
-          <button class="cb danger" onclick="stopPlayer()" title="Durdur (Esc)">⏹</button>
-          <button class="cb" onclick="toggleFSSmart()" title="Tam Ekran">⛶</button>
-        </div>
-        
         <div class="cat-bar" id="catBar">
           <button class="cat-pill active" onclick="filterCat('', this)">Tümü</button>
         </div>
