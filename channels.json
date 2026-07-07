@@ -4,7 +4,7 @@
        {
       "name": "6.Beyaz TV",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/BeyazTV.tr.png",
-      "group": "1.Ulusal",
+      "group": "1. ULUSAL",
       "epgId": "BeyazTV.tr",
       "url": "https://beyaztv-live.daioncdn.net/beyaztv/beyaztv_1080p.m3u8"
     },
@@ -12,7 +12,7 @@
       "name": "2. CNN Türk ",
       "youtubeId": "Z5xqm9OnO8c",
       "X-logo": "https://upload.wikimedia.org/wikipedia/commons/5/59/CNN_T%C3%BCrk_logo.svg",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": ""
     },
 
@@ -20,14 +20,14 @@
       "name": "9. ATV ",
       "youtubeId": "P3wREkPcQ1U",
       "X-logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/ATV.tr.png",
-      "group": "1.Ulusal",
+      "group": "1. ULUSAL",
       "epgId": ""
     },
     {
       "name": "1. A Haber ",
       "youtubeId": "RlHW5wX9Iqc",
       "X-logo": "https://st01.ahaber.com.tr/images/logo.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": ""
     },
 
@@ -35,7 +35,7 @@
       "name": "8. Akit Tv ",
       "youtubeId": "ds7aS4H1fbs",
       "X-logo": "https://upload.wikimedia.org/wikipedia/tr/c/cf/Akit_TV.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": ""
     },
 
@@ -44,21 +44,21 @@
       "name": "Gaybana Dünya ",
       "youtubeId": "PnEaxDYbGCQ",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "7.Turan Topçuoğlu",
+      "group": "7. T. TOPÇUOĞLU",
       "epgId": ""
     },
     {
       "name": "Yemin Etti Bu Oflu ",
       "youtubeId": "hUghUWV8lpI",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "7.Turan Topçuoğlu",
+      "group": "7. T. TOPÇUOĞLU",
       "epgId": ""
     },
     {
       "name": "İmera ",
       "youtubeId": "62vDl5dWl8g",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     
@@ -66,35 +66,35 @@
       "name": "Dumanlı Başım Bugün ",
       "youtubeId": "1PtFOo94KDY",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "7.Turan Topçuoğlu",
+      "group": "7. T. TOPÇUOĞLU",
       "epgId": ""
     },
     {
       "name": "Kara Sevda ",
       "youtubeId": "5iVjVzuVOQY",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "7.Turan Topçuoğlu",
+      "group": "7. T. TOPÇUOĞLU",
       "epgId": ""
     },
     {
       "name": "Ayşem Destanı ",
       "youtubeId": "iyvJpA2yZ-k",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "7.Turan Topçuoğlu",
+      "group": "7. T. TOPÇUOĞLU",
       "epgId": ""
     },
     {
       "name": "Horan ",
       "youtubeId": "ryfx-jYO8Ro",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "7.Turan Topçuoğlu",
+      "group": "7. T. TOPÇUOĞLU",
       "epgId": ""
     },
     {
       "name": "Ben Ağlarım El Güler ",
       "youtubeId": "dXO9RfT8tww",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "7.Turan Topçuoğlu",
+      "group": "7. T. TOPÇUOĞLU",
       "epgId": ""
     },
  
@@ -103,35 +103,35 @@
       "name": "Hayri Yaşar Karagülle - Geldi Bahar Ayları ",
       "youtubeId": "0RziZxRimS0",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
        {
       "name": "Koliva - Oy Oy Güzelum ",
       "youtubeId": "j6n_EFtyi5s",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Fatih Reyhan - Eski Hemşin ",
       "youtubeId": "hcTZw4Q57HI",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
         {
       "name": "Hayri Yaşar Karagülle Vur Elleri Ellere ",
       "youtubeId": "zzE_SG7_XcE",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Sinan Sami - Gene Yaranamadım",
       "youtubeId": "jJ-V4r3LPC4",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
    
@@ -139,196 +139,196 @@
       "name": "Hayri Yaşar Karagülle - Selam Trabzon'uma ",
       "youtubeId": "NGJGZvG4Ra8",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Asırlık Şu Çınara ",
       "youtubeId": "lQ5QBlF85Hc",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Hilmi Yerekaban - Virane Kıranlara ",
       "youtubeId": "mXx6h1B3mY8",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
      {
       "name": "Zeynep Başkan - Çayluk ",
       "youtubeId": "f6LrFjj9agI",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
      {
       "name": "Selim Bölükbaşı - Kapıya Sandalye ",
       "youtubeId": "XWNGrb97P8c",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Hülya Polat - Gaybana  ",
       "youtubeId": "RHviZcnh_zE",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Aylin Demir - Müjgan  ",
       "youtubeId": "nZhfo7G_JfY",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Tulum Horon Potpori ",
       "youtubeId": "olgBiI1sY9o",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Apolas Lermi - Bir Baktım ",
       "youtubeId": "HTMGLfBX_7g",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Resul Dindar - Gümüşhane Kızları ",
       "youtubeId": "VPNx4UDohUk",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
      {
       "name": "O.Şahin Kalem Çektim ",
       "youtubeId": "T6wbun1gpMs",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "O.Şahin Eygidi günler ",
       "youtubeId": "gOVYxDS_l_w",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "O.Şahin Yama ",
       "youtubeId": "8s_Xhv6Zvlk",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "O.Şahin Bi Kız Var Nişan Eden ",
       "youtubeId": "4ZYY4_7Vhhg",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "O.ŞAhin Bu Zamanın Kızlari ",
       "youtubeId": "7Ya3MNQTGgM",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Yalnız Değilsin ",
       "youtubeId": "aZCpmiUGYcw",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "8.EDHO",
+      "group": "8. EDHO",
       "epgId": ""
     },
      {
       "name": "Nem Kaldı ",
       "youtubeId": "na1kcFLe1Yo",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "8.EDHO",
+      "group": "8. EDHO",
       "epgId": ""
     },
     {
       "name": "Minnet Eylemem",
       "youtubeId": "N7VlPV7mLMM",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "8.EDHO",
+      "group": "8. EDHO",
       "epgId": ""
     },
     {
       "name": "Çeşmi Siyahım",
       "youtubeId": "eJCDdjOodUE",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "8.EDHO",
+      "group": "8. EDHO",
       "epgId": ""
     },
     {
       "name": "Yolun Sonu",
       "youtubeId": "cuHH0kComrU",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "8.EDHO",
+      "group": "8. EDHO",
       "epgId": ""
     },
     {
       "name": "Giresun İçinde",
       "youtubeId": "x-Qmlb1pd5A",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "8.EDHO",
+      "group": "8. EDHO",
       "epgId": ""
     },
     {
       "name": "Şu Kanlı Zalimin",
       "youtubeId": "qv5pT7Qw01c",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "8.EDHO",
+      "group": "8. EDHO",
       "epgId": ""
     },
      {
       "name": "Üryan Geldim",
       "youtubeId": "gYZMtjPk8jc",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "8.EDHO",
+      "group": "8. EDHO",
       "epgId": ""
     },
      {
       "name": "Böyledir Bizim Sevdamız",
       "youtubeId": "TtwgA1r8mPo",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "8.EDHO",
+      "group": "8. EDHO",
       "epgId": ""
     },
      {
       "name": "Dolanı Dolanı",
       "youtubeId": "YI7LfBKpdM0",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "8.EDHO",
+      "group": "8. EDHO",
       "epgId": ""
     },
     {
       "name": "Susarak Özlüyorum",
       "youtubeId": "fYOXs7pjirA",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "8.EDHO",
+      "group": "8. EDHO",
       "epgId": ""
     },
    
     {
       "name": "4. Haber Türk",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/HaberturkTV.tr.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": "HaberturkTV.tr",
       "url": "https://tv.ensonhaber.com/haberturk/haberturk.m3u8"
     },
     {
       "name": "4. Haber Türk ",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/HaberturkTV.tr.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": "HaberturkTV.tr",
       "youtubeId": "RNVNlJSUFoE"
     },
@@ -336,28 +336,28 @@
  {
       "name": "9. ATV HD ",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/ATV.tr.png",
-      "group": "1.Ulusal",
+      "group": "1. ULUSAL",
       "epgId": "ATV.HD",
       "url": "https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/atv/atv_480p.m3u8"
     },
     {
       "name": "7. Kanal 7",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/Kanal7.tr.png",
-      "group": "1.Ulusal",
+      "group": "1. ULUSAL",
       "epgId": "Kanal7.tr",
       "url": "https://kanal7-live.daioncdn.net/kanal7/kanal7.m3u8"
     },
     {
       "name": "2. Kanal D",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/KanalD.tr.png",
-      "group": "1.Ulusal",
+      "group": "1. ULUSAL",
       "epgId": "KanalD.tr",
       "url": "https://ackaxsqacw.turknet.ercdn.net/ozfkfbbjba/kanald/kanald_1080p.m3u8"
     },
       {
       "name": "Minika Çocuk",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/MinikaCocuk.tr.png",
-      "group": "Çocuk & Eğitim",
+      "group": "4. ÇOCUK",
       "epgId": "MinikaCocuk.tr",
       "url": "https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/minikago_cocuk/minikago_cocuk_720p.m3u8"
     },
@@ -365,21 +365,21 @@
     {
       "name": "11. NTV",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/NTV.tr.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": "NTV.tr",
       "youtubeId": "pqq5c6k70kk"
     },
     {
       "name": "1.Number 1 TV",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/Number1TV.tr.png",
-      "group": "3.Müzik",
+      "group": "3. MÜZİK",
       "epgId": "Number1TV.tr",
       "url": "https://b01c02nl.mediatriple.net/videoonlylive/mtkgeuihrlfwlive/u_stream_5c9e17cd6360b_1/playlist.m3u8"
     },
     {
       "name": "5. Show TV",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/ShowTV.tr.png",
-      "group": "1.Ulusal",
+      "group": "1. ULUSAL",
       "epgId": "ShowTV.tr",
       "url": "https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/showtv/showtv.m3u8"
     },
@@ -393,14 +393,14 @@
     {
       "name": "4. Star",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/StarTV.tr.png",
-      "group": "1.Ulusal",
+      "group": "1. ULUSAL",
       "epgId": "StarTV.tr",
       "youtubeId": "82O6yOy_XwE"
     },
     {
       "name": "TRT Çocuk",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/TRTCocuk.tr.png",
-      "group": "Çocuk & Eğitim",
+      "group": "4. ÇOCUK",
       "epgId": "TRTCocuk.tr",
       "url": "https://tv-trtcocuk.medya.trt.com.tr/master.m3u8"
     },
@@ -408,111 +408,111 @@
       "name": "3. TV 100",
       "youtubeId": "ebVRSmBYC60",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/TV100.tr.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": ""
     },
     {
       "name": "12. Ulke TV",
       "youtubeId": "YwUf2IfT4Pw",
       "logo": "https://play-lh.googleusercontent.com/rbQZxGEu1kM-YysIlM9NzVLobrkI41XUcTLJOW5nRpn0OnmOSfKzqsuUQm5KJPnPANE=w240-h480-rw",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": "ulketv.tr"
     },
     {
       "name": "3. TV 100",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/TV100.tr.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": "TV100.tr",
       "url": "https://tv100-live.daioncdn.net/tv100/tv100_1080p.m3u8"
     },
      {
       "name": "3. TV 100",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/TV100.tr.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": "TV100.tr",
       "url": "https://tv.ensonhaber.com/tv100/tv100_360p.m3u8"
     },
     {
       "name": "N KRAL POP",
       "logo": "https://i.ibb.co/vk0bKz0/kral-pop.png",
-      "group": "3.Müzik",
+      "group": "3. MÜZİK",
       "epgId": "Kral.Pop.Radyo.tr",
       "url": "http://dygvideo.dygdigital.com/live/hls/kralpop"
     },
     {
       "name": "1. Number 1 Ask",
       "logo": "https://i.ibb.co/5cJ0KtQ/nr1-ask.png",
-      "group": "3.Müzik",
+      "group": "3. MÜZİK",
       "epgId": "Number1Ask.tr",
       "url": "https://b01c02nl.mediatriple.net/videoonlylive/mtkgeuihrlfwlive/u_stream_5c9e18f9cea15_1/playlist.m3u8"
     },
     {
       "name": "1. Number 1 Damar",
       "logo": "https://i.ibb.co/2yCF7ms/nr1-damar.png",
-      "group": "3.Müzik",
+      "group": "3. MÜZİK",
       "epgId": "Number1Damar.tr",
       "url": "https://b01c02nl.mediatriple.net/videoonlylive/mtkgeuihrlfwlive/u_stream_5c9e198784bdc_1/playlist.m3u8"
     },
     {
       "name": "1.Number 1 Dance",
       "logo": "https://i.ibb.co/kXFSFTN/nr1-dance.png",
-      "group": "3.Müzik",
+      "group": "3. MÜZİK",
       "epgId": "Number1Dance.tr",
       "url": "https://b01c02nl.mediatriple.net/videoonlylive/mtkgeuihrlfwlive/u_stream_5c9e2aa8acf44_1/playlist.m3u8"
     },
     {
       "name": "TRT Muzik",
       "logo": "https://i.ibb.co/4gbPpzC/trt-muzik.png",
-      "group": "3.Müzik",
+      "group": "3. MÜZİK",
       "epgId": "TRTMuzik.tr",
       "url": "https://tv-trtmuzik.medya.trt.com.tr/master_720.m3u8"
     },
     {
       "name": "2. PowerTurk TV",
       "logo": "https://i.ibb.co/xXcBD2C/powerturk.png",
-      "group": "3.Müzik",
+      "group": "3. MÜZİK",
       "epgId": "PowerTurkTV.tr",
       "url": "https://livetv.powerapp.com.tr/powerturkTV/powerturkhd.smil/chunks.m3u8"
     },
     {
       "name": "2. Power TV",
       "logo": "https://i.ibb.co/JrXDQJy/power-tv.png",
-      "group": "3.Müzik",
+      "group": "3. MÜZİK",
       "epgId": "PowerTV.tr",
       "url": "https://livetv.powerapp.com.tr/powerTV/powerhd.smil/chunks.m3u8"
     },
     {
       "name": "2. POWER TURK TAPTAZE",
       "logo": "https://i.ibb.co/F5K5xs9/powerturk-taptaze.png",
-      "group": "3.Müzik",
+      "group": "3. MÜZİK",
       "epgId": "",
       "url": "http://livetv.powerapp.com.tr/pturktaptaze/taptaze.smil/playlist.m3u8"
     },
     {
       "name": "2.POWER DANCE",
       "logo": "https://i.ibb.co/5hwZ7xw/power-dance.png",
-      "group": "3.Müzik",
+      "group": "3. MÜZİK",
       "epgId": "",
       "url": "https://listen.powerapp.com.tr/dance/dance.smil/chunks.m3u8"
     },
     {
       "name": "2. POWER LOVE",
       "logo": "https://i.ibb.co/bJL1VnX/power-love.png",
-      "group": "3.Müzik",
+      "group": "3. MÜZİK",
       "epgId": "",
       "url": "https://listen.powerapp.com.tr/plove/love.smil/chunks.m3u8"
     },
     {
       "name": "2. POWER TURK AKUSTIK",
       "logo": "https://i.ibb.co/XFY7dCW/powerturk-akustik.png",
-      "group": "3.Müzik",
+      "group": "3. MÜZİK",
       "epgId": "",
       "url": "https://listen.powerapp.com.tr/pturkakustik/akustik.smil/chunks.m3u8"
     },
     {
       "name": "2. POWER TURK SLOW",
       "logo": "https://i.ibb.co/R4pcKqK/powerturk-slow.png",
-      "group": "3.Müzik",
+      "group": "3. MÜZİK",
       "epgId": "",
       "url": "https://listen.powerapp.com.tr/pturkslow/slow.smil/chunks.m3u8"
     },
@@ -520,14 +520,14 @@
       "name": "1. TRT 1",
       "url": "https://tv-trt1.medya.trt.com.tr/master_720.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4a/TRT1_Logo_2020-2021.jpg?20200512090317",
-      "group": "1.Ulusal",
+      "group": "1. ULUSAL",
       "epgId": ""
     },
     {
       "name": "9. ATV HD",
       "url": "https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/atv/atv.m3u8",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/ATV.tr.png",
-      "group": "1.Ulusal",
+      "group": "1. ULUSAL",
       "epgId": ""
     },
    
@@ -535,35 +535,35 @@
       "name": "7. KANAL 7",
       "url": "https://kanal7-live.daioncdn.net/kanal7/kanal7_1080p.m3u8",
       "logo": "https://i.ibb.co/DPVDgvqn/Ads-z-tasar-m-1.png",
-      "group": "1.Ulusal",
+      "group": "1. ULUSAL",
       "epgId": ""
     },
     {
       "name": "6. BEYAZ TV",
       "url": "https://beyaztv-live.daioncdn.net/beyaztv/beyaztv.m3u8",
       "logo": "https://i.ibb.co/JWMb2kcp/Ads-z-tasar-m-4.png",
-      "group": "1.Ulusal",
+      "group": "1. ULUSAL",
       "epgId": ""
     },
     {
       "name": "21. Tv 360",
       "url": "https://turkmedya-live.ercdn.net/tv360/tv360_720p.m3u8",
       "logo": "https://i.ibb.co/s3gJCGL/360.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": ""
     },
     {
       "name": "TV 4",
       "url": "https://turkmedya-live.ercdn.net/tv4/tv4_720p.m3u8",
       "logo": "https://i.ibb.co/5XGy07B3/Ads-z-tasar-m-5.png",
-      "group": "1.Ulusal",
+      "group": "1. ULUSAL",
       "epgId": ""
     },
     {
       "name": "TIVI 6",
       "url": "https://live.artidijitalmedya.com/artidijital_tivi6/tivi6/playlist.m3u8",
       "logo": "https://i.ibb.co/2Y3YGXg4/Ads-z-tasar-m-6.png",
-      "group": "1.Ulusal",
+      "group": "1. ULUSAL",
       "epgId": ""
     },
     {
@@ -591,28 +591,28 @@
       "name": "7. TRT HABER",
       "url": "https://tv-trthaber.medya.trt.com.tr/master_720.m3u8",
       "logo": "https://i.ibb.co/LzcNGmm8/unnamed.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": ""
     },
     {
       "name": "4. HABERTURK",
       "url": "https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/haberturktv/haberturktv.m3u8",
       "logo": "https://i.ibb.co/Q79Lh4Cb/Ads-z-tasar-m-9.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": ""
     },
     {
       "name": "10. TV 24 HD",
       "url": "https://turkmedya-live.ercdn.net/tv24/tv24.m3u8",
       "logo": "https://i.ibb.co/tHQpWvn/24.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": ""
     },
     {
       "name": "9. TVNET",
       "url": "https://mn-nl.mncdn.com/tvnet/tvnet/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Tvnet_logo_%282022%29.svg/960px-Tvnet_logo_%282022%29.svg.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": ""
     },
  
@@ -620,63 +620,63 @@
       "name": "8. AKIT TV",
       "youtubeId": "X8Ib4ype8w8",
       "logo": "https://i.ibb.co/3mPpV9kp/Ads-z-tasar-m-11.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": ""
     },
     {
       "name": "6. TGRT HABER HD",
       "url": "https://canli.tgrthaber.com/tgrt.m3u8",
       "logo": "https://i.ibb.co/KYdPPbs/Ads-z-tasar-m-13.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": ""
     },
     {
       "name": "6. TGRT HABER HD",
       "youtubeId": "0SAUIyvNA5s",
       "logo": "https://i.ibb.co/KYdPPbs/Ads-z-tasar-m-13.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": ""
     },
     {
       "name": "22. TURKHABER",
       "url": "https://edge1.socialsmart.tv/turkhaber/bant1/playlist.m3u8",
       "logo": "https://i.ibb.co/1JMFDj8X/Ads-z-tasar-m-14.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": ""
     },
     {
       "name": "1. NR1",
       "url": "https://b01c02nl.mediatriple.net/videoonlylive/mtkgeuihrlfwlive/u_stream_5c9e17cd6360b_1/playlist.m3u8",
       "logo": "https://i.ibb.co/YBqnDxdN/Ads-z-tasar-m-17.png",
-      "group": "3.Müzik",
+      "group": "3. MÜZİK",
       "epgId": ""
     },
     {
       "name": "2. POWER TURK",
       "url": "https://livetv.powerapp.com.tr/powerturkTV/powerturkhd.smil/playlist.m3u8",
       "logo": "https://i.ibb.co/xXcBD2C/powerturk.png",
-      "group": "3.Müzik",
+      "group": "3. MÜZİK",
       "epgId": ""
     },
     {
       "name": "TRT Diyanet Çocuk",
       "url": "https://tv-trtdiyanetcocuk.medya.trt.com.tr/master.m3u8",
       "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNwBQtkeuk0a1Ofxhin7lGP_VtWNecIwOsSA&s",
-      "group": "Çocuk & Eğitim",
+      "group": "4. ÇOCUK",
       "epgId": ""
     },
     {
       "name": "MinikaGo",
       "url": "https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/minikago/minikago_720p.m3u8",
       "logo": "https://i.ibb.co/2ZwxWr0/minika-go.png",
-      "group": "Çocuk & Eğitim",
+      "group": "4. ÇOCUK",
       "epgId": ""
     },
     {
       "name": "Disney JR HD",
       "url": "https://saran-live.ercdn.net/disneyjunior/index.m3u8",
       "logo": "https://www.citypng.com/public/uploads/preview/hd-disney-junior-logo-transparent-png-701751694774905qihesgpohf.png",
-      "group": "Çocuk & Eğitim",
+      "group": "4. ÇOCUK",
       "epgId": ""
     },
     {
@@ -690,7 +690,7 @@
       "name": "1. A HABER HD",
       "youtubeId": "nmY9i63t6qo",
       "logo": "https://st01.ahaber.com.tr/images/logo.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": ""
     },
     {
@@ -704,252 +704,252 @@
       "name": "Kral Şakir TV",
       "youtubeId": "5Whk9MVTpI4",
       "logo": "https://i.ytimg.com/vi/5Whk9MVTpI4/sddefault.jpg",
-      "group": "Çocuk & Eğitim",
+      "group": "4. ÇOCUK",
       "epgId": ""
     },
     {
       "name": "Cartoonito Türkiye",
       "youtubeId": "XDSd6m4SauI",
       "logo": "https://i.ytimg.com/vi/XDSd6m4SauI/sddefault.jpg",
-      "group": "Çocuk & Eğitim",
+      "group": "4. ÇOCUK",
       "epgId": ""
     },
     {
       "name": "2. CNN Türk",
       "youtubeId": "6N8_r2uwLEc",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/5/59/CNN_T%C3%BCrk_logo.svg",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": ""
     },
     {
       "name": "5. Haber Global",
       "youtubeId": "EqoCJ8BPxtE",
       "logo": "https://i.haberglobal.com/storage/files/images/2022/01/11/mikrofon-logo-1-1-QENs.png",
-      "group": "2.Haber",
+      "group": "2. HABER",
       "epgId": ""
     },
       {
       "name": "Karadeniz Akustik",
       "youtubeId": "Fru_Ss-TqgY",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
      {
       "name": "Karadeniz ",
       "youtubeId": "PV1kDalcvVE",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Krdnz Mahsup 1 ",
       "youtubeId": "HtjN3qFzMok",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Krdnz Mahsup 3 ",
       "youtubeId": "W8_O05NhE2g",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Krdnz Mahsup 4 ",
       "youtubeId": "O93oqCdJGao",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Krdnz Mahsup 5 ",
       "youtubeId": "8M1aKEQggNw",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Krdnz Mahsup 6 ",
       "youtubeId": "Sq1c2ZB6gfA",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Krdnz Mahsup 2 ",
       "youtubeId": "SZp-OERwFbQ",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "1. Karadeniz 2 ",
       "youtubeId": "kQ8RDCrZ_qg",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Onay Şahin bi baktım ",
       "youtubeId": "T8MFKICcJF8",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Fuat Saka Torul ",
       "youtubeId": "-XNoI12npcg",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Kemençe ",
       "youtubeId": "bEwyzIEoD5M",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Şükrü Güler- horon ",
       "youtubeId": "Q0khMZWqyW4",
       "X-logo": "https://i.ytimg.com/vi/Fru_Ss-TqgY/sddefault.jpg",
-      "group": "6.KRDNZ",
+      "group": "6. KRDNZ",
       "epgId": ""
     },
     {
       "name": "Yardımcı Arabalar",
       "youtubeId": "SGeZDZ7TmlY",
       "logo": "https://i.ytimg.com/vi/SGeZDZ7TmlY/sddefault.jpg",
-      "group": "Çocuk & Eğitim",
+      "group": "4. ÇOCUK",
       "epgId": ""
     },
     {
       "name": "Kamyon Leo",
       "youtubeId": "zgfG4VFFjsk",
       "logo": "https://i.ytimg.com/vi/zgfG4VFFjsk/sddefault.jpg",
-      "group": "Çocuk & Eğitim",
+      "group": "4. ÇOCUK",
       "epgId": ""
     },
     {
       "name": "Diyanet Çocuk",
       "youtubeId": "nJj2jjIU2go",
       "logo": "https://i.ytimg.com/vi/nJj2jjIU2go/sddefault.jpg",
-      "group": "Çocuk & Eğitim",
+      "group": "4. ÇOCUK",
       "epgId": ""
     },
     {
       "name": "Mucize Uğurböceği",
       "youtubeId": "-MNPBH_YF5M",
       "logo": "https://i.ytimg.com/vi/-MNPBH_YF5M/sddefault.jpg",
-      "group": "Çocuk & Eğitim",
+      "group": "4. ÇOCUK",
       "epgId": ""
     },
     {
       "name": "Robocar Poli",
       "youtubeId": "l0Fx4-AHkuk",
       "logo": "https://i.ytimg.com/vi/l0Fx4-AHkuk/sddefault.jpg",
-      "group": "Çocuk & Eğitim",
+      "group": "4. ÇOCUK",
       "epgId": ""
     },
     {
       "name": "Gumball",
       "youtubeId": "WYt1hNo4dYk",
       "logo": "https://i.ytimg.com/vi/WYt1hNo4dYk/sddefault.jpg",
-      "group": "Çocuk & Eğitim",
+      "group": "4. ÇOCUK",
       "epgId": ""
     },
     {
       "name": "Sonbahar",
       "youtubeId": "-ZFtmVIDg9I",
       "logo": "https://i.ytimg.com/vi/-ZFtmVIDg9I/sddefault.jpg",
-      "group": "Rahatlatıcı Müzikler",
+      "group": "3. MÜZİK",
       "epgId": ""
     },
     {
       "name": "Dinlendirici Müzik",
       "youtubeId": "EmdtE7sRMSY",
       "logo": "https://i.ytimg.com/vi/EmdtE7sRMSY/sddefault.jpg",
-      "group": "Rahatlatıcı Müzikler",
+      "group": "3. MÜZİK",
       "epgId": ""
     },
     {
       "name": "Uzay",
       "youtubeId": "fO9e9jnhYK8",
       "logo": "https://i.ytimg.com/vi/fO9e9jnhYK8/sddefault.jpg",
-      "group": "Rahatlatıcı Müzikler",
+      "group": "3. MÜZİK",
       "epgId": ""
     },
     {
       "name": "Relaxing Music",
       "youtubeId": "wwya7JCD5_0",
       "logo": "https://i.ytimg.com/vi/wwya7JCD5_0/sddefault.jpg",
-      "group": "Rahatlatıcı Müzikler",
+      "group": "3. MÜZİK",
       "epgId": ""
     },
     {
       "name": "Relaxing Jazz Music",
       "youtubeId": "fTb6yJ7AlT8",
       "logo": "https://i.ytimg.com/vi/fTb6yJ7AlT8/sddefault.jpg",
-      "group": "Rahatlatıcı Müzikler",
+      "group": "3. MÜZİK",
       "epgId": ""
     },
     {
       "name": "The Nature Within",
       "youtubeId": "zUmUu7RB-ms",
       "logo": "https://i.ytimg.com/vi/zUmUu7RB-ms/sddefault.jpg",
-      "group": "Rahatlatıcı Müzikler",
+      "group": "3. MÜZİK",
       "epgId": ""
     },
     {
       "name": "Deep Focus 7/24",
       "youtubeId": "_bLX5WfDQfM",
       "logo": "https://i.ytimg.com/vi/_bLX5WfDQfM/sddefault.jpg",
-      "group": "Rahatlatıcı Müzikler",
+      "group": "3. MÜZİK",
       "epgId": ""
     },
     {
       "name": "Relaxing Music 24/7",
       "youtubeId": "CkchxBUtXu4",
       "logo": "https://i.ytimg.com/vi/CkchxBUtXu4/sddefault.jpg",
-      "group": "Rahatlatıcı Müzikler",
+      "group": "3. MÜZİK",
       "epgId": ""
     },
     {
       "name": "Meditation Radio",
       "youtubeId": "i9Yjozs750c",
       "logo": "https://i.ytimg.com/vi/i9Yjozs750c/sddefault.jpg",
-      "group": "Rahatlatıcı Müzikler",
+      "group": "3. MÜZİK",
       "epgId": ""
     },
     {
       "name": "Enstrümantal",
       "youtubeId": "EmdtE7sRMSY",
       "logo": "https://i.ytimg.com/vi/EmdtE7sRMSY/sddefault.jpg",
-      "group": "Rahatlatıcı Müzikler",
+      "group": "3. MÜZİK",
       "epgId": ""
     },
     {
       "name": "Ibiza Summer Mix",
       "youtubeId": "UoXPNB7zmxk",
       "logo": "https://i.ytimg.com/vi/UoXPNB7zmxk/sddefault.jpg",
-      "group": "Rahatlatıcı Müzikler",
+      "group": "3. MÜZİK",
       "epgId": ""
     },
     {
       "name": "Akustik Türküler",
       "youtubeId": "_qm_JqY-6OI",
       "X-logo": "https://i.ytimg.com/vi/_qm_JqY-6OI/sddefault.jpg",
-      "group": "3.Müzik",
+      "group": "3. MÜZİK",
       "epgId": ""
     },
     {
       "name": "8. TV8",
       "url": "https://rkhubpaomb.turknet.ercdn.net/fwjkgpasof/tv8/tv8.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/tr/thumb/6/68/Tv8_Yeni_Logo.png/250px-Tv8_Yeni_Logo.png",
-      "group": "1.Ulusal",
+      "group": "1. ULUSAL",
       "epgId": ""
             }
       ]
