@@ -83,7 +83,6 @@
     flex-shrink: 0;
   }
 
-  /* Kanal listesi altındaki buton alanı kadar (56px) boşluk bırakıldı */
   .channel-list {
     overflow-y: auto;
     flex: 1;
@@ -193,7 +192,7 @@
 
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ══ NEW: SIDEBAR SOL ALT BUTON PANELİ ══ */
+  /* ══ SOL SİDEBAR BUTON ALANI (NORMAL MOD) ══ */
   .sidebar-ctrl {
     position: absolute;
     bottom: 0; left: 0; width: 100%;
@@ -204,7 +203,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 6px;
-    z-index: 10;
+    z-index: 999;
   }
 
   .sidebar-ctrl .cb {
@@ -252,7 +251,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-bottom: 32px; /* İnce kategori barı için ideal pay */
+    padding-bottom: 32px; 
   }
 
   .player-idle {
@@ -279,7 +278,7 @@
 
   .yt-container { position: absolute; inset: 0; border: none; padding-bottom: 32px; }
 
-  /* ══ ALT KATEGORİ BARI (ORİJİNAL İNCE HALİ) ══ */
+  /* ══ ALT KATEGORİ BARI (İNCE HALİ) ══ */
   .ctrl-bar {
     background: var(--bg2);
     border-top: 1px solid var(--border);
@@ -293,7 +292,7 @@
     position: fixed;
     bottom: 0;
     right: 0;
-    left: 185px; /* Sidebar genişliği kadar sağdan başlar */
+    left: 185px; 
     height: 32px; 
     box-shadow: 0 -4px 10px rgba(0,0,0,0.4);
   }
@@ -356,28 +355,30 @@
   }
   .toast.show { opacity: 1; transform: translateY(0); }
 
-  /* ══ TAM EKRAN MODU AYARLARI ══ */
+  /* ══ 🔥 TAM EKRANDA BUTONLARIN KAYBOLMASINI ÖNLEYEN CSS 🔥 ══ */
   .player-wrap:fullscreen .player-ratio,
   .player-wrap:-webkit-full-screen .player-ratio { padding-bottom: 0; }
   
   .player-wrap:fullscreen .yt-container,
   .player-wrap:-webkit-full-screen .yt-container { padding-bottom: 0; }
 
-  /* Tam ekranda butonlar sağ alta şık bir kontrol paneli olarak yerleşir */
+  /* Tam ekrana geçildiğinde sol alttaki butonları sağ alta, video üstüne kusursuz sabitler */
   .player-wrap:fullscreen .sidebar-ctrl,
   .player-wrap:-webkit-full-screen .sidebar-ctrl {
     position: absolute !important;
-    bottom: 24px !important;
-    left: 24px !important;
-    width: 220px !important; 
-    height: 54px !important;
-    background: rgba(14, 19, 24, 0.9) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    border-radius: 10px !important;
-    padding: 6px !important;
-    backdrop-filter: blur(12px) !important;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.7) !important;
-    z-index: 2147483647 !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    left: auto !important;
+    width: 200px !important; 
+    height: 50px !important;
+    background: rgba(14, 19, 24, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 8px !important;
+    padding: 4px !important;
+    backdrop-filter: blur(10px) !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.7) !important;
+    z-index: 2147483647 !important; /* En üst katmanda kalmasını garanti eder */
+    display: flex !important;
   }
 
   .player-wrap:fullscreen .ctrl-bar,
@@ -409,6 +410,7 @@
       </div>
     </div>
 
+    <!-- Kontrol Butonları -->
     <div class="sidebar-ctrl" id="actionButtons">
       <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
       <button class="cb" onclick="nextCh()" title="Sonraki (→)">⏭</button>
