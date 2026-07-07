@@ -192,7 +192,6 @@
 
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ══ SOL SİDEBAR BUTON ALANI (NORMAL MOD) ══ */
   .sidebar-ctrl {
     position: absolute;
     bottom: 0; left: 0; width: 100%;
@@ -279,7 +278,6 @@
 
   .yt-container { position: absolute; inset: 0; border: none; padding-bottom: 30px; }
 
-  /* ══ ALT KATEGORİ BARI (İNCE HALİ) ══ */
   .ctrl-bar {
     background: var(--bg2);
     border-top: 1px solid var(--border);
@@ -313,7 +311,6 @@
 
   .cat-bar::-webkit-scrollbar { height: 0px; display: none; }
 
-  /* Kategoriler Dikdörtgen Yapıldı ve Yer Kazanmak İçin Optimize Edildi */
   .cat-pill {
     background: #1c2530; 
     border: 1px solid rgba(255, 255, 255, 0.18); 
@@ -321,7 +318,7 @@
     font-family: 'DM Sans', sans-serif;
     font-size: 11px; font-weight: 700; 
     padding: 3px 10px; 
-    border-radius: 3px; /* Bombeli yapı yerine keskin modern dikdörtgen */
+    border-radius: 3px; 
     cursor: pointer;
     white-space: nowrap;
     transition: all .2s;
@@ -357,7 +354,6 @@
   }
   .toast.show { opacity: 1; transform: translateY(0); }
 
-  /* ══ TAM EKRAN MODUNDA PANEL KESKİNLİĞİ VE PARLAKLIĞI ══ */
   .player-wrap:fullscreen .player-ratio,
   .player-wrap:-webkit-full-screen .player-ratio { padding-bottom: 0; }
   
@@ -382,7 +378,6 @@
     opacity: 0.35 !important;
   }
 
-  /* İşaretler maksimum beyazlıkta ve parlayacak şekilde netleştirildi */
   .player-ratio .sidebar-ctrl .cb {
     height: 34px !important;
     font-size: 15px !important;
@@ -398,7 +393,6 @@
     opacity: 1.0 !important;
   }
 
-  /* İstek üzerine: Kategori barı tam ekranda kesinlikle görünmez */
   .player-wrap:fullscreen .ctrl-bar,
   .player-wrap:-webkit-full-screen .ctrl-bar { display: none !important; }
 
@@ -505,7 +499,6 @@ function showControlsTemporarily() {
 
     clearTimeout(hideTimeout);
     
-    // Hareketsizlik halinde 3 saniye sonra barları uçurur
     hideTimeout = setTimeout(() => {
       btnPanel.classList.add("hide-controls");
       if (videoEl) {
@@ -596,18 +589,7 @@ Promise.all(fetchM3uPromises)
       return;
     }
 
-    allChannels.sort((a, b) => {
-      const numA = parseInt(a.name.match(/^\d+/)?.[0], 10);
-      const numB = parseInt(b.name.match(/^\d+/)?.[0], 10);
-
-      if (!isNaN(numA) && !isNaN(numB)) {
-        return numA - numB;
-      }
-      if (!isNaN(numA)) return -1;
-      if (!isNaN(numB)) return 1;
-      
-      return a.name.localeCompare(b.name, 'tr', { sensitivity: 'base' });
-    });
+    allChannels.sort((a, b) => a.name.localeCompare(b.name, 'tr', { sensitivity: 'base' }));
 
     buildCats();
     renderList();
@@ -624,10 +606,16 @@ function getSmartGroup(groupName) {
 
 function buildCats() {
   const mappedGroups = allChannels.map(c => getSmartGroup(c.group));
-  const groups = ["", ...new Set(mappedGroups)];
+  // Sıralama düzeltildi: Sayısal başlığı olanları rakamsal sırala
+  const groups = [...new Set(mappedGroups)].sort((a, b) => {
+    const numA = parseInt(a, 10);
+    const numB = parseInt(b, 10);
+    if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+    return a.localeCompare(b);
+  });
   
   const bar = document.getElementById("catBar");
-  bar.innerHTML = groups.map((g, i) =>
+  bar.innerHTML = ["", ...groups].map((g, i) =>
     `<button class="cat-pill ${i === 0 ? "active" : ""}" onclick="filterCat('${g.replace(/'/g,"\\'")}',this)">${i === 0 ? "Tümü" : g}</button>`
   ).join("");
 
@@ -723,7 +711,7 @@ function renderList() {
       : `<span>📺</span>`;
       
     const badge = ch.youtubeId ? `<span class="yt-badge">YOUTUBE</span>` : `<span class="live-badge">CANLI</span>`;
-   
+    const displayGroup = getSmartGroup(ch.group);
     const u = idKey.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
 
     return `
@@ -785,9 +773,6 @@ function play(idx, useProxy = false) {
     let finalStreamUrl = ch.url;
     if (useProxy || ch.url.includes("daioncdn.net") || ch.url.includes("puhu") || ch.url.includes("startv")) {
       finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
-      console.log("🔒 Özel Tünel Devrede:", finalStreamUrl);
-    } else {
-      console.log("🌐 Doğrudan Bağlantı:", finalStreamUrl);
     }
 
     if (Hls.isSupported()) {
@@ -807,7 +792,6 @@ function play(idx, useProxy = false) {
       hls.on(Hls.Events.ERROR, function (event, data) {
         if (data.fatal) {
           if ((data.details === "manifestLoadError" || data.type === Hls.ErrorTypes.NETWORK_ERROR) && !useProxy) {
-            console.warn("CORS/Erişim engeli tespit edildi! Tünele geçiliyor...");
             play(idx, true);
           } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
             hls.recoverMediaError();
