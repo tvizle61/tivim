@@ -692,21 +692,24 @@ function renderList() {
   if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url || c.youtubeId));
   if (currentCat) list = list.filter(c => getSmartGroup(c.group) === currentCat);
 
-  // 2. Sıralama Mantığı
+  // 2. Sıralama Mantığı (Sayısal Düzeltme)
   list.sort((a, b) => {
     const groupA = getSmartGroup(a.group);
     const groupB = getSmartGroup(b.group);
     
-    // Rakamları ayıkla
-    const numA = parseInt(groupA, 10);
-    const numB = parseInt(groupB, 10);
+    // Baştaki rakamı bul (Örn: "10. BELGESEL" -> 10)
+    const matchA = groupA.match(/^(\d+)/);
+    const matchB = groupB.match(/^(\d+)/);
+    
+    const numA = matchA ? parseInt(matchA[1], 10) : 9999;
+    const numB = matchB ? parseInt(matchB[1], 10) : 9999;
 
-    // Eğer ikisi de rakamlıysa rakama göre sırala
-    if (!isNaN(numA) && !isNaN(numB)) {
+    // Eğer her iki grupta da rakam varsa sayısal kıyasla
+    if (numA !== 9999 || numB !== 9999) {
         if (numA !== numB) return numA - numB;
     }
     
-    // Rakam yoksa veya aynıysa isme göre sırala
+    // Rakamlar aynıysa veya rakam yoksa isme göre alfabetik sırala
     return a.name.localeCompare(b.name, 'tr', { sensitivity: 'base' });
   });
 
@@ -720,13 +723,13 @@ function renderList() {
 
   // 3. Liste HTML'ini oluştur
   el.innerHTML = list.map(ch => {
-    const idx   = allChannels.indexOf(ch);
+    const idx = allChannels.indexOf(ch);
     const idKey = ch.url || ch.youtubeId;
     const isAct = currentCh && (currentCh.url === ch.url && currentCh.youtubeId === ch.youtubeId);
     const isFav = favorites.includes(idKey);
     
     const logoSrc = ch.logo || ch["X-logo"];
-    const logo  = logoSrc
+    const logo = logoSrc
       ? `<img src="${logoSrc}" loading="lazy" onerror="this.outerHTML='<span>📺</span>'">`
       : `<span>📺</span>`;
       
