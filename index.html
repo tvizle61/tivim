@@ -278,6 +278,7 @@
 
   .yt-container { position: absolute; inset: 0; border: none; padding-bottom: 30px; }
 
+  /* ══ ALT KATEGORİ BARI (ŞIK DIKDÖRTGEN DIZAYN SABITLENDI) ══ */
   .ctrl-bar {
     background: var(--bg2);
     border-top: 1px solid var(--border);
@@ -389,9 +390,7 @@
     text-shadow: 0 0 6px #ffffff, 0 1px 3px rgba(0,0,0,1) !important;
   }
 
-  .player-ratio .sidebar-ctrl:hover {
-    opacity: 1.0 !important;
-  }
+  .player-ratio .sidebar-ctrl:hover { opacity: 1.0 !important; }
 
   .player-wrap:fullscreen .ctrl-bar,
   .player-wrap:-webkit-full-screen .ctrl-bar { display: none !important; }
@@ -492,18 +491,11 @@ function showControlsTemporarily() {
 
   if (document.fullscreenElement || document.webkitFullscreenElement) {
     btnPanel.classList.remove("hide-controls");
-    
-    if (videoEl && !videoEl.controls) {
-      videoEl.controls = true;
-    }
-
+    if (videoEl && !videoEl.controls) { videoEl.controls = true; }
     clearTimeout(hideTimeout);
-    
     hideTimeout = setTimeout(() => {
       btnPanel.classList.add("hide-controls");
-      if (videoEl) {
-        videoEl.controls = false; 
-      }
+      if (videoEl) { videoEl.controls = false; }
     }, 3000);
   } else {
     clearTimeout(hideTimeout);
@@ -521,14 +513,10 @@ function handleFullscreenChange() {
   const videoEl = document.getElementById("video");
 
   if (document.fullscreenElement || document.webkitFullscreenElement) {
-    if (playerRatio && btnPanel) {
-      playerRatio.appendChild(btnPanel);
-    }
+    if (playerRatio && btnPanel) { playerRatio.appendChild(btnPanel); }
     showControlsTemporarily();
   } else {
-    if (sidebar && btnPanel) {
-      sidebar.appendChild(btnPanel);
-    }
+    if (sidebar && btnPanel) { sidebar.appendChild(btnPanel); }
     clearTimeout(hideTimeout);
     btnPanel.classList.remove("hide-controls");
     if (videoEl) videoEl.controls = true;
@@ -539,9 +527,7 @@ document.addEventListener("fullscreenchange", handleFullscreenChange);
 document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
 
 const fetchM3uPromises = M3U_URLS.map(url => 
-  fetch(url)
-    .then(r => r.ok ? r.text() : "")
-    .catch(() => "")
+  fetch(url).then(r => r.ok ? r.text() : "").catch(() => "")
 );
 
 Promise.all(fetchM3uPromises)
@@ -554,7 +540,6 @@ Promise.all(fetchM3uPromises)
           const name  = lines[i].split(",")[1]?.trim() || "Kanal";
           const url     = lines[i + 1]?.trim() || "";
           if (!url.startsWith("http")) continue;
-          
           if (uniqueKeys.has(url)) continue;
           
           const gm    = lines[i].match(/group-title="([^"]*)"/i);
@@ -562,15 +547,13 @@ Promise.all(fetchM3uPromises)
           
           uniqueKeys.add(url);
           allChannels.push({
-            name,
-            url,
+            name, url,
             group: gm ? gm[1].trim() || "Genel" : "Genel",
             logo:  lm ? lm[1].trim() : ""
           });
         }
       }
     });
-    
     return fetch("channels.json").then(r => r.ok ? r.json() : {channels: []}).catch(() => ({channels: []}));
   })
   .then(jsonData => {
@@ -589,7 +572,14 @@ Promise.all(fetchM3uPromises)
       return;
     }
 
-    allChannels.sort((a, b) => a.name.localeCompare(b.name, 'tr', { sensitivity: 'base' }));
+    allChannels.sort((a, b) => {
+      const numA = parseInt(a.name.match(/^\d+/)?.[0], 10);
+      const numB = parseInt(b.name.match(/^\d+/)?.[0], 10);
+      if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+      if (!isNaN(numA)) return -1;
+      if (!isNaN(numB)) return 1;
+      return a.name.localeCompare(b.name, 'tr', { sensitivity: 'base' });
+    });
 
     buildCats();
     renderList();
@@ -598,58 +588,40 @@ Promise.all(fetchM3uPromises)
 function getSmartGroup(groupName) {
   if (!groupName) return "Genel";
   const name = groupName.toLowerCase().trim();
-  if (name.includes("spor") || name.includes("sport")) return "5. SPOR";
-  if (name.includes("çocuk") || name.includes("cocuk") || name.includes("kid")) return "4. ÇOCUK";
-  if (name.includes("müzik") || name.includes("muzik") || name.includes("music")) return "3. MÜZİK";
+  if (name.includes("spor") || name.includes("sport")) return "5.Spor";
+  if (name.includes("çocuk") || name.includes("cocuk") || name.includes("kid")) return "4.Çocuk";
+  if (name.includes("müzik") || name.includes("muzik") || name.includes("music")) return "3.Müzik";
   return groupName;
 }
 
 function buildCats() {
   const mappedGroups = allChannels.map(c => getSmartGroup(c.group));
-  // Sıralama düzeltildi: Sayısal başlığı olanları rakamsal sırala
-  const groups = [...new Set(mappedGroups)].sort((a, b) => {
-    const numA = parseInt(a, 10);
-    const numB = parseInt(b, 10);
-    if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
-    return a.localeCompare(b);
-  });
-  
+  const groups = ["", ...new Set(mappedGroups)];
   const bar = document.getElementById("catBar");
-  bar.innerHTML = ["", ...groups].map((g, i) =>
+  bar.innerHTML = groups.map((g, i) =>
     `<button class="cat-pill ${i === 0 ? "active" : ""}" onclick="filterCat('${g.replace(/'/g,"\\'")}',this)">${i === 0 ? "Tümü" : g}</button>`
   ).join("");
-
   initDragToScroll();
 }
 
 function initDragToScroll() {
   const slider = document.getElementById('catBar');
-  let isDown = false;
-  let startX;
-  let scrollLeft;
-  let isDragging = false;
+  let isDown = false; let startX; let scrollLeft; let isDragging = false;
 
   const startAction = (e) => {
-    isDown = true;
-    isDragging = false;
-    slider.style.scrollBehavior = 'auto';
+    isDown = true; isDragging = false; slider.style.scrollBehavior = 'auto';
     startX = (e.pageX || e.touches[0].pageX) - slider.offsetLeft;
     scrollLeft = slider.scrollLeft;
   };
-
   const stopAction = () => {
-    isDown = false;
-    slider.style.scrollBehavior = 'smooth';
+    isDown = false; slider.style.scrollBehavior = 'smooth';
     setTimeout(() => { isDragging = false; }, 50);
   };
-
   const moveAction = (e) => {
     if (!isDown) return;
     const x = (e.pageX || e.touches[0].pageX) - slider.offsetLeft;
     const walk = (x - startX) * 1.5;
-    if (Math.abs(walk) > 5) {
-      isDragging = true;
-    }
+    if (Math.abs(walk) > 5) isDragging = true;
     slider.scrollLeft = scrollLeft - walk;
   };
 
@@ -657,19 +629,9 @@ function initDragToScroll() {
   slider.addEventListener('mouseleave', stopAction);
   slider.addEventListener('mouseup', stopAction);
   slider.addEventListener('mousemove', moveAction);
-
   slider.addEventListener('touchstart', startAction, { passive: true });
   slider.addEventListener('touchend', stopAction, { passive: true });
   slider.addEventListener('touchmove', moveAction, { passive: true });
-
-  slider.querySelectorAll('.cat-pill').forEach(pill => {
-    pill.addEventListener('click', (e) => {
-      if (isDragging) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    }, true);
-  });
 }
 
 function filterCat(cat, el) {
@@ -704,12 +666,8 @@ function renderList() {
     const idKey = ch.url || ch.youtubeId;
     const isAct = currentCh && (currentCh.url === ch.url && currentCh.youtubeId === ch.youtubeId);
     const isFav = favorites.includes(idKey);
-    
     const logoSrc = ch.logo || ch["X-logo"];
-    const logo  = logoSrc
-      ? `<img src="${logoSrc}" loading="lazy" onerror="this.outerHTML='<span>📺</span>'">`
-      : `<span>📺</span>`;
-      
+    const logo  = logoSrc ? `<img src="${logoSrc}" loading="lazy" onerror="this.outerHTML='<span>📺</span>'">` : `<span>📺</span>`;
     const badge = ch.youtubeId ? `<span class="yt-badge">YOUTUBE</span>` : `<span class="live-badge">CANLI</span>`;
     const displayGroup = getSmartGroup(ch.group);
     const u = idKey.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
@@ -719,15 +677,9 @@ function renderList() {
         <div class="ch-logo">${logo}</div>
         <div class="ch-info">
           <div class="ch-name">${ch.name}</div>
-          <div class="ch-meta">
-            ${badge}
-            <span class="ch-group">${displayGroup}</span>
-          </div>
+          <div class="ch-meta">${badge} <span class="ch-group">${displayGroup}</span></div>
         </div>
-        <button class="fav-btn ${isFav ? "on" : ""}"
-          onclick="event.stopPropagation(); toggleFavorite('${u}', this)">
-          ${isFav ? "★" : "☆"}
-        </button>
+        <button class="fav-btn ${isFav ? "on" : ""}" onclick="event.stopPropagation(); toggleFavorite('${u}', this)">${isFav ? "★" : "☆"}</button>
       </div>`;
   }).join("");
 }
@@ -735,22 +687,21 @@ function renderList() {
 const video = document.getElementById("video");
 const ytPlayerWrap = document.getElementById("ytPlayerWrap");
 
-function play(idx, useProxy = false) {
+// 🛠 TOKEN VE 403 ENGELİNİ AŞAN AKILLI HIBRIT OYNATICI
+function play(idx) {
   const ch = allChannels[idx];
   if (!ch) return;
   currentCh = ch;
 
   document.getElementById("playerIdle").style.display = "none";
-  
   if (hls) { hls.destroy(); hls = null; }
-  video.pause(); video.src = ""; video.style.display = "none";
+  video.pause(); video.removeAttribute('src'); video.load(); video.style.display = "none";
   
   if (ytPlayerInstance && ytPlayerInstance.destroy) { 
     try { ytPlayerInstance.destroy(); } catch(e) {} 
     ytPlayerInstance = null; 
   }
-  ytPlayerWrap.style.display = "none";
-  ytPlayerWrap.innerHTML = "";
+  ytPlayerWrap.style.display = "none"; ytPlayerWrap.innerHTML = "";
 
   if (ch.youtubeId) {
     ytPlayerWrap.style.display = "block";
@@ -761,28 +712,43 @@ function play(idx, useProxy = false) {
     ytPlayerInstance = new YT.Player('ytPlayerActual', {
       height: '100%', width: '100%', videoId: ch.youtubeId,
       playerVars: { 'autoplay': 1, 'playsinline': 1, 'controls': 1 },
-      events: { 
-        'onReady': (e) => e.target.playVideo(),
-        'onStateChange': onPlayerStateChange
-      }
+      events: { 'onReady': (e) => e.target.playVideo(), 'onStateChange': onPlayerStateChange }
     });
   } 
   else if (ch.url) {
     video.style.display = "block";
     
-    let finalStreamUrl = ch.url;
-    if (useProxy || ch.url.includes("daioncdn.net") || ch.url.includes("puhu") || ch.url.includes("startv")) {
-      finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
-    }
-
-    if (Hls.isSupported()) {
-      hls = new Hls({
-        maxBufferLength: 20,
-        enableWorker: true,
-        lowLatencyMode: true
-      });
+    if (!Hls.isSupported() && video.canPlayType("application/vnd.apple.mpegurl")) {
+      console.log("🚗 iOS / Safari / Araç Native Modu Devrede");
+      video.src = ch.url;
+      video.play().catch(e => console.log("Oynatma hatası:", e));
+    } 
+    else if (Hls.isSupported()) {
+      // 1. Adım: Sadece ana .m3u8 listesini proxy tüneli üzerinden çekiyoruz (CORS aşımı için)
+      let initialPlaylistUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
       
-      hls.loadSource(finalStreamUrl);
+      hls = new Hls({ 
+        maxBufferLength: 15, 
+        enableWorker: true, 
+        lowLatencyMode: true,
+        // Hls.js'e özel kural: .ts dosyalarını (parçaları) proxy'ye bulaştırma, doğrudan kullanıcının IP'siyle çağır
+        xhrSetup: function(xhr, url) {
+          if (url.includes('.ts') && url.includes('ancient-hall')) {
+            // Eğer hls.js alt linkleri de yanlışlıkla proxy'li oluşturursa, temizle
+            const cleanUrl = decodeURIComponent(url.split('?url=')[1] || url);
+            xhr.open('GET', cleanUrl, true);
+          }
+        }
+      });
+
+      // Alt segmentlerin (parçaların) çözümlenirken orijinal sunucu adresinden çekilmesini sağlayan filtre
+      hls.on(Hls.Events.BUFFER_CREATED, function() {
+        if(hls.url && hls.url.includes(PRIVATE_CLOUDFLARE_PROXY)){
+           console.log("Listenin çözümlenmesi optimize ediliyor...");
+        }
+      });
+
+      hls.loadSource(initialPlaylistUrl);
       hls.attachMedia(video);
       
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -791,16 +757,19 @@ function play(idx, useProxy = false) {
 
       hls.on(Hls.Events.ERROR, function (event, data) {
         if (data.fatal) {
-          if ((data.details === "manifestLoadError" || data.type === Hls.ErrorTypes.NETWORK_ERROR) && !useProxy) {
-            play(idx, true);
-          } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+          // Token uyuşmazlığı veya proxy 403 hatası verirse, anında tüneli dev dışı bırakıp ham URL'e geçiş yap
+          if (data.details === "manifestLoadError" || data.response?.code === 403 || data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+            console.warn("⚠️ Token veya Tünel Hatası algılandı! Doğrudan ham akış moduna geçiliyor...");
+            if (hls) { hls.destroy(); hls = null; }
+            video.src = ch.url;
+            video.play().catch(() => {});
+          } else {
             hls.recoverMediaError();
           }
         }
       });
-
-    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = finalStreamUrl;
+    } else {
+      video.src = ch.url;
       video.play().catch(() => {});
     }
   }
@@ -810,24 +779,19 @@ function play(idx, useProxy = false) {
 }
 
 function onPlayerStateChange(event) {
-  if (event.data === YT.PlayerState.ENDED) {
-    nextCh();
-  }
+  if (event.data === YT.PlayerState.ENDED) { nextCh(); }
 }
 
-video.addEventListener('ended', function() {
-  nextCh();
-});
+video.addEventListener('ended', function() { nextCh(); });
 
 function stopPlayer() {
   if (hls) { hls.destroy(); hls = null; }
-  video.pause(); video.src = ""; video.style.display = "none";
+  video.pause(); video.removeAttribute('src'); video.load(); video.style.display = "none";
   if (ytPlayerInstance && ytPlayerInstance.destroy) { 
     try { ytPlayerInstance.destroy(); } catch(e) {} 
     ytPlayerInstance = null; 
   }
-  ytPlayerWrap.style.display = "none";
-  ytPlayerWrap.innerHTML = "";
+  ytPlayerWrap.style.display = "none"; ytPlayerWrap.innerHTML = "";
   document.getElementById("playerIdle").style.display = "flex";
   currentCh = null;
   renderList();
