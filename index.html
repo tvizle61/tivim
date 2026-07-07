@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌟 ARAC TV & YOUTUBE PLAYER </title>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<title>🌟 ARAC TV PLAYER (DIRECT NATIVE) </title>
 <script src="https://www.youtube.com/iframe_api"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -27,15 +26,6 @@
     color: var(--text);
     min-height: 100vh;
     overflow-x: hidden;
-  }
-
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.4;
   }
 
   .app {
@@ -68,10 +58,8 @@
     color: var(--muted);
     font-family: 'DM Sans', sans-serif;
     font-size: 10px; font-weight: 600;
-    letter-spacing: 0.3px; text-transform: uppercase;
     padding: 10px 2px;
     cursor: pointer;
-    transition: all .2s;
   }
 
   .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
@@ -80,7 +68,6 @@
     padding: 4px 8px 1px;
     font-size: 10px;
     color: var(--muted);
-    flex-shrink: 0;
   }
 
   .channel-list {
@@ -89,108 +76,41 @@
     padding: 3px 4px 56px; 
   }
 
-  .channel-list::-webkit-scrollbar { width: 4px; }
-  .channel-list::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
-
   .channel {
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 5px 6px;
+    padding: 6px;
     border-radius: 6px;
     margin-bottom: 3px;
     cursor: pointer;
-    border: 1px solid transparent;
-    transition: all .2s;
     background: rgba(255,255,255,0.02);
-    width: 100%;
   }
-
-  .channel:hover { background: var(--bg3); }
 
   .channel.active {
     background: rgba(232,55,61,.15);
-    border: 1.5px solid var(--accent) !important;
+    border: 1.5px solid var(--accent);
   }
 
   .ch-logo {
     width: 24px; height: 24px;
     border-radius: 4px;
     background: var(--bg3);
-    border: 1px solid var(--border);
     display: flex; align-items: center; justify-content: center;
     font-size: 12px;
-    flex-shrink: 0;
     overflow: hidden;
   }
 
-  .ch-logo img {
-    width: 100%; height: 100%;
-    object-fit: contain;
-    padding: 1px;
-    background: #0e1318;
-  }
-
+  .ch-logo img { width: 100%; height: 100%; object-fit: contain; }
   .ch-info { flex: 1; min-width: 0; }
+  .ch-name { font-size: 10px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ch-meta { display: flex; align-items: center; gap: 4px; margin-top: 1px; }
+  .live-badge { background: var(--accent); color: #fff; font-size: 7px; font-weight: 700; padding: 1px 3px; border-radius: 2px; }
+  .yt-badge { background: #ff0000; color: #fff; font-size: 7px; font-weight: 700; padding: 1px 3px; border-radius: 2px; }
+  .ch-group { font-size: 9px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  .ch-name {
-    font-size: 10px; font-weight: 600;
-    color: var(--text);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.2;
-  }
-
-  .ch-meta {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    margin-top: 1px;
-    line-height: 1;
-  }
-
-  .live-badge { background: var(--accent); color: #fff; font-size: 7px; font-weight: 700; padding: 1px 3px; border-radius: 2px; flex-shrink: 0; }
-  .yt-badge { background: #ff0000; color: #fff; font-size: 7px; font-weight: 700; padding: 1px 3px; border-radius: 2px; flex-shrink: 0; }
-
-  .ch-group {
-    font-size: 9px; color: var(--muted);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-
-  .fav-btn {
-    background: none; border: none;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 11px;
-    transition: color .2s, transform .2s;
-    flex-shrink: 0;
-    padding: 1px;
-    line-height: 1;
-  }
-
-  .fav-btn:hover  { color: var(--gold); transform: scale(1.1); }
-  .fav-btn.on     { color: var(--gold); }
-
-  .loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    padding: 40px 20px;
-    color: var(--muted);
-    font-size: 11px;
-  }
-
-  .spin {
-    width: 24px; height: 24px;
-    border: 2px solid var(--bg3);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin .8s linear infinite;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
+  .fav-btn { background: none; border: none; color: var(--muted); font-size: 11px; cursor: pointer; }
+  .fav-btn.on { color: var(--gold); }
 
   .sidebar-ctrl {
     position: absolute;
@@ -200,263 +120,107 @@
     border-top: 1px solid var(--border);
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 0 6px;
-    z-index: 999;
-    transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
   .sidebar-ctrl .cb {
-    flex: 1;
-    height: 40px;
-    margin: 0 2px;
+    flex: 1; height: 40px; margin: 0 2px;
+    background: var(--bg3); border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text); cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 14px;
     border-radius: 5px;
-    background: var(--bg3);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: var(--text);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    transition: all .2s ease;
   }
 
-  .sidebar-ctrl .cb:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .sidebar-ctrl .cb.danger:hover { background: #c0392b; border-color: #c0392b; }
-
-  .main {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background: #000;
-    overflow: hidden;
-  }
-
-  .player-wrap { 
-    position: relative; 
-    background: #000; 
-    flex: 1; 
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
+  .main { display: flex; flex-direction: column; height: 100vh; background: #000; }
+  .player-wrap { position: relative; background: #000; flex: 1; display: flex; flex-direction: column; }
+  
   .player-ratio {
-    position: relative;
-    width: 100%;
-    flex: 1;
-    background: #000;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-bottom: 30px; 
+    position: relative; width: 100%; flex: 1; background: #000;
+    display: flex; align-items: center; justify-content: center; padding-bottom: 30px; 
   }
 
   .player-idle {
     position: absolute; inset: 0;
     background: radial-gradient(ellipse at center, #0d1520 0%, #000 70%);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 16px;
-    z-index: 2;
-    padding-bottom: 30px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
   }
 
-  .idle-icon { font-size: 64px; opacity: .13; animation: breathe 3s ease-in-out infinite; }
-  @keyframes breathe { 0%,100% { opacity:.08; transform:scale(1); } 50% { opacity:.2; transform:scale(1.05); } }
   .idle-txt { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 4px; color: var(--muted); }
 
-  #video, .yt-container {
-    width: 100%; 
-    height: 100%;
-    background: #000;
-    display: none;
-    object-fit: fill; 
-  }
-
+  #video, .yt-container { width: 100%; height: 100%; background: #000; display: none; object-fit: fill; }
   .yt-container { position: absolute; inset: 0; border: none; padding-bottom: 30px; }
 
   .ctrl-bar {
-    background: var(--bg2);
-    border-top: 1px solid var(--border);
-    padding: 0 8px; 
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    flex-shrink: 0;
-    z-index: 9;
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    left: 185px; 
-    height: 30px; 
-    box-shadow: 0 -4px 10px rgba(0,0,0,0.4);
+    background: var(--bg2); border-top: 1px solid var(--border);
+    position: fixed; bottom: 0; right: 0; left: 185px; height: 30px; 
+    display: flex; align-items: center; padding: 0 8px; z-index: 9;
   }
 
-  .cat-bar {
-    display: flex;
-    gap: 4px;
-    padding: 2px 0; 
-    overflow-x: auto;
-    flex: 1;
-    align-items: center;
-    user-select: none;
-    cursor: grab;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .cat-bar::-webkit-scrollbar { height: 0px; display: none; }
+  .cat-bar { display: flex; gap: 4px; overflow-x: auto; flex: 1; align-items: center; }
+  .cat-bar::-webkit-scrollbar { display: none; }
 
   .cat-pill {
-    background: #1c2530; 
-    border: 1px solid rgba(255, 255, 255, 0.18); 
-    color: #ffffff !important; 
-    font-family: 'DM Sans', sans-serif;
-    font-size: 11px; font-weight: 700; 
-    padding: 3px 10px; 
-    border-radius: 3px; 
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all .2s;
-    text-shadow: 0px 1px 2px rgba(0,0,0,0.8); 
+    background: #1c2530; border: 1px solid rgba(255, 255, 255, 0.18); color: #fff; 
+    font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 3px; cursor: pointer; white-space: nowrap;
   }
 
-  .cat-pill.active, .cat-pill:hover {
-    background: #ffffff !important; 
-    border-color: #ffffff !important;
-    color: #000000 !important; 
-    text-shadow: none;
-    font-weight: 800;
-  }
+  .cat-pill.active { background: #fff; color: #000; font-weight: 800; }
 
-  .toast {
-    position: fixed;
-    bottom: 45px;
-    right: 24px;
-    background: rgba(14, 19, 24, 0.9);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 500;
-    z-index: 999999;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.3s ease;
-    pointer-events: none;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
-
-  .player-wrap:fullscreen .player-ratio,
-  .player-wrap:-webkit-full-screen .player-ratio { padding-bottom: 0; }
-  
-  .player-wrap:fullscreen .yt-container,
-  .player-wrap:-webkit-full-screen .yt-container { padding-bottom: 0; }
-
-  .player-ratio .sidebar-ctrl {
-    position: absolute !important;
-    bottom: 12px !important;
-    left: 12px !important;
-    right: auto !important;
-    width: 170px !important;
-    height: 44px !important;
-    background: rgba(8, 11, 16, 0.5) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    border-radius: 4px !important;
-    padding: 0 3px !important;
-    backdrop-filter: blur(8px) !important;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.6) !important;
-    z-index: 2147483647 !important;
-    display: flex !important;
-    opacity: 0.35 !important;
-  }
-
-  .player-ratio .sidebar-ctrl .cb {
-    height: 34px !important;
-    font-size: 15px !important;
-    color: #ffffff !important; 
-    opacity: 1 !important;
-    font-weight: 900 !important;
-    background: rgba(20, 26, 34, 0.95) !important;
-    border: 1px solid rgba(255, 255, 255, 0.5) !important; 
-    text-shadow: 0 0 6px #ffffff, 0 1px 3px rgba(0,0,0,1) !important;
-  }
-
-  .player-ratio .sidebar-ctrl:hover { opacity: 1.0 !important; }
-
-  .player-wrap:fullscreen .ctrl-bar,
-  .player-wrap:-webkit-full-screen .ctrl-bar { display: none !important; }
-
-  .hide-controls {
-    opacity: 0 !important;
-    transform: translateY(0) scale(0.85) !important;
-    pointer-events: none !important;
+  /* Araç Ekranı Mod Seçici */
+  .mode-selector {
+    background: #1c2530; border: 1px solid var(--accent); color: var(--accent);
+    font-size: 9px; font-weight: bold; padding: 2px 5px; border-radius: 3px; margin-left: 5px;
   }
 
   @media (max-width: 768px) {
-    .app { grid-template-columns: 1fr; height: auto; min-height: 100vh; }
-    .main { order: 1; height: auto; }
-    .sidebar { order: 2; border-right: none; border-top: 1px solid var(--border); height: 50vh; }
-    .player-ratio { height: 56.25vw; flex: none; padding-bottom: 30px; }
-    .ctrl-bar { position: fixed; bottom: 0; left: 0; width: 100%; }
-    .channel-list { max-height: calc(50vh - 108px); padding-bottom: 56px; }
+    .app { grid-template-columns: 1fr; }
+    .sidebar { height: 50vh; }
+    .player-ratio { height: 56.25vw; padding-bottom: 30px; }
+    .ctrl-bar { left: 0; width: 100%; }
   }
 </style>
 </head>
 <body>
 
 <div class="app">
-  <aside class="sidebar" id="sidebarNode">
+  <aside class="sidebar">
     <div class="sidebar-tabs">
-      <button class="tab-btn active" onclick="switchTab('all', this)">TÜM KANALLAR</button>
-      <button class="tab-btn" onclick="switchTab('fav', this)">⭐ FAVORİLER</button>
+      <button class="tab-btn active" onclick="switchTab('all', this)">KANALLAR</button>
+      <button class="tab-btn" onclick="switchTab('fav', this)">⭐ FAVORİ</button>
     </div>
     <div class="ch-count" id="chCount"></div>
-    <div class="channel-list" id="channelList">
-      <div class="loading">
-        <div class="spin"></div>
-        Kanallar ve Videolar Yükleniyor...
-      </div>
-    </div>
+    <div class="channel-list" id="channelList">Yükleniyor...</div>
 
     <div class="sidebar-ctrl" id="actionButtons">
-      <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
-      <button class="cb" onclick="nextCh()" title="Sonraki (→)">⏭</button>
-      <button class="cb danger" onclick="stopPlayer()" title="Durdur (Esc)">⏹</button>
-      <button class="cb" onclick="toggleFSSmart()" title="Tam Ekran">⛶</button>
+      <button class="cb" onclick="prevCh()">⏮</button>
+      <button class="cb" onclick="nextCh()">⏭</button>
+      <button class="cb" onclick="stopPlayer()">⏹</button>
+      <button class="cb" onclick="toggleFS()">⛶</button>
     </div>
   </aside>
 
   <main class="main">
     <div class="player-wrap" id="playerWrapContainer">
-      <div class="player-ratio" id="playerRatioNode">
+      <div class="player-ratio">
         <div class="player-idle" id="playerIdle">
-          <div class="idle-icon">📺</div>
           <div class="idle-txt">İZLEMEK İÇİN KANAL SEÇİN</div>
         </div>
-        <video id="video" controls playsinline crossorigin="anonymous"></video>
+        <video id="video" controls playsinline autoplay></video>
         <div id="ytPlayerWrap" class="yt-container"></div>
       </div>
-      <div class="ctrl-bar" id="bottomCtrlBar">
-        <div class="cat-bar" id="catBar">
-          <button class="cat-pill active" onclick="filterCat('', this)">Tümü</button>
-        </div>
+      <div class="ctrl-bar">
+        <div class="cat-bar" id="catBar"></div>
+        <select class="mode-selector" id="playModeSelector">
+          <option value="direct" selected>🚗 Araç Modu (Doğrudan)</option>
+          <option value="proxy">💻 PC Modu (Tünel)</option>
+        </select>
       </div>
     </div>
   </main>
 </div>
 
-<div class="toast" id="toast"></div>
-
 <script>
-const PRIVATE_CLOUDFLARE_PROXY = "https://ancient-hall-8d94.deepbluee61.workers.dev/?url=";
-
+const PROXY_URL = "https://ancient-hall-8d94.deepbluee61.workers.dev/?url=";
 const M3U_URLS = [
   "https://raw.githubusercontent.com/kadirsener1/avva/refs/heads/main/pplaylist.m3u",
   "https://raw.githubusercontent.com/tvizle61/tv/refs/heads/main/toplu.m3u",
@@ -464,168 +228,51 @@ const M3U_URLS = [
   "https://raw.githubusercontent.com/tvizle61/plustv/refs/heads/main/ttv1.m3u"
 ];
 
-let hls;
 let ytPlayerInstance = null;
-let favorites   = JSON.parse(localStorage.getItem("favorites") || "[]");
+let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
 let allChannels = [];
-let currentCh   = null;
-let currentTab  = "all";
-let currentCat  = "";
-let hideTimeout; 
-
+let currentCh = null;
+let currentTab = "all";
+let currentCat = "";
 const uniqueKeys = new Set();
 
-function onYouTubeIframeAPIReady() {
-  console.log("YouTube API Hazır.");
-}
+function onYouTubeIframeAPIReady() { console.log("YT Hazır"); }
 
-function showControlsTemporarily() {
-  const btnPanel = document.getElementById("actionButtons");
-  const videoEl = document.getElementById("video");
+const fetchPromises = M3U_URLS.map(url => fetch(url).then(r => r.ok ? r.text() : "").catch(() => ""));
 
-  if (document.fullscreenElement || document.webkitFullscreenElement) {
-    btnPanel.classList.remove("hide-controls");
-    if (videoEl && !videoEl.controls) { videoEl.controls = true; }
-    clearTimeout(hideTimeout);
-    hideTimeout = setTimeout(() => {
-      btnPanel.classList.add("hide-controls");
-      if (videoEl) { videoEl.controls = false; }
-    }, 3000);
-  } else {
-    clearTimeout(hideTimeout);
-    btnPanel.classList.remove("hide-controls");
-    if (videoEl) videoEl.controls = true;
-  }
-}
-
-document.getElementById("playerWrapContainer").addEventListener("mousemove", showControlsTemporarily);
-
-function handleFullscreenChange() {
-  const btnPanel = document.getElementById("actionButtons");
-  const playerRatio = document.getElementById("playerRatioNode");
-  const sidebar = document.getElementById("sidebarNode");
-  const videoEl = document.getElementById("video");
-
-  if (document.fullscreenElement || document.webkitFullscreenElement) {
-    if (playerRatio && btnPanel) { playerRatio.appendChild(btnPanel); }
-    showControlsTemporarily();
-  } else {
-    if (sidebar && btnPanel) { sidebar.appendChild(btnPanel); }
-    clearTimeout(hideTimeout);
-    btnPanel.classList.remove("hide-controls");
-    if (videoEl) videoEl.controls = true;
-  }
-}
-
-document.addEventListener("fullscreenchange", handleFullscreenChange);
-document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
-
-const fetchM3uPromises = M3U_URLS.map(url => 
-  fetch(url).then(r => r.ok ? r.text() : "").catch(() => "")
-);
-
-Promise.all(fetchM3uPromises)
-  .then(m3uResults => {
-    m3uResults.forEach(text => {
-      if (!text) return;
-      const lines = text.split("\n");
-      for (let i = 0; i < lines.length; i++) {
-        if (lines[i].startsWith("#EXTINF")) {
-          const name  = lines[i].split(",")[1]?.trim() || "Kanal";
-          const url     = lines[i + 1]?.trim() || "";
-          if (!url.startsWith("http")) continue;
-          if (uniqueKeys.has(url)) continue;
-          
-          const gm    = lines[i].match(/group-title="([^"]*)"/i);
-          const lm    = lines[i].match(/tvg-logo="([^"]*)"/i);
-          
-          uniqueKeys.add(url);
-          allChannels.push({
-            name, url,
-            group: gm ? gm[1].trim() || "Genel" : "Genel",
-            logo:  lm ? lm[1].trim() : ""
-          });
-        }
+Promise.all(fetchPromises).then(m3uResults => {
+  m3uResults.forEach(text => {
+    if (!text) return;
+    const lines = text.split("\n");
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].startsWith("#EXTINF")) {
+        const name = lines[i].split(",")[1]?.trim() || "Kanal";
+        const url = lines[i + 1]?.trim() || "";
+        if (!url.startsWith("http") || uniqueKeys.has(url)) continue;
+        
+        const gm = lines[i].match(/group-title="([^"]*)"/i);
+        const lm = lines[i].match(/tvg-logo="([^"]*)"/i);
+        
+        uniqueKeys.add(url);
+        allChannels.push({
+          name, url,
+          group: gm ? gm[1].trim() : "Genel",
+          logo: lm ? lm[1].trim() : ""
+        });
       }
-    });
-    return fetch("channels.json").then(r => r.ok ? r.json() : {channels: []}).catch(() => ({channels: []}));
-  })
-  .then(jsonData => {
-    if (jsonData && jsonData.channels) {
-      jsonData.channels.forEach(ch => {
-        const idKey = ch.url || ch.youtubeId;
-        if (idKey && !uniqueKeys.has(idKey)) {
-          uniqueKeys.add(idKey);
-          allChannels.push(ch);
-        }
-      });
     }
-    
-    if(allChannels.length === 0) {
-      document.getElementById("channelList").innerHTML = '<div style="padding:20px;color:var(--muted);text-align:center">❌ Kaynak yüklenemedi.</div>';
-      return;
-    }
-
-    allChannels.sort((a, b) => {
-      const numA = parseInt(a.name.match(/^\d+/)?.[0], 10);
-      const numB = parseInt(b.name.match(/^\d+/)?.[0], 10);
-      if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
-      if (!isNaN(numA)) return -1;
-      if (!isNaN(numB)) return 1;
-      return a.name.localeCompare(b.name, 'tr', { sensitivity: 'base' });
-    });
-
-    buildCats();
-    renderList();
   });
 
-function getSmartGroup(groupName) {
-  if (!groupName) return "Genel";
-  const name = groupName.toLowerCase().trim();
-  if (name.includes("spor") || name.includes("sport")) return "5.Spor";
-  if (name.includes("çocuk") || name.includes("cocuk") || name.includes("kid")) return "4.Çocuk";
-  if (name.includes("müzik") || name.includes("muzik") || name.includes("music")) return "3.Müzik";
-  return groupName;
-}
+  allChannels.sort((a, b) => a.name.localeCompare(b.name, 'tr'));
+  buildCats();
+  renderList();
+});
 
 function buildCats() {
-  const mappedGroups = allChannels.map(c => getSmartGroup(c.group));
-  const groups = ["", ...new Set(mappedGroups)];
-  const bar = document.getElementById("catBar");
-  bar.innerHTML = groups.map((g, i) =>
-    `<button class="cat-pill ${i === 0 ? "active" : ""}" onclick="filterCat('${g.replace(/'/g,"\\'")}',this)">${i === 0 ? "Tümü" : g}</button>`
+  const groups = ["", ...new Set(allChannels.map(c => c.group))];
+  document.getElementById("catBar").innerHTML = groups.map((g, i) =>
+    `<button class="cat-pill ${i===0?'active':''}" onclick="filterCat('${g}',this)">${i===0?'Tümü':g}</button>`
   ).join("");
-  initDragToScroll();
-}
-
-function initDragToScroll() {
-  const slider = document.getElementById('catBar');
-  let isDown = false; let startX; let scrollLeft; let isDragging = false;
-
-  const startAction = (e) => {
-    isDown = true; isDragging = false; slider.style.scrollBehavior = 'auto';
-    startX = (e.pageX || e.touches[0].pageX) - slider.offsetLeft;
-    scrollLeft = slider.scrollLeft;
-  };
-  const stopAction = () => {
-    isDown = false; slider.style.scrollBehavior = 'smooth';
-    setTimeout(() => { isDragging = false; }, 50);
-  };
-  const moveAction = (e) => {
-    if (!isDown) return;
-    const x = (e.pageX || e.touches[0].pageX) - slider.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    if (Math.abs(walk) > 5) isDragging = true;
-    slider.scrollLeft = scrollLeft - walk;
-  };
-
-  slider.addEventListener('mousedown', startAction);
-  slider.addEventListener('mouseleave', stopAction);
-  slider.addEventListener('mouseup', stopAction);
-  slider.addEventListener('mousemove', moveAction);
-  slider.addEventListener('touchstart', startAction, { passive: true });
-  slider.addEventListener('touchend', stopAction, { passive: true });
-  slider.addEventListener('touchmove', moveAction, { passive: true });
 }
 
 function filterCat(cat, el) {
@@ -645,35 +292,24 @@ function switchTab(tab, btn) {
 function renderList() {
   let list = allChannels;
   if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url || c.youtubeId));
-  if (currentCat)            list = list.filter(c => getSmartGroup(c.group) === currentCat);
+  if (currentCat) list = list.filter(c => c.group === currentCat);
 
-  document.getElementById("chCount").textContent = list.length + " kanal/video";
+  document.getElementById("chCount").textContent = list.length + " Kanal";
   const el = document.getElementById("channelList");
 
-  if (!list.length) {
-    el.innerHTML = `<div style="text-align:center;padding:40px 16px;color:var(--muted);font-size:13px;">Sonuç yok</div>`;
-    return;
-  }
-
   el.innerHTML = list.map(ch => {
-    const idx   = allChannels.indexOf(ch);
+    const idx = allChannels.indexOf(ch);
     const idKey = ch.url || ch.youtubeId;
     const isAct = currentCh && (currentCh.url === ch.url && currentCh.youtubeId === ch.youtubeId);
     const isFav = favorites.includes(idKey);
-    const logoSrc = ch.logo || ch["X-logo"];
-    const logo  = logoSrc ? `<img src="${logoSrc}" loading="lazy" onerror="this.outerHTML='<span>📺</span>'">` : `<span>📺</span>`;
-    const badge = ch.youtubeId ? `<span class="yt-badge">YOUTUBE</span>` : `<span class="live-badge">CANLI</span>`;
-    const displayGroup = getSmartGroup(ch.group);
-    const u = idKey.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
-
     return `
-      <div class="channel ${isAct ? "active" : ""}" onclick="play(${idx})">
-        <div class="ch-logo">${logo}</div>
+      <div class="channel ${isAct?'active':''}" onclick="play(${idx})">
+        <div class="ch-logo">${ch.logo?`<img src="${ch.logo}">`:'📺'}</div>
         <div class="ch-info">
           <div class="ch-name">${ch.name}</div>
-          <div class="ch-meta">${badge} <span class="ch-group">${displayGroup}</span></div>
+          <div class="ch-meta"><span class="live-badge">${ch.youtubeId?'YT':'CANLI'}</span></div>
         </div>
-        <button class="fav-btn ${isFav ? "on" : ""}" onclick="event.stopPropagation(); toggleFavorite('${u}', this)">${isFav ? "★" : "☆"}</button>
+        <button class="fav-btn ${isFav?'on':''}" onclick="event.stopPropagation(); toggleFav('${idKey}', this)">${isFav?'★':'☆'}</button>
       </div>`;
   }).join("");
 }
@@ -681,101 +317,55 @@ function renderList() {
 const video = document.getElementById("video");
 const ytPlayerWrap = document.getElementById("ytPlayerWrap");
 
-// Mod Seçenekleri: 0 = Proxy Tüneli, 1 = Doğrudan Kaynak (Baypas), 2 = Native Saf Tarayıcı Modu
-function play(idx, playMode = 0) {
+function play(idx) {
   const ch = allChannels[idx];
   if (!ch) return;
   currentCh = ch;
 
   document.getElementById("playerIdle").style.display = "none";
-  if (hls) { hls.destroy(); hls = null; }
   video.pause(); video.removeAttribute('src'); video.load(); video.style.display = "none";
-  
-  if (ytPlayerInstance && ytPlayerInstance.destroy) { 
-    try { ytPlayerInstance.destroy(); } catch(e) {} 
-    ytPlayerInstance = null; 
-  }
+  if (ytPlayerInstance?.destroy) { ytPlayerInstance.destroy(); ytPlayerInstance = null; }
   ytPlayerWrap.style.display = "none"; ytPlayerWrap.innerHTML = "";
 
   if (ch.youtubeId) {
     ytPlayerWrap.style.display = "block";
-    const ytTarget = document.createElement("div");
-    ytTarget.id = "ytPlayerActual";
-    ytPlayerWrap.appendChild(ytTarget);
-
-    ytPlayerInstance = new YT.Player('ytPlayerActual', {
-      height: '100%', width: '100%', videoId: ch.youtubeId,
-      playerVars: { 'autoplay': 1, 'playsinline': 1, 'controls': 1 },
-      events: { 'onReady': (e) => e.target.playVideo(), 'onStateChange': onPlayerStateChange }
+    const target = document.createElement("div"); target.id = "ytActual"; ytPlayerWrap.appendChild(target);
+    ytPlayerInstance = new YT.Player('ytActual', {
+      height:'100%', width:'100%', videoId: ch.youtubeId,
+      playerVars: { 'autoplay': 1, 'playsinline': 1 },
+      events: { 'onReady': (e) => e.target.playVideo() }
     });
-  } 
-  else if (ch.url) {
+  } else if (ch.url) {
     video.style.display = "block";
-    let finalStreamUrl = ch.url;
-
-    if (playMode === 0) {
-      finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
-      console.log("🔒 Mod 0: Tünel Aktif:", finalStreamUrl);
-    } else {
-      console.log("🌐 Mod " + playMode + ": Doğrudan Kaynak Yükleniyor (Baypas):", finalStreamUrl);
+    
+    // Seçilen moda göre URL yapısı belirleniyor
+    const selectedMode = document.getElementById("playModeSelector").value;
+    let finalUrl = ch.url;
+    
+    if (selectedMode === "proxy") {
+      finalUrl = PROXY_URL + encodeURIComponent(ch.url);
     }
 
-    // Araç ekranlarında saf native oynatmayı zorlamak veya Hls.js kullanmak arasındaki geçiş
-    if (playMode === 2 || (!Hls.isSupported() && video.canPlayType("application/vnd.apple.mpegurl"))) {
-      console.log("📲 Tarayıcı Native Oynatıcı Devrede");
-      video.src = finalStreamUrl;
-      video.play().catch(err => {
-        if(playMode === 0) play(idx, 1);
+    // Araç ekranlarında CORS aşımı için doğrudan ham URL native video elementine basılıyor
+    video.src = finalUrl;
+    
+    // Kullanıcı tıklaması (etkileşimi) ile doğrudan tetiklendiği için araç tarayıcısı oynatacaktır
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(error => {
+        console.log("Oynatma başlatılamadı, araç tarayıcı kısıtlaması:", error);
       });
-    } 
-    else if (Hls.isSupported()) {
-      hls = new Hls({ maxBufferLength: 15, enableWorker: false, lowLatencyMode: true });
-      hls.loadSource(finalStreamUrl);
-      hls.attachMedia(video);
-      
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play().catch(() => {});
-      });
-
-      hls.on(Hls.Events.ERROR, function (event, data) {
-        if (data.fatal) {
-          console.warn("Hls Hatası Yakalandı. Hata Detayı:", data.details);
-          if (playMode === 0) {
-            // Tünel 403 verdiğinde doğrudan kaynağa düşür
-            play(idx, 1);
-          } else if (playMode === 1) {
-            // Doğrudan kaynak da hata verirse native tarayıcı modunu dene
-            play(idx, 2);
-          } else {
-            hls.recoverMediaError();
-          }
-        }
-      });
-    } else {
-      // Çaresiz kalınan durumlarda direkt src ata
-      video.src = finalStreamUrl;
-      video.play().catch(() => {});
     }
   }
-
   renderList();
-  showToast("▶ " + ch.name);
-}
-
-function onPlayerStateChange(event) {
-  if (event.data === YT.PlayerState.ENDED) nextCh();
 }
 
 video.addEventListener('ended', () => nextCh());
 
 function stopPlayer() {
-  if (hls) { hls.destroy(); hls = null; }
   video.pause(); video.removeAttribute('src'); video.load(); video.style.display = "none";
-  if (ytPlayerInstance && ytPlayerInstance.destroy) { 
-    try { ytPlayerInstance.destroy(); } catch(e) {} 
-    ytPlayerInstance = null; 
-  }
-  ytPlayerWrap.style.display = "none"; ytPlayerWrap.innerHTML = "";
+  if (ytPlayerInstance?.destroy) { ytPlayerInstance.destroy(); ytPlayerInstance = null; }
+  ytPlayerWrap.style.display = "none";
   document.getElementById("playerIdle").style.display = "flex";
   currentCh = null;
   renderList();
@@ -784,27 +374,23 @@ function stopPlayer() {
 function getFiltered() {
   let list = allChannels;
   if (currentTab === "fav") list = list.filter(c => favorites.includes(c.url || c.youtubeId));
-  if (currentCat)            list = list.filter(c => getSmartGroup(c.group) === currentCat);
+  if (currentCat) list = list.filter(c => c.group === currentCat);
   return list;
 }
 
 function nextCh() {
-  const list = getFiltered();
-  if (!list.length) return;
+  const list = getFiltered(); if (!list.length) return;
   const idx = list.findIndex(c => (c.url && c.url === currentCh?.url) || (c.youtubeId && c.youtubeId === currentCh?.youtubeId));
   play(allChannels.indexOf(list[(idx + 1) % list.length]));
-  showControlsTemporarily(); 
 }
 
 function prevCh() {
-  const list = getFiltered();
-  if (!list.length) return;
+  const list = getFiltered(); if (!list.length) return;
   const idx = list.findIndex(c => (c.url && c.url === currentCh?.url) || (c.youtubeId && c.youtubeId === currentCh?.youtubeId));
   play(allChannels.indexOf(list[(idx - 1 + list.length) % list.length]));
-  showControlsTemporarily(); 
 }
 
-function toggleFSSmart() {
+function toggleFS() {
   const el = document.getElementById("playerWrapContainer");
   if (!document.fullscreenElement && !document.webkitFullscreenElement) {
     if (el.requestFullscreen) el.requestFullscreen();
@@ -815,35 +401,17 @@ function toggleFSSmart() {
   }
 }
 
-function toggleFavorite(idKey, btn) {
+function toggleFav(idKey, btn) {
   if (favorites.includes(idKey)) {
     favorites = favorites.filter(u => u !== idKey);
     btn.textContent = "☆"; btn.classList.remove("on");
-    showToast("Favorilerden çıkarıldı");
   } else {
     favorites.push(idKey);
     btn.textContent = "★"; btn.classList.add("on");
-    showToast("⭐ Favorilere eklendi");
   }
   localStorage.setItem("favorites", JSON.stringify(favorites));
   renderList();
 }
-
-let toastT;
-function showToast(msg) {
-  const t = document.getElementById("toast");
-  t.textContent = msg; t.classList.add("show");
-  clearTimeout(toastT);
-  toastT = setTimeout(() => t.classList.remove("show"), 2800);
-}
-
-document.addEventListener("keydown", e => {
-  if (e.target.tagName === "INPUT") return;
-  if (e.key === "ArrowRight") nextCh();
-  if (e.key === "ArrowLeft")   prevCh();
-  if (e.key === "Escape")      stopPlayer();
-  if (e.key === "f" || e.key === "F") toggleFSSmart();
-});
 </script>
 </body>
 </html>
