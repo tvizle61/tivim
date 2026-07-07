@@ -192,7 +192,6 @@
 
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ══ SOL SİDEBAR BUTON ALANI (NORMAL MOD) ══ */
   .sidebar-ctrl {
     position: absolute;
     bottom: 0; left: 0; width: 100%;
@@ -279,7 +278,6 @@
 
   .yt-container { position: absolute; inset: 0; border: none; padding-bottom: 30px; }
 
-  /* ══ ALT KATEGORİ BARI (İNCE HALİ) ══ */
   .ctrl-bar {
     background: var(--bg2);
     border-top: 1px solid var(--border);
@@ -289,7 +287,6 @@
     justify-content: flex-start;
     flex-shrink: 0;
     z-index: 9;
-    
     position: fixed;
     bottom: 0;
     right: 0;
@@ -313,7 +310,6 @@
 
   .cat-bar::-webkit-scrollbar { height: 0px; display: none; }
 
-  /* Kategoriler Dikdörtgen Yapıldı ve Yer Kazanmak İçin Optimize Edildi */
   .cat-pill {
     background: #1c2530; 
     border: 1px solid rgba(255, 255, 255, 0.18); 
@@ -321,7 +317,7 @@
     font-family: 'DM Sans', sans-serif;
     font-size: 11px; font-weight: 700; 
     padding: 3px 10px; 
-    border-radius: 3px; /* Bombeli yapı yerine keskin modern dikdörtgen */
+    border-radius: 3px; 
     cursor: pointer;
     white-space: nowrap;
     transition: all .2s;
@@ -357,7 +353,6 @@
   }
   .toast.show { opacity: 1; transform: translateY(0); }
 
-  /* ══ TAM EKRAN MODUNDA PANEL KESKİNLİĞİ VE PARLAKLIĞI ══ */
   .player-wrap:fullscreen .player-ratio,
   .player-wrap:-webkit-full-screen .player-ratio { padding-bottom: 0; }
   
@@ -382,7 +377,6 @@
     opacity: 0.35 !important;
   }
 
-  /* İşaretler maksimum beyazlıkta ve parlayacak şekilde netleştirildi */
   .player-ratio .sidebar-ctrl .cb {
     height: 34px !important;
     font-size: 15px !important;
@@ -394,11 +388,8 @@
     text-shadow: 0 0 6px #ffffff, 0 1px 3px rgba(0,0,0,1) !important;
   }
 
-  .player-ratio .sidebar-ctrl:hover {
-    opacity: 1.0 !important;
-  }
+  .player-ratio .sidebar-ctrl:hover { opacity: 1.0 !important; }
 
-  /* İstek üzerine: Kategori barı tam ekranda kesinlikle görünmez */
   .player-wrap:fullscreen .ctrl-bar,
   .player-wrap:-webkit-full-screen .ctrl-bar { display: none !important; }
 
@@ -444,23 +435,19 @@
 
   <main class="main">
     <div class="player-wrap" id="playerWrapContainer">
-      
       <div class="player-ratio" id="playerRatioNode">
         <div class="player-idle" id="playerIdle">
           <div class="idle-icon">📺</div>
           <div class="idle-txt">İZLEMEK İÇİN KANAL SEÇİN</div>
         </div>
-        
-        <video id="video" controls playsinline></video>
+        <video id="video" controls playsinline crossorigin="anonymous"></video>
         <div id="ytPlayerWrap" class="yt-container"></div>
       </div>
-
       <div class="ctrl-bar" id="bottomCtrlBar">
         <div class="cat-bar" id="catBar">
           <button class="cat-pill active" onclick="filterCat('', this)">Tümü</button>
         </div>
       </div>
-
     </div>
   </main>
 </div>
@@ -498,19 +485,11 @@ function showControlsTemporarily() {
 
   if (document.fullscreenElement || document.webkitFullscreenElement) {
     btnPanel.classList.remove("hide-controls");
-    
-    if (videoEl && !videoEl.controls) {
-      videoEl.controls = true;
-    }
-
+    if (videoEl && !videoEl.controls) { videoEl.controls = true; }
     clearTimeout(hideTimeout);
-    
-    // Hareketsizlik halinde 3 saniye sonra barları uçurur
     hideTimeout = setTimeout(() => {
       btnPanel.classList.add("hide-controls");
-      if (videoEl) {
-        videoEl.controls = false; 
-      }
+      if (videoEl) { videoEl.controls = false; }
     }, 3000);
   } else {
     clearTimeout(hideTimeout);
@@ -528,14 +507,10 @@ function handleFullscreenChange() {
   const videoEl = document.getElementById("video");
 
   if (document.fullscreenElement || document.webkitFullscreenElement) {
-    if (playerRatio && btnPanel) {
-      playerRatio.appendChild(btnPanel);
-    }
+    if (playerRatio && btnPanel) { playerRatio.appendChild(btnPanel); }
     showControlsTemporarily();
   } else {
-    if (sidebar && btnPanel) {
-      sidebar.appendChild(btnPanel);
-    }
+    if (sidebar && btnPanel) { sidebar.appendChild(btnPanel); }
     clearTimeout(hideTimeout);
     btnPanel.classList.remove("hide-controls");
     if (videoEl) videoEl.controls = true;
@@ -546,9 +521,7 @@ document.addEventListener("fullscreenchange", handleFullscreenChange);
 document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
 
 const fetchM3uPromises = M3U_URLS.map(url => 
-  fetch(url)
-    .then(r => r.ok ? r.text() : "")
-    .catch(() => "")
+  fetch(url).then(r => r.ok ? r.text() : "").catch(() => "")
 );
 
 Promise.all(fetchM3uPromises)
@@ -561,7 +534,6 @@ Promise.all(fetchM3uPromises)
           const name  = lines[i].split(",")[1]?.trim() || "Kanal";
           const url     = lines[i + 1]?.trim() || "";
           if (!url.startsWith("http")) continue;
-          
           if (uniqueKeys.has(url)) continue;
           
           const gm    = lines[i].match(/group-title="([^"]*)"/i);
@@ -569,15 +541,13 @@ Promise.all(fetchM3uPromises)
           
           uniqueKeys.add(url);
           allChannels.push({
-            name,
-            url,
+            name, url,
             group: gm ? gm[1].trim() || "Genel" : "Genel",
             logo:  lm ? lm[1].trim() : ""
           });
         }
       }
     });
-    
     return fetch("channels.json").then(r => r.ok ? r.json() : {channels: []}).catch(() => ({channels: []}));
   })
   .then(jsonData => {
@@ -599,13 +569,9 @@ Promise.all(fetchM3uPromises)
     allChannels.sort((a, b) => {
       const numA = parseInt(a.name.match(/^\d+/)?.[0], 10);
       const numB = parseInt(b.name.match(/^\d+/)?.[0], 10);
-
-      if (!isNaN(numA) && !isNaN(numB)) {
-        return numA - numB;
-      }
+      if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
       if (!isNaN(numA)) return -1;
       if (!isNaN(numB)) return 1;
-      
       return a.name.localeCompare(b.name, 'tr', { sensitivity: 'base' });
     });
 
@@ -625,43 +591,31 @@ function getSmartGroup(groupName) {
 function buildCats() {
   const mappedGroups = allChannels.map(c => getSmartGroup(c.group));
   const groups = ["", ...new Set(mappedGroups)];
-  
   const bar = document.getElementById("catBar");
   bar.innerHTML = groups.map((g, i) =>
     `<button class="cat-pill ${i === 0 ? "active" : ""}" onclick="filterCat('${g.replace(/'/g,"\\'")}',this)">${i === 0 ? "Tümü" : g}</button>`
   ).join("");
-
   initDragToScroll();
 }
 
 function initDragToScroll() {
   const slider = document.getElementById('catBar');
-  let isDown = false;
-  let startX;
-  let scrollLeft;
-  let isDragging = false;
+  let isDown = false; let startX; let scrollLeft; let isDragging = false;
 
   const startAction = (e) => {
-    isDown = true;
-    isDragging = false;
-    slider.style.scrollBehavior = 'auto';
+    isDown = true; isDragging = false; slider.style.scrollBehavior = 'auto';
     startX = (e.pageX || e.touches[0].pageX) - slider.offsetLeft;
     scrollLeft = slider.scrollLeft;
   };
-
   const stopAction = () => {
-    isDown = false;
-    slider.style.scrollBehavior = 'smooth';
+    isDown = false; slider.style.scrollBehavior = 'smooth';
     setTimeout(() => { isDragging = false; }, 50);
   };
-
   const moveAction = (e) => {
     if (!isDown) return;
     const x = (e.pageX || e.touches[0].pageX) - slider.offsetLeft;
     const walk = (x - startX) * 1.5;
-    if (Math.abs(walk) > 5) {
-      isDragging = true;
-    }
+    if (Math.abs(walk) > 5) isDragging = true;
     slider.scrollLeft = scrollLeft - walk;
   };
 
@@ -669,19 +623,9 @@ function initDragToScroll() {
   slider.addEventListener('mouseleave', stopAction);
   slider.addEventListener('mouseup', stopAction);
   slider.addEventListener('mousemove', moveAction);
-
   slider.addEventListener('touchstart', startAction, { passive: true });
   slider.addEventListener('touchend', stopAction, { passive: true });
   slider.addEventListener('touchmove', moveAction, { passive: true });
-
-  slider.querySelectorAll('.cat-pill').forEach(pill => {
-    pill.addEventListener('click', (e) => {
-      if (isDragging) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    }, true);
-  });
 }
 
 function filterCat(cat, el) {
@@ -716,12 +660,8 @@ function renderList() {
     const idKey = ch.url || ch.youtubeId;
     const isAct = currentCh && (currentCh.url === ch.url && currentCh.youtubeId === ch.youtubeId);
     const isFav = favorites.includes(idKey);
-    
     const logoSrc = ch.logo || ch["X-logo"];
-    const logo  = logoSrc
-      ? `<img src="${logoSrc}" loading="lazy" onerror="this.outerHTML='<span>📺</span>'">`
-      : `<span>📺</span>`;
-      
+    const logo  = logoSrc ? `<img src="${logoSrc}" loading="lazy" onerror="this.outerHTML='<span>📺</span>'">` : `<span>📺</span>`;
     const badge = ch.youtubeId ? `<span class="yt-badge">YOUTUBE</span>` : `<span class="live-badge">CANLI</span>`;
     const displayGroup = getSmartGroup(ch.group);
     const u = idKey.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
@@ -731,15 +671,9 @@ function renderList() {
         <div class="ch-logo">${logo}</div>
         <div class="ch-info">
           <div class="ch-name">${ch.name}</div>
-          <div class="ch-meta">
-            ${badge}
-            <span class="ch-group">${displayGroup}</span>
-          </div>
+          <div class="ch-meta">${badge} <span class="ch-group">${displayGroup}</span></div>
         </div>
-        <button class="fav-btn ${isFav ? "on" : ""}"
-          onclick="event.stopPropagation(); toggleFavorite('${u}', this)">
-          ${isFav ? "★" : "☆"}
-        </button>
+        <button class="fav-btn ${isFav ? "on" : ""}" onclick="event.stopPropagation(); toggleFavorite('${u}', this)">${isFav ? "★" : "☆"}</button>
       </div>`;
   }).join("");
 }
@@ -747,22 +681,21 @@ function renderList() {
 const video = document.getElementById("video");
 const ytPlayerWrap = document.getElementById("ytPlayerWrap");
 
-function play(idx, useProxy = false) {
+// Mod Seçenekleri: 0 = Proxy Tüneli, 1 = Doğrudan Kaynak (Baypas), 2 = Native Saf Tarayıcı Modu
+function play(idx, playMode = 0) {
   const ch = allChannels[idx];
   if (!ch) return;
   currentCh = ch;
 
   document.getElementById("playerIdle").style.display = "none";
-  
   if (hls) { hls.destroy(); hls = null; }
-  video.pause(); video.src = ""; video.style.display = "none";
+  video.pause(); video.removeAttribute('src'); video.load(); video.style.display = "none";
   
   if (ytPlayerInstance && ytPlayerInstance.destroy) { 
     try { ytPlayerInstance.destroy(); } catch(e) {} 
     ytPlayerInstance = null; 
   }
-  ytPlayerWrap.style.display = "none";
-  ytPlayerWrap.innerHTML = "";
+  ytPlayerWrap.style.display = "none"; ytPlayerWrap.innerHTML = "";
 
   if (ch.youtubeId) {
     ytPlayerWrap.style.display = "block";
@@ -773,30 +706,30 @@ function play(idx, useProxy = false) {
     ytPlayerInstance = new YT.Player('ytPlayerActual', {
       height: '100%', width: '100%', videoId: ch.youtubeId,
       playerVars: { 'autoplay': 1, 'playsinline': 1, 'controls': 1 },
-      events: { 
-        'onReady': (e) => e.target.playVideo(),
-        'onStateChange': onPlayerStateChange
-      }
+      events: { 'onReady': (e) => e.target.playVideo(), 'onStateChange': onPlayerStateChange }
     });
   } 
   else if (ch.url) {
     video.style.display = "block";
-    
     let finalStreamUrl = ch.url;
-    if (useProxy || ch.url.includes("daioncdn.net") || ch.url.includes("puhu") || ch.url.includes("startv")) {
+
+    if (playMode === 0) {
       finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
-      console.log("🔒 Özel Tünel Devrede:", finalStreamUrl);
+      console.log("🔒 Mod 0: Tünel Aktif:", finalStreamUrl);
     } else {
-      console.log("🌐 Doğrudan Bağlantı:", finalStreamUrl);
+      console.log("🌐 Mod " + playMode + ": Doğrudan Kaynak Yükleniyor (Baypas):", finalStreamUrl);
     }
 
-    if (Hls.isSupported()) {
-      hls = new Hls({
-        maxBufferLength: 20,
-        enableWorker: true,
-        lowLatencyMode: true
+    // Araç ekranlarında saf native oynatmayı zorlamak veya Hls.js kullanmak arasındaki geçiş
+    if (playMode === 2 || (!Hls.isSupported() && video.canPlayType("application/vnd.apple.mpegurl"))) {
+      console.log("📲 Tarayıcı Native Oynatıcı Devrede");
+      video.src = finalStreamUrl;
+      video.play().catch(err => {
+        if(playMode === 0) play(idx, 1);
       });
-      
+    } 
+    else if (Hls.isSupported()) {
+      hls = new Hls({ maxBufferLength: 15, enableWorker: false, lowLatencyMode: true });
       hls.loadSource(finalStreamUrl);
       hls.attachMedia(video);
       
@@ -806,16 +739,20 @@ function play(idx, useProxy = false) {
 
       hls.on(Hls.Events.ERROR, function (event, data) {
         if (data.fatal) {
-          if ((data.details === "manifestLoadError" || data.type === Hls.ErrorTypes.NETWORK_ERROR) && !useProxy) {
-            console.warn("CORS/Erişim engeli tespit edildi! Tünele geçiliyor...");
-            play(idx, true);
-          } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+          console.warn("Hls Hatası Yakalandı. Hata Detayı:", data.details);
+          if (playMode === 0) {
+            // Tünel 403 verdiğinde doğrudan kaynağa düşür
+            play(idx, 1);
+          } else if (playMode === 1) {
+            // Doğrudan kaynak da hata verirse native tarayıcı modunu dene
+            play(idx, 2);
+          } else {
             hls.recoverMediaError();
           }
         }
       });
-
-    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+    } else {
+      // Çaresiz kalınan durumlarda direkt src ata
       video.src = finalStreamUrl;
       video.play().catch(() => {});
     }
@@ -826,24 +763,19 @@ function play(idx, useProxy = false) {
 }
 
 function onPlayerStateChange(event) {
-  if (event.data === YT.PlayerState.ENDED) {
-    nextCh();
-  }
+  if (event.data === YT.PlayerState.ENDED) nextCh();
 }
 
-video.addEventListener('ended', function() {
-  nextCh();
-});
+video.addEventListener('ended', () => nextCh());
 
 function stopPlayer() {
   if (hls) { hls.destroy(); hls = null; }
-  video.pause(); video.src = ""; video.style.display = "none";
+  video.pause(); video.removeAttribute('src'); video.load(); video.style.display = "none";
   if (ytPlayerInstance && ytPlayerInstance.destroy) { 
     try { ytPlayerInstance.destroy(); } catch(e) {} 
     ytPlayerInstance = null; 
   }
-  ytPlayerWrap.style.display = "none";
-  ytPlayerWrap.innerHTML = "";
+  ytPlayerWrap.style.display = "none"; ytPlayerWrap.innerHTML = "";
   document.getElementById("playerIdle").style.display = "flex";
   currentCh = null;
   renderList();
