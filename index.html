@@ -355,29 +355,28 @@
   }
   .toast.show { opacity: 1; transform: translateY(0); }
 
-  /* ══ 🔥 TAM EKRANDA BUTONLARIN KAYBOLMASINI ÖNLEYEN CSS 🔥 ══ */
+  /* ══ TAM EKRAN MODUNDA KESİN GÖRÜNÜRLÜK CSS'LERİ ══ */
   .player-wrap:fullscreen .player-ratio,
   .player-wrap:-webkit-full-screen .player-ratio { padding-bottom: 0; }
   
   .player-wrap:fullscreen .yt-container,
   .player-wrap:-webkit-full-screen .yt-container { padding-bottom: 0; }
 
-  /* Tam ekrana geçildiğinde sol alttaki butonları sağ alta, video üstüne kusursuz sabitler */
-  .player-wrap:fullscreen .sidebar-ctrl,
-  .player-wrap:-webkit-full-screen .sidebar-ctrl {
+  /* Tam ekran tetiklendiğinde DOM taşıması yapacağımız için burası kusursuz çalışacak */
+  .player-ratio .sidebar-ctrl {
     position: absolute !important;
-    bottom: 20px !important;
-    right: 20px !important;
+    bottom: 24px !important;
+    right: 24px !important;
     left: auto !important;
-    width: 200px !important; 
-    height: 50px !important;
+    width: 220px !important;
+    height: 52px !important;
     background: rgba(14, 19, 24, 0.85) !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
     border-radius: 8px !important;
-    padding: 4px !important;
-    backdrop-filter: blur(10px) !important;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.7) !important;
-    z-index: 2147483647 !important; /* En üst katmanda kalmasını garanti eder */
+    padding: 0 6px !important;
+    backdrop-filter: blur(12px) !important;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.8) !important;
+    z-index: 2147483647 !important; /* Tarayıcının en üst katmanı */
     display: flex !important;
   }
 
@@ -397,7 +396,7 @@
 <body>
 
 <div class="app">
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebarNode">
     <div class="sidebar-tabs">
       <button class="tab-btn active" onclick="switchTab('all', this)">TÜM KANALLAR</button>
       <button class="tab-btn" onclick="switchTab('fav', this)">⭐ FAVORİLER</button>
@@ -410,7 +409,6 @@
       </div>
     </div>
 
-    <!-- Kontrol Butonları -->
     <div class="sidebar-ctrl" id="actionButtons">
       <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
       <button class="cb" onclick="nextCh()" title="Sonraki (→)">⏭</button>
@@ -422,7 +420,7 @@
   <main class="main">
     <div class="player-wrap" id="playerWrapContainer">
       
-      <div class="player-ratio">
+      <div class="player-ratio" id="playerRatioNode">
         <div class="player-idle" id="playerIdle">
           <div class="idle-icon">📺</div>
           <div class="idle-txt">İZLEMEK İÇİN KANAL SEÇİN</div>
@@ -467,6 +465,28 @@ const uniqueKeys = new Set();
 function onYouTubeIframeAPIReady() {
   console.log("YouTube API Hazır.");
 }
+
+// Tam Ekran Değişimlerini İzleyen Güvenli DOM Taşıyıcı Fonksiyon
+function handleFullscreenChange() {
+  const btnPanel = document.getElementById("actionButtons");
+  const playerRatio = document.getElementById("playerRatioNode");
+  const sidebar = document.getElementById("sidebarNode");
+
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
+    // Tam ekrandaysa: Butonları video alanının en üst katmanına taşı
+    if (playerRatio && btnPanel) {
+      playerRatio.appendChild(btnPanel);
+    }
+  } else {
+    // Tam ekrandan çıkıldıysa: Butonları sol sidebar'a geri yükle
+    if (sidebar && btnPanel) {
+      sidebar.appendChild(btnPanel);
+    }
+  }
+}
+
+document.addEventListener("fullscreenchange", handleFullscreenChange);
+document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
 
 const fetchM3uPromises = M3U_URLS.map(url => 
   fetch(url)
