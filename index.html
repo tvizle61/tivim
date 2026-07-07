@@ -51,6 +51,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    position: relative; /* Alt barı buraya sabitlemek için eklendi */
   }
 
   .sidebar-tabs {
@@ -78,7 +79,7 @@
   .cat-bar {
     display: flex;
     gap: 6px;
-    padding: 2px 8px; /* Dikey padding azaltıldı */
+    padding: 2px 0; 
     overflow-x: auto;
     flex: 1;
     align-items: center;
@@ -100,7 +101,7 @@
     color: #ffffff !important; 
     font-family: 'DM Sans', sans-serif;
     font-size: 11px; font-weight: 700; 
-    padding: 3px 12px; /* Dikey padding düşürülerek buton yüksekliği daraltıldı */
+    padding: 3px 10px; 
     border-radius: 20px;
     cursor: pointer;
     white-space: nowrap;
@@ -128,7 +129,7 @@
   .channel-list {
     overflow-y: auto;
     flex: 1;
-    padding: 3px 4px;
+    padding: 3px 4px 50px; /* Alttaki butonların arkasında kalmaması için padding artırıldı */
   }
 
   .channel-list::-webkit-scrollbar { width: 4px; }
@@ -285,32 +286,37 @@
 
   .yt-container { position: absolute; inset: 0; border: none; }
 
-  /* ══ KONTROL BARI (BOŞLUKLAR SIFIRA YAKIN DARALTILDI) ══ */
+  /* ══ YENİLENEN KONTROL BARI (SOL MENÜNÜN EN ALTINA ALINDI) ══ */
   .ctrl-bar {
-    background: linear-gradient(to right, var(--bg2), var(--bg3));
+    background: var(--bg2);
     border-top: 1px solid var(--border);
-    padding: 2px 14px; /* Üst ve alt iç boşluk 8px'den 2px'ye düşürüldü */
+    padding: 4px 6px; 
     display: flex;
-    align-items: center;
+    flex-direction: column; /* Üst üste gelmesi için sütun yapıldı */
+    align-items: stretch;
     justify-content: flex-start;
     flex-shrink: 0;
-    gap: 16px;
+    gap: 4px;
     z-index: 5;
-    position: relative;
-    overflow: hidden;
+    position: absolute; /* Sol menünün altına sabitlemek için */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.5);
   }
 
-  .ctrl-btns { display: flex; align-items: center; gap: 6px; flex-shrink: 0; z-index: 10; }
+  .ctrl-btns { display: flex; align-items: center; gap: 4px; flex-shrink: 0; z-index: 10; width: 100%; justify-content: space-between; }
 
   .cb {
-    width: 32px; height: 32px; /* Buton boyutları kontrol barına uyması için 38px'den 32px'ye düşürüldü */
-    border-radius: 6px;
+    flex: 1; /* Butonların genişliği eşit dağılsın */
+    height: 28px; 
+    border-radius: 4px;
     background: var(--bg3);
     border: 1px solid var(--border);
     color: var(--text);
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    font-size: 12px;
+    font-size: 11px;
     transition: all .2s;
   }
 
@@ -341,15 +347,18 @@
     transform: translateY(0);
   }
 
+  /* TAM EKRAN MODU AYARLARI */
   .player-wrap:fullscreen .ctrl-bar,
   .player-wrap:-webkit-full-screen .ctrl-bar {
     position: absolute;
     bottom: 24px;
     left: 24px;
+    width: auto;
     background: transparent !important;
     border: none !important;
     padding: 0 !important;
     z-index: 2147483647;
+    flex-direction: row;
   }
 
   .player-wrap:fullscreen .cat-bar,
@@ -363,15 +372,23 @@
     padding: 6px;
     backdrop-filter: blur(12px);
     box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    width: auto;
+    gap: 6px;
+  }
+  .player-wrap:fullscreen .cb,
+  .player-wrap:-webkit-full-screen .cb {
+    width: 32px;
+    height: 32px;
+    flex: none;
   }
 
   @media (max-width: 768px) {
     .app { grid-template-columns: 1fr; height: auto; min-height: 100vh; }
     .main { order: 1; height: auto; }
-    .sidebar { order: 2; border-right: none; border-top: 1px solid var(--border); }
+    .sidebar { order: 2; border-right: none; border-top: 1px solid var(--border); height: 50vh; }
     .player-ratio { height: 56.25vw; flex: none; }
-    .ctrl-bar { padding: 4px 12px; gap: 10px; }
-    .channel-list { max-height: 42vh; }
+    .ctrl-bar { position: absolute; bottom: 0; width: 100%; }
+    .channel-list { max-height: calc(50vh - 100px); padding-bottom: 70px; }
   }
 </style>
 </head>
@@ -390,6 +407,19 @@
         Kanallar ve Videolar Yükleniyor...
       </div>
     </div>
+
+    <div class="ctrl-bar">
+      <div class="ctrl-btns" id="actionButtons">
+        <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
+        <button class="cb" onclick="nextCh()" title="Sonraki (→)">⏭</button>
+        <button class="cb danger" onclick="stopPlayer()" title="Durdur (Esc)">⏹</button>
+        <button class="cb" onclick="toggleFSSmart()" title="Tam Ekran">⛶</button>
+      </div>
+      
+      <div class="cat-bar" id="catBar">
+        <button class="cat-pill active" onclick="filterCat('', this)">Tümü</button>
+      </div>
+    </div>
   </aside>
 
   <main class="main">
@@ -403,19 +433,6 @@
         
         <video id="video" controls playsinline></video>
         <div id="ytPlayerWrap" class="yt-container"></div>
-      </div>
-
-      <div class="ctrl-bar">
-        <div class="ctrl-btns" id="actionButtons">
-          <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
-          <button class="cb" onclick="nextCh()" title="Sonraki (→)">⏭</button>
-          <button class="cb danger" onclick="stopPlayer()" title="Durdur (Esc)">⏹</button>
-          <button class="cb" onclick="toggleFSSmart()" title="Tam Ekran">⛶</button>
-        </div>
-        
-        <div class="cat-bar" id="catBar">
-          <button class="cat-pill active" onclick="filterCat('', this)">Tümü</button>
-        </div>
       </div>
 
     </div>
