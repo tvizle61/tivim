@@ -773,10 +773,8 @@ function play(idx, useProxy = false) {
   else if (ch.url) {
     video.style.display = "block";
     
-    let finalStreamUrl = ch.url;
-    if (useProxy || ch.url.includes("daioncdn.net") || ch.url.includes("puhu") || ch.url.includes("startv")) {
-      finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
-    }
+  let finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
+console.log("Stream URL:", finalStreamUrl); // Konsolda kontrol et
 
     if (Hls.isSupported()) {
       hls = new Hls({
