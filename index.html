@@ -756,29 +756,21 @@ function play(idx, useProxy = false) {
   ytPlayerWrap.innerHTML = "";
 
   if (ch.youtubeId) {
-    ytPlayerWrap.style.display = "block";
-    const ytTarget = document.createElement("div");
-    ytTarget.id = "ytPlayerActual";
-    ytPlayerWrap.appendChild(ytTarget);
-
-    ytPlayerInstance = new YT.Player('ytPlayerActual', {
-      height: '100%', width: '100%', videoId: ch.youtubeId,
-      playerVars: { 'autoplay': 1, 'playsinline': 1, 'controls': 1 },
-      events: { 
-        'onReady': (e) => e.target.playVideo(),
-        'onStateChange': onPlayerStateChange
-      }
-    });
+    // YouTube kodu...
   } 
   else if (ch.url) {
     video.style.display = "block";
     
-    // URL'yi encode et
-    const encodedUrl = encodeURIComponent(ch.url);
-    let finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodedUrl;
+    // **DEĞİŞİKLİK:** Önce proxy'li dene, olmazsa direkt
+    let finalStreamUrl;
+    if (useProxy) {
+      finalStreamUrl = ch.url; // Proxy'yi atla
+    } else {
+      finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
+    }
     
     console.log('Oynatılıyor:', ch.name);
-    console.log('Proxy URL:', finalStreamUrl);
+    console.log('URL:', finalStreamUrl);
 
     if (Hls.isSupported()) {
       hls = new Hls({
@@ -798,9 +790,8 @@ function play(idx, useProxy = false) {
         console.log('HLS Hatası:', data);
         if (data.fatal) {
           if (data.type === Hls.ErrorTypes.NETWORK_ERROR && !useProxy) {
-            // Doğrudan dene
-            video.src = ch.url;
-            video.play().catch(() => {});
+            // Proxy'siz dene
+            play(idx, true);
           } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
             hls.recoverMediaError();
           }
