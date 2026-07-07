@@ -252,7 +252,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-bottom: 32px; 
+    padding-bottom: 30px; 
   }
 
   .player-idle {
@@ -262,7 +262,7 @@
     align-items: center; justify-content: center;
     gap: 16px;
     z-index: 2;
-    padding-bottom: 32px;
+    padding-bottom: 30px;
   }
 
   .idle-icon { font-size: 64px; opacity: .13; animation: breathe 3s ease-in-out infinite; }
@@ -277,13 +277,13 @@
     object-fit: fill; 
   }
 
-  .yt-container { position: absolute; inset: 0; border: none; padding-bottom: 32px; }
+  .yt-container { position: absolute; inset: 0; border: none; padding-bottom: 30px; }
 
   /* ══ ALT KATEGORİ BARI (İNCE HALİ) ══ */
   .ctrl-bar {
     background: var(--bg2);
     border-top: 1px solid var(--border);
-    padding: 0 12px; 
+    padding: 0 8px; 
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -294,13 +294,13 @@
     bottom: 0;
     right: 0;
     left: 185px; 
-    height: 32px; 
+    height: 30px; 
     box-shadow: 0 -4px 10px rgba(0,0,0,0.4);
   }
 
   .cat-bar {
     display: flex;
-    gap: 6px;
+    gap: 4px;
     padding: 2px 0; 
     overflow-x: auto;
     flex: 1;
@@ -313,14 +313,15 @@
 
   .cat-bar::-webkit-scrollbar { height: 0px; display: none; }
 
+  /* Kategoriler Dikdörtgen Yapıldı ve Yer Kazanmak İçin Optimize Edildi */
   .cat-pill {
     background: #1c2530; 
-    border: 1px solid rgba(255, 255, 255, 0.2); 
+    border: 1px solid rgba(255, 255, 255, 0.18); 
     color: #ffffff !important; 
     font-family: 'DM Sans', sans-serif;
     font-size: 11px; font-weight: 700; 
-    padding: 2px 9px; 
-    border-radius: 20px;
+    padding: 3px 10px; 
+    border-radius: 3px; /* Bombeli yapı yerine keskin modern dikdörtgen */
     cursor: pointer;
     white-space: nowrap;
     transition: all .2s;
@@ -356,14 +357,13 @@
   }
   .toast.show { opacity: 1; transform: translateY(0); }
 
-  /* ══ TAM EKRAN MODUNDA KESİN GÖRÜNÜRLÜK VE SOL-ALT HİZALAMA CSS'LERİ ══ */
+  /* ══ TAM EKRAN MODUNDA PANEL KESKİNLİĞİ VE PARLAKLIĞI ══ */
   .player-wrap:fullscreen .player-ratio,
   .player-wrap:-webkit-full-screen .player-ratio { padding-bottom: 0; }
   
   .player-wrap:fullscreen .yt-container,
   .player-wrap:-webkit-full-screen .yt-container { padding-bottom: 0; }
 
-  /* İstek 1: Tam ekranda sol alt köşeye çekilen, dar ve yarı şeffaf panel yapısı */
   .player-ratio .sidebar-ctrl {
     position: absolute !important;
     bottom: 12px !important;
@@ -372,8 +372,8 @@
     width: 170px !important;
     height: 44px !important;
     background: rgba(8, 11, 16, 0.5) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    border-radius: 6px !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 4px !important;
     padding: 0 3px !important;
     backdrop-filter: blur(8px) !important;
     box-shadow: 0 8px 24px rgba(0,0,0,0.6) !important;
@@ -382,28 +382,26 @@
     opacity: 0.35 !important;
   }
 
-  /* İstek 2: Butonların içindeki görseller (simgeler) tamamen BEYAZ, parlak ve çok belirgin yapıldı */
+  /* İşaretler maksimum beyazlıkta ve parlayacak şekilde netleştirildi */
   .player-ratio .sidebar-ctrl .cb {
     height: 34px !important;
-    font-size: 14px !important;
+    font-size: 15px !important;
     color: #ffffff !important; 
     opacity: 1 !important;
     font-weight: 900 !important;
-    background: rgba(20, 26, 34, 0.9) !important;
-    border: 1px solid rgba(255, 255, 255, 0.4) !important; 
-    text-shadow: 0 0 4px #fff, 0 1px 3px rgba(0,0,0,1) !important; /* Ekstra parlaklık efekti */
+    background: rgba(20, 26, 34, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important; 
+    text-shadow: 0 0 6px #ffffff, 0 1px 3px rgba(0,0,0,1) !important;
   }
 
-  /* Fare üzerine geldiğinde buton paneli netleşir */
   .player-ratio .sidebar-ctrl:hover {
     opacity: 1.0 !important;
   }
 
-  /* Kategori barı tam ekranda tamamen gizlenir */
+  /* İstek üzerine: Kategori barı tam ekranda kesinlikle görünmez */
   .player-wrap:fullscreen .ctrl-bar,
   .player-wrap:-webkit-full-screen .ctrl-bar { display: none !important; }
 
-  /* ══ SOL-ALT BUTON PANELİNİN OTOMATİK GİZLENME SINIFI ══ */
   .hide-controls {
     opacity: 0 !important;
     transform: translateY(0) scale(0.85) !important;
@@ -414,7 +412,7 @@
     .app { grid-template-columns: 1fr; height: auto; min-height: 100vh; }
     .main { order: 1; height: auto; }
     .sidebar { order: 2; border-right: none; border-top: 1px solid var(--border); height: 50vh; }
-    .player-ratio { height: 56.25vw; flex: none; padding-bottom: 32px; }
+    .player-ratio { height: 56.25vw; flex: none; padding-bottom: 30px; }
     .ctrl-bar { position: fixed; bottom: 0; left: 0; width: 100%; }
     .channel-list { max-height: calc(50vh - 108px); padding-bottom: 56px; }
   }
@@ -494,27 +492,22 @@ function onYouTubeIframeAPIReady() {
   console.log("YouTube API Hazır.");
 }
 
-// ══ AKILLI TAM EKRAN OTO-GİZLEME (HEM PANEL HEM VİDEO SÜRE BARLARI İÇİN) ══
 function showControlsTemporarily() {
   const btnPanel = document.getElementById("actionButtons");
   const videoEl = document.getElementById("video");
 
   if (document.fullscreenElement || document.webkitFullscreenElement) {
-    // 1. Kendi buton panelimizi görünür yap
     btnPanel.classList.remove("hide-controls");
     
-    // 2. Videonun kendi zaman barını/kontrollerini aktif et
     if (videoEl && !videoEl.controls) {
       videoEl.controls = true;
     }
 
     clearTimeout(hideTimeout);
     
-    // Hareketsizlik durumunda 3 saniye sonra barları uçur
+    // Hareketsizlik halinde 3 saniye sonra barları uçurur
     hideTimeout = setTimeout(() => {
       btnPanel.classList.add("hide-controls");
-      
-      // Videonun zaman çubuğunun ekrandan tamamen kaybolmasını tetikle
       if (videoEl) {
         videoEl.controls = false; 
       }
@@ -526,7 +519,6 @@ function showControlsTemporarily() {
   }
 }
 
-// Fare hareket ettikçe her şeyi anında uyandır
 document.getElementById("playerWrapContainer").addEventListener("mousemove", showControlsTemporarily);
 
 function handleFullscreenChange() {
