@@ -773,12 +773,16 @@ function play(idx, useProxy = false) {
   else if (ch.url) {
     video.style.display = "block";
     
-  let finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
-console.log("Stream URL:", finalStreamUrl); // Konsolda kontrol et
+    // URL'yi encode et
+    const encodedUrl = encodeURIComponent(ch.url);
+    let finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodedUrl;
+    
+    console.log('Oynatılıyor:', ch.name);
+    console.log('Proxy URL:', finalStreamUrl);
 
     if (Hls.isSupported()) {
       hls = new Hls({
-        maxBufferLength: 20,
+        maxBufferLength: 30,
         enableWorker: true,
         lowLatencyMode: true
       });
@@ -787,13 +791,16 @@ console.log("Stream URL:", finalStreamUrl); // Konsolda kontrol et
       hls.attachMedia(video);
       
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play().catch(() => {});
+        video.play().catch(err => console.log('Play hatası:', err));
       });
 
       hls.on(Hls.Events.ERROR, function (event, data) {
+        console.log('HLS Hatası:', data);
         if (data.fatal) {
-          if ((data.details === "manifestLoadError" || data.type === Hls.ErrorTypes.NETWORK_ERROR) && !useProxy) {
-            play(idx, true);
+          if (data.type === Hls.ErrorTypes.NETWORK_ERROR && !useProxy) {
+            // Doğrudan dene
+            video.src = ch.url;
+            video.play().catch(() => {});
           } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
             hls.recoverMediaError();
           }
@@ -809,7 +816,6 @@ console.log("Stream URL:", finalStreamUrl); // Konsolda kontrol et
   renderList();
   showToast("▶ " + ch.name);
 }
-
 function onPlayerStateChange(event) {
   if (event.data === YT.PlayerState.ENDED) {
     nextCh();
