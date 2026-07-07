@@ -386,7 +386,7 @@
     {
       "name": "Sports TV",
       "logo": "https://raw.githubusercontent.com/ghokun/tv/main/bin/logo/SportsTV.tr.png",
-      "group": "5.Spor",
+      "group": "5. Spor",
       "epgId": "SportsTV.tr",
       "url": "https://live.sportstv.com.tr/hls/low/sportstv.m3u8"
     },
@@ -570,21 +570,21 @@
       "name": "TRT SPOR",
       "url": "https://tv-trtspor1.medya.trt.com.tr/master_720.m3u8",
       "logo": "https://i.ibb.co/WxD4PLG/trt-spor.png",
-      "group": "5.Spor",
+      "group": "5. Spor",
       "epgId": ""
     },
     {
       "name": "TJK TV",
       "url": "https://tjktv-live.tjk.org/tjktv_1080p.m3u8",
       "logo": "https://i.ibb.co/PrkXrRn/tjk-tv.png",
-      "group": "5.Spor",
+      "group": "5. Spor",
       "epgId": ""
     },
     {
       "name": "TJK TV YURT DISI",
       "url": "https://tjktv-live.tjk.org/tjktv2/tjktv2_1080p.m3u8",
       "logo": "https://i.ibb.co/PrkXrRn/tjk-tv.png",
-      "group": "5.Spor",
+      "group": "5. Spor",
       "epgId": ""
     },
     {
@@ -683,7 +683,7 @@
       "name": "A SPOR HD",
       "youtubeId": "mgeW8Qm8-SY",
       "logo": "https://i.ytimg.com/vi/mgeW8Qm8-SY/sddefault.jpg",
-      "group": "5.Spor",
+      "group": "5. Spor",
       "epgId": ""
     },
     {
@@ -697,7 +697,7 @@
       "name": "Bein Sport Haber",
       "youtubeId": "9xVXWLwT0vA",
       "logo": "https://i.ytimg.com/vi/9xVXWLwT0vA/sddefault.jpg",
-      "group": "5.Spor",
+      "group": "5. Spor",
       "epgId": ""
     },
     {
