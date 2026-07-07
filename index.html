@@ -606,7 +606,6 @@ function getSmartGroup(groupName) {
 
 function buildCats() {
   const mappedGroups = allChannels.map(c => getSmartGroup(c.group));
-  // Sıralama düzeltildi: Sayısal başlığı olanları rakamsal sırala
   const groups = [...new Set(mappedGroups)].sort((a, b) => {
     const numA = parseInt(a, 10);
     const numB = parseInt(b, 10);
@@ -711,7 +710,6 @@ function renderList() {
       : `<span>📺</span>`;
       
     const badge = ch.youtubeId ? `<span class="yt-badge">YOUTUBE</span>` : `<span class="live-badge">CANLI</span>`;
-    const displayGroup = getSmartGroup(ch.group);
     const u = idKey.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
 
     return `
@@ -721,7 +719,6 @@ function renderList() {
           <div class="ch-name">${ch.name}</div>
           <div class="ch-meta">
             ${badge}
-            <span class="ch-group">${displayGroup}</span>
           </div>
         </div>
         <button class="fav-btn ${isFav ? "on" : ""}"
