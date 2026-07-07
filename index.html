@@ -589,12 +589,13 @@ Promise.all(fetchM3uPromises)
       return;
     }
 
-    allChannels.sort((a, b) =>
-  a.name.localeCompare(b.name, 'tr', {
-    sensitivity: 'base',
-    numeric: true
-  })
-);
+    allChannels.sort((a, b) => {
+  return a.name.localeCompare(b.name, "tr", {
+    numeric: true,
+    sensitivity: "base",
+    ignorePunctuation: true
+  });
+});
 
     buildCats();
     renderList();
