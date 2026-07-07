@@ -96,7 +96,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 6px;
+    padding: 5px 6px;
     border-radius: 6px;
     margin-bottom: 3px;
     cursor: pointer;
@@ -131,7 +131,7 @@
     background: #0e1318;
   }
 
-  .ch-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+  .ch-info { flex: 1; min-width: 0; }
 
   .ch-name {
     font-size: 10px; font-weight: 600;
@@ -146,12 +146,17 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    margin-top: 2px;
+    margin-top: 1px;
     line-height: 1;
   }
 
   .live-badge { background: var(--accent); color: #fff; font-size: 7px; font-weight: 700; padding: 1px 3px; border-radius: 2px; flex-shrink: 0; }
   .yt-badge { background: #ff0000; color: #fff; font-size: 7px; font-weight: 700; padding: 1px 3px; border-radius: 2px; flex-shrink: 0; }
+
+  .ch-group {
+    font-size: 9px; color: var(--muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
 
   .fav-btn {
     background: none; border: none;
@@ -198,6 +203,7 @@
     justify-content: space-between;
     padding: 0 6px;
     z-index: 999;
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
   .sidebar-ctrl .cb {
@@ -300,9 +306,10 @@
     user-select: none;
     cursor: grab;
     scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .cat-bar::-webkit-scrollbar { display: none; }
+  .cat-bar::-webkit-scrollbar { height: 0px; display: none; }
 
   .cat-pill {
     background: #1c2530; 
@@ -347,6 +354,54 @@
   }
   .toast.show { opacity: 1; transform: translateY(0); }
 
+  .player-wrap:fullscreen .player-ratio,
+  .player-wrap:-webkit-full-screen .player-ratio { padding-bottom: 0; }
+  
+  .player-wrap:fullscreen .yt-container,
+  .player-wrap:-webkit-full-screen .yt-container { padding-bottom: 0; }
+
+  .player-ratio .sidebar-ctrl {
+    position: absolute !important;
+    bottom: 12px !important;
+    left: 12px !important;
+    right: auto !important;
+    width: 170px !important;
+    height: 44px !important;
+    background: rgba(8, 11, 16, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 4px !important;
+    padding: 0 3px !important;
+    backdrop-filter: blur(8px) !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6) !important;
+    z-index: 2147483647 !important;
+    display: flex !important;
+    opacity: 0.35 !important;
+  }
+
+  .player-ratio .sidebar-ctrl .cb {
+    height: 34px !important;
+    font-size: 15px !important;
+    color: #ffffff !important; 
+    opacity: 1 !important;
+    font-weight: 900 !important;
+    background: rgba(20, 26, 34, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important; 
+    text-shadow: 0 0 6px #ffffff, 0 1px 3px rgba(0,0,0,1) !important;
+  }
+
+  .player-ratio .sidebar-ctrl:hover {
+    opacity: 1.0 !important;
+  }
+
+  .player-wrap:fullscreen .ctrl-bar,
+  .player-wrap:-webkit-full-screen .ctrl-bar { display: none !important; }
+
+  .hide-controls {
+    opacity: 0 !important;
+    transform: translateY(0) scale(0.85) !important;
+    pointer-events: none !important;
+  }
+
   @media (max-width: 768px) {
     .app { grid-template-columns: 1fr; height: auto; min-height: 100vh; }
     .main { order: 1; height: auto; }
@@ -374,10 +429,10 @@
     </div>
 
     <div class="sidebar-ctrl" id="actionButtons">
-      <button class="cb" onclick="prevCh()">⏮</button>
-      <button class="cb" onclick="nextCh()">⏭</button>
-      <button class="cb danger" onclick="stopPlayer()">⏹</button>
-      <button class="cb" onclick="toggleFSSmart()">⛶</button>
+      <button class="cb" onclick="prevCh()" title="Önceki (←)">⏮</button>
+      <button class="cb" onclick="nextCh()" title="Sonraki (→)">⏭</button>
+      <button class="cb danger" onclick="stopPlayer()" title="Durdur (Esc)">⏹</button>
+      <button class="cb" onclick="toggleFSSmart()" title="Tam Ekran">⛶</button>
     </div>
   </aside>
 
@@ -423,10 +478,70 @@ let allChannels = [];
 let currentCh   = null;
 let currentTab  = "all";
 let currentCat  = "";
+let hideTimeout; 
+
 const uniqueKeys = new Set();
 
+function onYouTubeIframeAPIReady() {
+  console.log("YouTube API Hazır.");
+}
+
+function showControlsTemporarily() {
+  const btnPanel = document.getElementById("actionButtons");
+  const videoEl = document.getElementById("video");
+
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
+    btnPanel.classList.remove("hide-controls");
+    
+    if (videoEl && !videoEl.controls) {
+      videoEl.controls = true;
+    }
+
+    clearTimeout(hideTimeout);
+    
+    hideTimeout = setTimeout(() => {
+      btnPanel.classList.add("hide-controls");
+      if (videoEl) {
+        videoEl.controls = false; 
+      }
+    }, 3000);
+  } else {
+    clearTimeout(hideTimeout);
+    btnPanel.classList.remove("hide-controls");
+    if (videoEl) videoEl.controls = true;
+  }
+}
+
+document.getElementById("playerWrapContainer").addEventListener("mousemove", showControlsTemporarily);
+
+function handleFullscreenChange() {
+  const btnPanel = document.getElementById("actionButtons");
+  const playerRatio = document.getElementById("playerRatioNode");
+  const sidebar = document.getElementById("sidebarNode");
+  const videoEl = document.getElementById("video");
+
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
+    if (playerRatio && btnPanel) {
+      playerRatio.appendChild(btnPanel);
+    }
+    showControlsTemporarily();
+  } else {
+    if (sidebar && btnPanel) {
+      sidebar.appendChild(btnPanel);
+    }
+    clearTimeout(hideTimeout);
+    btnPanel.classList.remove("hide-controls");
+    if (videoEl) videoEl.controls = true;
+  }
+}
+
+document.addEventListener("fullscreenchange", handleFullscreenChange);
+document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+
 const fetchM3uPromises = M3U_URLS.map(url => 
-  fetch(url).then(r => r.ok ? r.text() : "").catch(() => "")
+  fetch(url)
+    .then(r => r.ok ? r.text() : "")
+    .catch(() => "")
 );
 
 Promise.all(fetchM3uPromises)
@@ -439,6 +554,7 @@ Promise.all(fetchM3uPromises)
           const name  = lines[i].split(",")[1]?.trim() || "Kanal";
           const url     = lines[i + 1]?.trim() || "";
           if (!url.startsWith("http")) continue;
+          
           if (uniqueKeys.has(url)) continue;
           
           const gm    = lines[i].match(/group-title="([^"]*)"/i);
@@ -446,13 +562,15 @@ Promise.all(fetchM3uPromises)
           
           uniqueKeys.add(url);
           allChannels.push({
-            name, url,
+            name,
+            url,
             group: gm ? gm[1].trim() || "Genel" : "Genel",
             logo:  lm ? lm[1].trim() : ""
           });
         }
       }
     });
+    
     return fetch("channels.json").then(r => r.ok ? r.json() : {channels: []}).catch(() => ({channels: []}));
   })
   .then(jsonData => {
@@ -465,38 +583,92 @@ Promise.all(fetchM3uPromises)
         }
       });
     }
+    
+    if(allChannels.length === 0) {
+      document.getElementById("channelList").innerHTML = '<div style="padding:20px;color:var(--muted);text-align:center">❌ Kaynak yüklenemedi.</div>';
+      return;
+    }
 
-    allChannels.sort((a, b) => a.name.localeCompare(b.name, 'tr'));
+    allChannels.sort((a, b) => a.name.localeCompare(b.name, 'tr', { sensitivity: 'base' }));
+
     buildCats();
     renderList();
   });
 
-function getSmartGroup(g) { return g || "Genel"; }
+function getSmartGroup(groupName) {
+  if (!groupName) return "Genel";
+  const name = groupName.toLowerCase().trim();
+  if (name.includes("spor") || name.includes("sport")) return "5. SPOR";
+  if (name.includes("çocuk") || name.includes("cocuk") || name.includes("kid")) return "4. ÇOCUK";
+  if (name.includes("müzik") || name.includes("muzik") || name.includes("music")) return "3. MÜZİK";
+  return groupName;
+}
 
 function buildCats() {
-  const rawGroups = [...new Set(allChannels.map(c => getSmartGroup(c.group)))];
-  
-  rawGroups.sort((a, b) => {
-    const numA = parseInt(a.match(/^\d+/)?.[0] || 9999);
-    const numB = parseInt(b.match(/^\d+/)?.[0] || 9999);
-    if (numA !== numB) return numA - numB;
-    return a.localeCompare(b, 'tr');
+  const mappedGroups = allChannels.map(c => getSmartGroup(c.group));
+  const groups = [...new Set(mappedGroups)].sort((a, b) => {
+    const numA = parseInt(a, 10);
+    const numB = parseInt(b, 10);
+    if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+    return a.localeCompare(b);
   });
-
-  const groups = ["", ...rawGroups];
-  document.getElementById("catBar").innerHTML = groups.map((g, i) =>
+  
+  const bar = document.getElementById("catBar");
+  bar.innerHTML = ["", ...groups].map((g, i) =>
     `<button class="cat-pill ${i === 0 ? "active" : ""}" onclick="filterCat('${g.replace(/'/g,"\\'")}',this)">${i === 0 ? "Tümü" : g}</button>`
   ).join("");
+
   initDragToScroll();
 }
 
 function initDragToScroll() {
   const slider = document.getElementById('catBar');
-  let isDown = false; let startX; let scrollLeft;
-  slider.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
-  slider.addEventListener('mouseleave', () => isDown = false);
-  slider.addEventListener('mouseup', () => isDown = false);
-  slider.addEventListener('mousemove', (e) => { if(!isDown) return; e.preventDefault(); const x = e.pageX - slider.offsetLeft; const walk = (x - startX) * 1.5; slider.scrollLeft = scrollLeft - walk; });
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+  let isDragging = false;
+
+  const startAction = (e) => {
+    isDown = true;
+    isDragging = false;
+    slider.style.scrollBehavior = 'auto';
+    startX = (e.pageX || e.touches[0].pageX) - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+  };
+
+  const stopAction = () => {
+    isDown = false;
+    slider.style.scrollBehavior = 'smooth';
+    setTimeout(() => { isDragging = false; }, 50);
+  };
+
+  const moveAction = (e) => {
+    if (!isDown) return;
+    const x = (e.pageX || e.touches[0].pageX) - slider.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    if (Math.abs(walk) > 5) {
+      isDragging = true;
+    }
+    slider.scrollLeft = scrollLeft - walk;
+  };
+
+  slider.addEventListener('mousedown', startAction);
+  slider.addEventListener('mouseleave', stopAction);
+  slider.addEventListener('mouseup', stopAction);
+  slider.addEventListener('mousemove', moveAction);
+
+  slider.addEventListener('touchstart', startAction, { passive: true });
+  slider.addEventListener('touchend', stopAction, { passive: true });
+  slider.addEventListener('touchmove', moveAction, { passive: true });
+
+  slider.querySelectorAll('.cat-pill').forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      if (isDragging) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+  });
 }
 
 function filterCat(cat, el) {
@@ -521,21 +693,38 @@ function renderList() {
   document.getElementById("chCount").textContent = list.length + " kanal/video";
   const el = document.getElementById("channelList");
 
+  if (!list.length) {
+    el.innerHTML = `<div style="text-align:center;padding:40px 16px;color:var(--muted);font-size:13px;">Sonuç yok</div>`;
+    return;
+  }
+
   el.innerHTML = list.map(ch => {
     const idx   = allChannels.indexOf(ch);
     const idKey = ch.url || ch.youtubeId;
     const isAct = currentCh && (currentCh.url === ch.url && currentCh.youtubeId === ch.youtubeId);
     const isFav = favorites.includes(idKey);
-    const logo  = ch.logo ? `<img src="${ch.logo}" onerror="this.outerHTML='<span>📺</span>'">` : `<span>📺</span>`;
+    
+    const logoSrc = ch.logo || ch["X-logo"];
+    const logo  = logoSrc
+      ? `<img src="${logoSrc}" loading="lazy" onerror="this.outerHTML='<span>📺</span>'">`
+      : `<span>📺</span>`;
+      
+    const badge = ch.youtubeId ? `<span class="yt-badge">YOUTUBE</span>` : `<span class="live-badge">CANLI</span>`;
+    const u = idKey.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
 
     return `
       <div class="channel ${isAct ? "active" : ""}" onclick="play(${idx})">
         <div class="ch-logo">${logo}</div>
         <div class="ch-info">
           <div class="ch-name">${ch.name}</div>
-          <div class="ch-meta"><span class="live-badge">${ch.youtubeId?'YT':'CANLI'}</span></div>
+          <div class="ch-meta">
+            ${badge}
+          </div>
         </div>
-        <button class="fav-btn ${isFav ? "on" : ""}" onclick="event.stopPropagation(); toggleFavorite('${idKey.replace(/'/g, "\\'")}', this)">${isFav ? "★" : "☆"}</button>
+        <button class="fav-btn ${isFav ? "on" : ""}"
+          onclick="event.stopPropagation(); toggleFavorite('${u}', this)">
+          ${isFav ? "★" : "☆"}
+        </button>
       </div>`;
   }).join("");
 }
@@ -543,57 +732,99 @@ function renderList() {
 const video = document.getElementById("video");
 const ytPlayerWrap = document.getElementById("ytPlayerWrap");
 
-function play(idx) {
+function play(idx, useProxy = false) {
   const ch = allChannels[idx];
   if (!ch) return;
   currentCh = ch;
 
   document.getElementById("playerIdle").style.display = "none";
+  
   if (hls) { hls.destroy(); hls = null; }
-  video.pause(); video.removeAttribute('src'); video.load(); video.style.display = "none";
-  if (ytPlayerInstance?.destroy) { try { ytPlayerInstance.destroy(); } catch(e){} ytPlayerInstance = null; }
+  video.pause(); video.src = ""; video.style.display = "none";
+  
+  if (ytPlayerInstance && ytPlayerInstance.destroy) { 
+    try { ytPlayerInstance.destroy(); } catch(e) {} 
+    ytPlayerInstance = null; 
+  }
   ytPlayerWrap.style.display = "none";
+  ytPlayerWrap.innerHTML = "";
 
   if (ch.youtubeId) {
     ytPlayerWrap.style.display = "block";
-    const target = document.createElement("div"); target.id = "ytActual"; ytPlayerWrap.appendChild(target);
-    ytPlayerInstance = new YT.Player('ytActual', {
+    const ytTarget = document.createElement("div");
+    ytTarget.id = "ytPlayerActual";
+    ytPlayerWrap.appendChild(ytTarget);
+
+    ytPlayerInstance = new YT.Player('ytPlayerActual', {
       height: '100%', width: '100%', videoId: ch.youtubeId,
-      playerVars: { 'autoplay': 1, 'playsinline': 1 },
-      events: { 'onReady': (e) => e.target.playVideo(), 'onStateChange': (e) => { if(e.data === YT.PlayerState.ENDED) nextCh(); } }
+      playerVars: { 'autoplay': 1, 'playsinline': 1, 'controls': 1 },
+      events: { 
+        'onReady': (e) => e.target.playVideo(),
+        'onStateChange': onPlayerStateChange
+      }
     });
   } 
   else if (ch.url) {
     video.style.display = "block";
+    
+    let finalStreamUrl = ch.url;
+    if (useProxy || ch.url.includes("daioncdn.net") || ch.url.includes("puhu") || ch.url.includes("startv")) {
+      finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
+    }
+
     if (Hls.isSupported()) {
-      hls = new Hls({ 
-        maxBufferLength: 10,
-        xhrSetup: function(xhr, url) {
-          if (!url.startsWith(PRIVATE_CLOUDFLARE_PROXY) && url.startsWith("http")) {
-            const proxiedUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(url);
-            xhr.open('GET', proxiedUrl, true);
+      hls = new Hls({
+        maxBufferLength: 20,
+        enableWorker: true,
+        lowLatencyMode: true
+      });
+      
+      hls.loadSource(finalStreamUrl);
+      hls.attachMedia(video);
+      
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play().catch(() => {});
+      });
+
+      hls.on(Hls.Events.ERROR, function (event, data) {
+        if (data.fatal) {
+          if ((data.details === "manifestLoadError" || data.type === Hls.ErrorTypes.NETWORK_ERROR) && !useProxy) {
+            play(idx, true);
+          } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+            hls.recoverMediaError();
           }
         }
       });
-      hls.loadSource(PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url));
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
-    } else {
-      video.src = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
+
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = finalStreamUrl;
       video.play().catch(() => {});
     }
   }
+
   renderList();
   showToast("▶ " + ch.name);
 }
 
-video.addEventListener('ended', nextCh);
+function onPlayerStateChange(event) {
+  if (event.data === YT.PlayerState.ENDED) {
+    nextCh();
+  }
+}
+
+video.addEventListener('ended', function() {
+  nextCh();
+});
 
 function stopPlayer() {
   if (hls) { hls.destroy(); hls = null; }
-  video.pause(); video.removeAttribute('src'); video.load(); video.style.display = "none";
-  if (ytPlayerInstance?.destroy) { try { ytPlayerInstance.destroy(); } catch(e){} ytPlayerInstance = null; }
+  video.pause(); video.src = ""; video.style.display = "none";
+  if (ytPlayerInstance && ytPlayerInstance.destroy) { 
+    try { ytPlayerInstance.destroy(); } catch(e) {} 
+    ytPlayerInstance = null; 
+  }
   ytPlayerWrap.style.display = "none";
+  ytPlayerWrap.innerHTML = "";
   document.getElementById("playerIdle").style.display = "flex";
   currentCh = null;
   renderList();
@@ -607,33 +838,41 @@ function getFiltered() {
 }
 
 function nextCh() {
-  const list = getFiltered(); if (!list.length) return;
+  const list = getFiltered();
+  if (!list.length) return;
   const idx = list.findIndex(c => (c.url && c.url === currentCh?.url) || (c.youtubeId && c.youtubeId === currentCh?.youtubeId));
   play(allChannels.indexOf(list[(idx + 1) % list.length]));
+  showControlsTemporarily(); 
 }
 
 function prevCh() {
-  const list = getFiltered(); if (!list.length) return;
+  const list = getFiltered();
+  if (!list.length) return;
   const idx = list.findIndex(c => (c.url && c.url === currentCh?.url) || (c.youtubeId && c.youtubeId === currentCh?.youtubeId));
   play(allChannels.indexOf(list[(idx - 1 + list.length) % list.length]));
+  showControlsTemporarily(); 
 }
 
 function toggleFSSmart() {
   const el = document.getElementById("playerWrapContainer");
   if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-    if (el.requestFullscreen) el.requestFullscreen(); else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    if (el.requestFullscreen) el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
   } else {
-    if (document.exitFullscreen) document.exitFullscreen(); else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
   }
 }
 
 function toggleFavorite(idKey, btn) {
   if (favorites.includes(idKey)) {
     favorites = favorites.filter(u => u !== idKey);
-    btn.textContent = "☆";
+    btn.textContent = "☆"; btn.classList.remove("on");
+    showToast("Favorilerden çıkarıldı");
   } else {
     favorites.push(idKey);
-    btn.textContent = "★";
+    btn.textContent = "★"; btn.classList.add("on");
+    showToast("⭐ Favorilere eklendi");
   }
   localStorage.setItem("favorites", JSON.stringify(favorites));
   renderList();
@@ -641,9 +880,19 @@ function toggleFavorite(idKey, btn) {
 
 let toastT;
 function showToast(msg) {
-  const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show");
-  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 2800);
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove("show"), 2800);
 }
+
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT") return;
+  if (e.key === "ArrowRight") nextCh();
+  if (e.key === "ArrowLeft")   prevCh();
+  if (e.key === "Escape")      stopPlayer();
+  if (e.key === "f" || e.key === "F") toggleFSSmart();
+});
 </script>
 </body>
 </html>
