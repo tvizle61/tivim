@@ -772,6 +772,9 @@ function play(idx, useProxy = false) {
     let finalStreamUrl = ch.url;
     if (useProxy || ch.url.includes("daioncdn.net") || ch.url.includes("puhu") || ch.url.includes("startv")) {
       finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
+      console.log("🔒 Özel Tünel Devrede:", finalStreamUrl);
+    } else {
+      console.log("🌐 Doğrudan Bağlantı:", finalStreamUrl);
     }
 
     if (Hls.isSupported()) {
@@ -791,6 +794,7 @@ function play(idx, useProxy = false) {
       hls.on(Hls.Events.ERROR, function (event, data) {
         if (data.fatal) {
           if ((data.details === "manifestLoadError" || data.type === Hls.ErrorTypes.NETWORK_ERROR) && !useProxy) {
+            console.warn("CORS/Erişim engeli tespit edildi! Tünele geçiliyor...");
             play(idx, true);
           } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
             hls.recoverMediaError();
@@ -844,7 +848,6 @@ function nextCh() {
   if (!list.length) return;
   const idx = list.findIndex(c => (c.url && c.url === currentCh?.url) || (c.youtubeId && c.youtubeId === currentCh?.youtubeId));
   play(allChannels.indexOf(list[(idx + 1) % list.length]));
-  showControlsTemporarily(); 
 }
 
 function prevCh() {
@@ -852,7 +855,6 @@ function prevCh() {
   if (!list.length) return;
   const idx = list.findIndex(c => (c.url && c.url === currentCh?.url) || (c.youtubeId && c.youtubeId === currentCh?.youtubeId));
   play(allChannels.indexOf(list[(idx - 1 + list.length) % list.length]));
-  showControlsTemporarily(); 
 }
 
 function toggleFSSmart() {
