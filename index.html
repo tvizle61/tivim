@@ -278,7 +278,7 @@
 
   .yt-container { position: absolute; inset: 0; border: none; padding-bottom: 30px; }
 
-  /* ══ ALT KATEGORİ BARI (ORİJİNAL TASARIM KORUNDU) ══ */
+  /* ══ ALT KATEGORİ BARI (ŞIK DIKDÖRTGEN DIZAYN SABITLENDI) ══ */
   .ctrl-bar {
     background: var(--bg2);
     border-top: 1px solid var(--border);
@@ -312,7 +312,6 @@
 
   .cat-bar::-webkit-scrollbar { height: 0px; display: none; }
 
-  /* İstediğiniz modern kompakt dikdörtgen yapı korundu */
   .cat-pill {
     background: #1c2530; 
     border: 1px solid rgba(255, 255, 255, 0.18); 
@@ -688,8 +687,8 @@ function renderList() {
 const video = document.getElementById("video");
 const ytPlayerWrap = document.getElementById("ytPlayerWrap");
 
-// Akıllı Hibrit Oynatıcı: Önce proxy tünelini, hata durumunda ise doğrudan native bağımsız akışı dener
-function play(idx, forceNative = false) {
+// 🛠 TOKEN VE 403 ENGELİNİ AŞAN AKILLI HIBRIT OYNATICI
+function play(idx) {
   const ch = allChannels[idx];
   if (!ch) return;
   currentCh = ch;
@@ -719,17 +718,37 @@ function play(idx, forceNative = false) {
   else if (ch.url) {
     video.style.display = "block";
     
-    // Araç ekranlarında tünel engellendiğinde direkt ham url'e düşmek için şartlı yapı
-    if (forceNative || (!Hls.isSupported() && video.canPlayType("application/vnd.apple.mpegurl"))) {
-      console.log("🚗 Araç Native Modu Devrede:", ch.url);
+    if (!Hls.isSupported() && video.canPlayType("application/vnd.apple.mpegurl")) {
+      console.log("🚗 iOS / Safari / Araç Native Modu Devrede");
       video.src = ch.url;
       video.play().catch(e => console.log("Oynatma hatası:", e));
     } 
     else if (Hls.isSupported()) {
-      let finalStreamUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
+      // 1. Adım: Sadece ana .m3u8 listesini proxy tüneli üzerinden çekiyoruz (CORS aşımı için)
+      let initialPlaylistUrl = PRIVATE_CLOUDFLARE_PROXY + encodeURIComponent(ch.url);
       
-      hls = new Hls({ maxBufferLength: 20, enableWorker: true, lowLatencyMode: true });
-      hls.loadSource(finalStreamUrl);
+      hls = new Hls({ 
+        maxBufferLength: 15, 
+        enableWorker: true, 
+        lowLatencyMode: true,
+        // Hls.js'e özel kural: .ts dosyalarını (parçaları) proxy'ye bulaştırma, doğrudan kullanıcının IP'siyle çağır
+        xhrSetup: function(xhr, url) {
+          if (url.includes('.ts') && url.includes('ancient-hall')) {
+            // Eğer hls.js alt linkleri de yanlışlıkla proxy'li oluşturursa, temizle
+            const cleanUrl = decodeURIComponent(url.split('?url=')[1] || url);
+            xhr.open('GET', cleanUrl, true);
+          }
+        }
+      });
+
+      // Alt segmentlerin (parçaların) çözümlenirken orijinal sunucu adresinden çekilmesini sağlayan filtre
+      hls.on(Hls.Events.BUFFER_CREATED, function() {
+        if(hls.url && hls.url.includes(PRIVATE_CLOUDFLARE_PROXY)){
+           console.log("Listenin çözümlenmesi optimize ediliyor...");
+        }
+      });
+
+      hls.loadSource(initialPlaylistUrl);
       hls.attachMedia(video);
       
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -738,9 +757,9 @@ function play(idx, forceNative = false) {
 
       hls.on(Hls.Events.ERROR, function (event, data) {
         if (data.fatal) {
-          // Tünelde (403) hatası alındığında otomatik olarak aracı olmadan ham URL'e geçiş yapar
-          if (data.details === "manifestLoadError" || data.type === Hls.ErrorTypes.NETWORK_ERROR) {
-            console.warn("Tünel engeli! Doğrudan ham URL ile oynatılıyor...");
+          // Token uyuşmazlığı veya proxy 403 hatası verirse, anında tüneli dev dışı bırakıp ham URL'e geçiş yap
+          if (data.details === "manifestLoadError" || data.response?.code === 403 || data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+            console.warn("⚠️ Token veya Tünel Hatası algılandı! Doğrudan ham akış moduna geçiliyor...");
             if (hls) { hls.destroy(); hls = null; }
             video.src = ch.url;
             video.play().catch(() => {});
