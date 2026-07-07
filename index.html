@@ -540,7 +540,7 @@ function renderList() {
         <div class="ch-logo">${logo}</div>
         <div class="ch-info">
           <div class="ch-name">${ch.name}</div>
-          <div class="ch-meta"><span class="live-badge">${ch.youtubeId?'YT':'CANLI'}</span> <span class="ch-group">${getSmartGroup(ch.group)}</span></div>
+          <div class="ch-meta"><span class="live-badge">${ch.youtubeId?'Youtube':'CANLI'}</span> <span class="ch-group">${getSmartGroup(ch.group)}</span></div>
         </div>
         <button class="fav-btn ${isFav ? "on" : ""}" onclick="event.stopPropagation(); toggleFavorite('${idKey.replace(/'/g, "\\'")}', this)">${isFav ? "★" : "☆"}</button>
       </div>`;
