@@ -296,7 +296,6 @@
     left: 185px; 
     height: 32px; 
     box-shadow: 0 -4px 10px rgba(0,0,0,0.4);
-    transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
   .cat-bar {
@@ -364,7 +363,7 @@
   .player-wrap:fullscreen .yt-container,
   .player-wrap:-webkit-full-screen .yt-container { padding-bottom: 0; }
 
-  /* Tam ekranda sol alt köşeye çekilen, dar ve yarı şeffaf panel yapısı */
+  /* İstek 1: Tam ekranda sol alt köşeye çekilen, dar ve yarı şeffaf panel yapısı */
   .player-ratio .sidebar-ctrl {
     position: absolute !important;
     bottom: 12px !important;
@@ -372,7 +371,7 @@
     right: auto !important;
     width: 170px !important;
     height: 44px !important;
-    background: rgba(8, 11, 16, 0.6) !important;
+    background: rgba(8, 11, 16, 0.5) !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
     border-radius: 6px !important;
     padding: 0 3px !important;
@@ -380,42 +379,35 @@
     box-shadow: 0 8px 24px rgba(0,0,0,0.6) !important;
     z-index: 2147483647 !important;
     display: flex !important;
-    opacity: 0.35 !important; /* Panel şeffaf kalmaya devam eder */
+    opacity: 0.35 !important;
   }
 
-  /* İşaretlerin net ve parlak beyaz (belirgin) olması sağlandı */
+  /* İstek 2: Butonların içindeki görseller (simgeler) tamamen BEYAZ, parlak ve çok belirgin yapıldı */
   .player-ratio .sidebar-ctrl .cb {
     height: 34px !important;
-    font-size: 13px !important;
+    font-size: 14px !important;
     color: #ffffff !important; 
-    font-weight: bold !important;
-    background: rgba(20, 26, 34, 0.85) !important;
-    border: 1px solid rgba(255, 255, 255, 0.25) !important; 
-    text-shadow: 0 1px 3px rgba(0,0,0,1) !important;
+    opacity: 1 !important;
+    font-weight: 900 !important;
+    background: rgba(20, 26, 34, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important; 
+    text-shadow: 0 0 4px #fff, 0 1px 3px rgba(0,0,0,1) !important; /* Ekstra parlaklık efekti */
   }
 
-  /* Fare üzerine geldiğinde buton paneli geçici olarak netleşir */
+  /* Fare üzerine geldiğinde buton paneli netleşir */
   .player-ratio .sidebar-ctrl:hover {
     opacity: 1.0 !important;
   }
 
-  /* Tam ekranda alt kategori barı da sol tarafa tam hizalanır */
+  /* Kategori barı tam ekranda tamamen gizlenir */
   .player-wrap:fullscreen .ctrl-bar,
-  .player-wrap:-webkit-full-screen .ctrl-bar {
-    left: 0 !important;
-    background: rgba(14, 19, 24, 0.8) !important;
-    backdrop-filter: blur(8px);
-    border-top: 1px solid rgba(255,255,255,0.1);
-  }
+  .player-wrap:-webkit-full-screen .ctrl-bar { display: none !important; }
 
-  /* ══ OTOMATİK GİZLEME SINIFLARI (Barlar 3 saniye sonra pürüzsüzce kaybolur) ══ */
+  /* ══ SOL-ALT BUTON PANELİNİN OTOMATİK GİZLENME SINIFI ══ */
   .hide-controls {
     opacity: 0 !important;
-    transform: translateY(15px) !important;
+    transform: translateY(0) scale(0.85) !important;
     pointer-events: none !important;
-  }
-  .player-ratio .sidebar-ctrl.hide-controls {
-    transform: translateY(0) scale(0.9) !important; /* Sol alt panel hafif küçülerek söner */
   }
 
   @media (max-width: 768px) {
@@ -494,7 +486,7 @@ let allChannels = [];
 let currentCh   = null;
 let currentTab  = "all";
 let currentCat  = "";
-let hideTimeout; // Otomatik gizleme için zamanlayıcı referansı
+let hideTimeout; 
 
 const uniqueKeys = new Set();
 
@@ -502,38 +494,46 @@ function onYouTubeIframeAPIReady() {
   console.log("YouTube API Hazır.");
 }
 
-// ══ AKILLI TAM EKRAN OTO-GİZLEME YÖNETİMİ ══
+// ══ AKILLI TAM EKRAN OTO-GİZLEME (HEM PANEL HEM VİDEO SÜRE BARLARI İÇİN) ══
 function showControlsTemporarily() {
   const btnPanel = document.getElementById("actionButtons");
-  const ctrlBar = document.getElementById("bottomCtrlBar");
+  const videoEl = document.getElementById("video");
 
-  // Eğer tam ekrandaysak gizleme mekanizmasını çalıştır
   if (document.fullscreenElement || document.webkitFullscreenElement) {
+    // 1. Kendi buton panelimizi görünür yap
     btnPanel.classList.remove("hide-controls");
-    ctrlBar.classList.remove("hide-controls");
+    
+    // 2. Videonun kendi zaman barını/kontrollerini aktif et
+    if (videoEl && !videoEl.controls) {
+      videoEl.controls = true;
+    }
 
     clearTimeout(hideTimeout);
-    // 3 saniye hareketsiz kalırsa pürüzsüzce gizle
+    
+    // Hareketsizlik durumunda 3 saniye sonra barları uçur
     hideTimeout = setTimeout(() => {
       btnPanel.classList.add("hide-controls");
-      ctrlBar.classList.add("hide-controls");
+      
+      // Videonun zaman çubuğunun ekrandan tamamen kaybolmasını tetikle
+      if (videoEl) {
+        videoEl.controls = false; 
+      }
     }, 3000);
   } else {
-    // Normal modda her zaman görünür kalsınlar
     clearTimeout(hideTimeout);
     btnPanel.classList.remove("hide-controls");
-    ctrlBar.classList.remove("hide-controls");
+    if (videoEl) videoEl.controls = true;
   }
 }
 
-// Fare hareket ettiğinde barları tekrar uyandır
+// Fare hareket ettikçe her şeyi anında uyandır
 document.getElementById("playerWrapContainer").addEventListener("mousemove", showControlsTemporarily);
 
 function handleFullscreenChange() {
   const btnPanel = document.getElementById("actionButtons");
   const playerRatio = document.getElementById("playerRatioNode");
   const sidebar = document.getElementById("sidebarNode");
-  const ctrlBar = document.getElementById("bottomCtrlBar");
+  const videoEl = document.getElementById("video");
 
   if (document.fullscreenElement || document.webkitFullscreenElement) {
     if (playerRatio && btnPanel) {
@@ -546,7 +546,7 @@ function handleFullscreenChange() {
     }
     clearTimeout(hideTimeout);
     btnPanel.classList.remove("hide-controls");
-    ctrlBar.classList.remove("hide-controls");
+    if (videoEl) videoEl.controls = true;
   }
 }
 
@@ -869,7 +869,7 @@ function nextCh() {
   if (!list.length) return;
   const idx = list.findIndex(c => (c.url && c.url === currentCh?.url) || (c.youtubeId && c.youtubeId === currentCh?.youtubeId));
   play(allChannels.indexOf(list[(idx + 1) % list.length]));
-  showControlsTemporarily(); // Kanal değişince barları göster
+  showControlsTemporarily(); 
 }
 
 function prevCh() {
@@ -877,7 +877,7 @@ function prevCh() {
   if (!list.length) return;
   const idx = list.findIndex(c => (c.url && c.url === currentCh?.url) || (c.youtubeId && c.youtubeId === currentCh?.youtubeId));
   play(allChannels.indexOf(list[(idx - 1 + list.length) % list.length]));
-  showControlsTemporarily(); // Kanal değişince barları göster
+  showControlsTemporarily(); 
 }
 
 function toggleFSSmart() {
