@@ -709,9 +709,9 @@ function renderList() {
       ? `<img src="${logoSrc}" loading="lazy" onerror="this.outerHTML='<span>📺</span>'">`
       : `<span>📺</span>`;
       
-     const badge = ch.youtubeId ? `<span class="yt-badge">YOUTUBE</span>` : `<span class="live-badge">CANLI</span>`;
+    const badge = ch.youtubeId ? `<span class="yt-badge">YOUTUBE</span>` : `<span class="live-badge">CANLI</span>`;
+    const displayGroup = getSmartGroup(ch.group);
     const u = idKey.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
-
 
     return `
       <div class="channel ${isAct ? "active" : ""}" onclick="play(${idx})">
