@@ -128,7 +128,7 @@
   .channel-list {
     overflow-y: auto;
     flex: 1;
-    padding: 3px 4px 70px; /* Buton yüksekliği kadar boşluk bırakıldı */
+    padding: 3px 4px 45px; /* Alt bar yüksekliği için boşluk güncellendi */
   }
 
   .channel-list::-webkit-scrollbar { width: 4px; }
@@ -260,6 +260,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-bottom: 40px; /* Normal modda alt barın videoyu kapatmaması için pay eklendi */
   }
 
   .player-idle {
@@ -269,6 +270,7 @@
     align-items: center; justify-content: center;
     gap: 16px;
     z-index: 2;
+    padding-bottom: 40px;
   }
 
   .idle-icon { font-size: 64px; opacity: .13; animation: breathe 3s ease-in-out infinite; }
@@ -283,33 +285,39 @@
     object-fit: fill; 
   }
 
-  .yt-container { position: absolute; inset: 0; border: none; }
+  .yt-container { position: absolute; inset: 0; border: none; padding-bottom: 40px; }
 
-  /* ══ KONTROL BARI (AKILLI HİBRİT KONUMLANDIRMA) ══ */
+  /* ══ YENİLENEN TAM GENİŞLİK KONTROL BARI ══ */
   .ctrl-bar {
     background: var(--bg2);
     border-top: 1px solid var(--border);
-    padding: 4px 6px; 
+    padding: 6px 12px; 
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row; /* Butonlar ve kategoriler yan yana uzansın */
+    align-items: center;
     justify-content: flex-start;
     flex-shrink: 0;
-    gap: 4px;
+    gap: 16px;
     z-index: 999;
     
-    /* Burası Önemli: Normal modda sol menünün altında görünmesini sağlıyor */
+    /* En soldan başlayıp en sağa kadar uzanması sağlandı */
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 185px; /* Tam sol menünün genişliği kadar */
-    box-shadow: 0 -4px 10px rgba(0,0,0,0.5);
+    width: 100%; 
+    height: 40px;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.6);
   }
 
-  .ctrl-btns { display: flex; align-items: center; gap: 4px; flex-shrink: 0; width: 100%; justify-content: space-between; }
+  .ctrl-btns { 
+    display: flex; 
+    align-items: center; 
+    gap: 6px; 
+    flex-shrink: 0; 
+  }
 
   .cb {
-    flex: 1;
+    width: 32px;
     height: 28px; 
     border-radius: 4px;
     background: var(--bg3);
@@ -326,7 +334,7 @@
 
   .toast {
     position: fixed;
-    bottom: 24px;
+    bottom: 54px;
     right: 24px;
     background: rgba(14, 19, 24, 0.9);
     border: 1px solid var(--border);
@@ -348,13 +356,20 @@
     transform: translateY(0);
   }
 
-  /* ══ TAM EKRAN MODU (BURADA ARTIK KUSURSUZ GÖRÜNECEK) ══ */
+  /* ══ TAM EKRAN MODU AYARLARI (HOVER / FLOAT SEKLINDE) ══ */
+  .player-wrap:fullscreen .player-ratio,
+  .player-wrap:-webkit-full-screen .player-ratio { padding-bottom: 0; }
+  
+  .player-wrap:fullscreen .yt-container,
+  .player-wrap:-webkit-full-screen .yt-container { padding-bottom: 0; }
+
   .player-wrap:fullscreen .ctrl-bar,
   .player-wrap:-webkit-full-screen .ctrl-bar {
-    position: absolute !important; /* Fixed modundan çıkarılıyor */
+    position: absolute !important;
     bottom: 24px !important;
     left: 24px !important;
-    width: auto !important; /* Sabit 185px genişliği iptal */
+    width: auto !important; 
+    height: auto !important;
     background: transparent !important;
     border: none !important;
     padding: 0 !important;
@@ -380,9 +395,8 @@
   
   .player-wrap:fullscreen .cb,
   .player-wrap:-webkit-full-screen .cb {
-    width: 36px !important;
-    height: 36px !important;
-    flex: none !important;
+    width: 38px !important;
+    height: 38px !important;
     font-size: 14px !important;
   }
 
@@ -390,9 +404,9 @@
     .app { grid-template-columns: 1fr; height: auto; min-height: 100vh; }
     .main { order: 1; height: auto; }
     .sidebar { order: 2; border-right: none; border-top: 1px solid var(--border); height: 50vh; }
-    .player-ratio { height: 56.25vw; flex: none; }
-    .ctrl-bar { position: absolute; bottom: 0; width: 100%; }
-    .channel-list { max-height: calc(50vh - 100px); padding-bottom: 70px; }
+    .player-ratio { height: 56.25vw; flex: none; padding-bottom: 40px; }
+    .ctrl-bar { position: fixed; bottom: 0; width: 100%; }
+    .channel-list { max-height: calc(50vh - 45px); padding-bottom: 45px; }
   }
 </style>
 </head>
